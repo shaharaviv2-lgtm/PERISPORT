@@ -1,0 +1,62 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "81UDmWuNT524L3LxfuSx0"
+uri = "file://artifacts/sports-store/public/images/product-1.png"
+type = "image"
+title = "Running shoe with neon accents"
+
+[[generated]]
+id = "FQJUiqGxgQlO-m7V5Jccq"
+uri = "file://artifacts/sports-store/public/images/product-2.png"
+type = "image"
+title = "Black windbreaker jacket"
+
+[[generated]]
+id = "qhgq4Dt-nvVc-gPzuLEZ8"
+uri = "file://artifacts/sports-store/public/images/product-3.png"
+type = "image"
+title = "Compression tights"
+
+[[generated]]
+id = "54OghhxWRp7A5Npj75_Fo"
+uri = "file://artifacts/sports-store/public/images/product-4.png"
+type = "image"
+title = "Neon sports sunglasses"
+
+[[generated]]
+id = "devHf0Q918zwah7hbsdKV"
+uri = "file://artifacts/sports-store/public/images/product-5.png"
+type = "image"
+title = "Smart fitness watch"
+
+[[generated]]
+id = "WjpsM3l38bQ1KS3qu25BE"
+uri = "file://artifacts/sports-store/public/images/product-6.png"
+type = "image"
+title = "Gym duffel bag"
+
+[[generated]]
+id = "aF6g21i_bKht8p9LbLZm-"
+uri = "file://artifacts/sports-store/public/images/product-7.png"
+type = "image"
+title = "Training hoodie"
+
+[[generated]]
+id = "85ccsqsJ_bbwh7Vu6yOFY"
+uri = "file://artifacts/sports-store/public/images/category-footwear.png"
+type = "image"
+title = "Category Footwear"
+
+[[generated]]
+id = "F2th8itkvwEnly4UzEacu"
+uri = "file://artifacts/sports-store/public/images/category-apparel.png"
+type = "image"
+title = "Category Apparel"
+
+[[generated]]
+id = "t-lj_Ceswdrc9HGFKqaF8"
+uri = "file://artifacts/sports-store/public/images/category-equipment.png"
+type = "image"
+title = "Category Equipment"

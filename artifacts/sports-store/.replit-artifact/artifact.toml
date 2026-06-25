@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Sports Fashion Store"
+version = "1.0.0"
+id = "artifacts/sports-store"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22010
+
+[services.development]
+run = "pnpm --filter @workspace/sports-store run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sports-store", "run", "build" ]
+publicDir = "artifacts/sports-store/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22010"
+BASE_PATH = "/"
