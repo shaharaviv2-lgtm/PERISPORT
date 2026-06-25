@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 
 const SIZES_BY_CATEGORY: Record<string, string[]> = {
   apparel: ["XS", "S", "M", "L", "XL", "XXL"],
-  footwear: ["38", "39", "40", "41", "42", "43", "44", "45"],
   accessories: ["One Size"],
   equipment: ["One Size"],
 };

@@ -130,9 +130,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="space-y-4">
               <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">Directory</h4>
               <ul className="space-y-2">
-                <li><Link href="/products" className="text-sm hover:text-primary transition-colors">All Gear</Link></li>
-                <li><Link href="/about" className="text-sm hover:text-primary transition-colors">Intel</Link></li>
-                <li><Link href="/social" className="text-sm hover:text-primary transition-colors">Network</Link></li>
+                <li><Link href="/products?q=football" className="text-sm hover:text-primary transition-colors">Football</Link></li>
+                <li><Link href="/products?q=basketball" className="text-sm hover:text-primary transition-colors">Basketball</Link></li>
+                <li><Link href="/social" className="text-sm hover:text-primary transition-colors">Social Media</Link></li>
+                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link></li>
               </ul>
             </div>
 
