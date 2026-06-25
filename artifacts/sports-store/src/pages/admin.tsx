@@ -124,15 +124,17 @@ export default function Admin() {
 
   function onSubmit(values: ProductForm) {
     createProduct.mutate({
-      name: values.name,
-      description: values.description || undefined,
-      price: values.price,
-      originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
-      category: values.category,
-      imageUrl: values.imageUrl,
-      badge: values.badge || undefined,
-      inStock: values.inStock,
-      featured: values.featured,
+      data: {
+        name: values.name,
+        description: values.description || undefined,
+        price: values.price,
+        originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
+        category: values.category,
+        imageUrl: values.imageUrl,
+        badge: values.badge || undefined,
+        inStock: values.inStock,
+        featured: values.featured,
+      },
     });
   }
 
