@@ -19,9 +19,11 @@ export default function Products() {
   const searchParams = new URLSearchParams(window.location.search);
   const initialCategory = searchParams.get('category') || 'all';
   
+  const initialSearch = new URLSearchParams(window.location.search).get('q') || "";
+
   const [activeTab, setActiveTab] = useState(initialCategory);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
 
   const { data: categories, isLoading: isCategoriesLoading } = useListCategories({
     query: { queryKey: getListCategoriesQueryKey() }

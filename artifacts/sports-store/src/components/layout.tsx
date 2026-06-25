@@ -22,11 +22,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/products", label: "Gear" },
-    { href: "/social", label: "Network" },
-    { href: "/about", label: "Intel" },
-    { href: "/contact", label: "Comms" },
+    { href: "/products?q=football", label: "Football" },
+    { href: "/products?q=basketball", label: "Basketball" },
+    { href: "/social", label: "Social Media" },
+    { href: "/contact", label: "Contact" },
   ];
+
+  const isNavActive = (href: string) => {
+    const path = href.split("?")[0];
+    const q = new URLSearchParams(href.split("?")[1] ?? "").get("q");
+    const currentQ = new URLSearchParams(window.location.search).get("q");
+    if (q) return location === path && currentQ === q;
+    return location === href;
+  };
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground dark">
@@ -53,7 +61,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 key={link.href}
                 href={link.href}
                 className={`text-sm font-medium tracking-wide uppercase transition-colors hover:text-primary ${
-                  location === link.href ? "text-primary" : "text-muted-foreground"
+                  isNavActive(link.href) ? "text-primary" : "text-muted-foreground"
                 }`}
               >
                 {link.label}
@@ -89,7 +97,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 key={link.href}
                 href={link.href}
                 className={`text-2xl font-display font-bold tracking-wider uppercase transition-colors ${
-                  location === link.href ? "text-primary" : "text-foreground"
+                  isNavActive(link.href) ? "text-primary" : "text-foreground"
                 }`}
               >
                 {link.label}
