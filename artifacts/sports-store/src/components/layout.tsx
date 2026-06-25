@@ -12,7 +12,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -41,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
+            ? "bg-background/95 border-b border-border"
             : "bg-transparent border-transparent"
         }`}
       >

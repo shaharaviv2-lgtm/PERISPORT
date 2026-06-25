@@ -36,7 +36,7 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
         <img
           src={product.imageUrl || "/images/product-1.png"}
           alt={product.name}
-          className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+          className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-[opacity,transform] duration-300 ease-out"
         />
 
         {/* Hover Actions */}

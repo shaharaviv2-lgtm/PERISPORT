@@ -34,12 +34,12 @@ export default function Home() {
             className="object-cover w-full h-full mix-blend-luminosity opacity-40"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-transparent md:via-background/50" />
+          <div className="absolute inset-0 bg-gradient-to-l from-background via-background/90 to-transparent md:via-background/50" />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
         </div>
 
         <div className="container relative z-10 px-4 md:px-6">
-          <div className="max-w-3xl space-y-6 md:space-y-8">
+          <div className="max-w-3xl mr-0 ml-auto space-y-6 md:space-y-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/50 border border-border backdrop-blur-sm">
               <span className="w-2 h-2 bg-primary animate-pulse" />
               <span className="font-mono text-xs uppercase tracking-widest text-primary">המערכת פעילה // גרסה 2.4</span>
@@ -168,7 +168,7 @@ export default function Home() {
                   <img 
                     src={category.imageUrl!} 
                     alt={category.name} 
-                    className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                    className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-[opacity,transform] duration-300 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
                   
