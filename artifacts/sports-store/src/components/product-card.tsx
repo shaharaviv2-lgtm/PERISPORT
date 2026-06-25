@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import type { Product } from "@workspace/api-client-react/src/generated/api.schemas";
 import { ShoppingCart, Eye } from "lucide-react";
@@ -10,8 +10,13 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onQuickView }: ProductCardProps) {
+  const [, navigate] = useLocation();
+
   return (
-    <div className="group relative bg-card border border-border rounded-none overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(153,255,0,0.1)] flex flex-col h-full">
+    <div
+      className="group relative bg-card border border-border rounded-none overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(153,255,0,0.1)] flex flex-col h-full cursor-pointer"
+      onClick={() => navigate(`/products/${product.id}`)}
+    >
       <div className="relative aspect-[4/5] bg-muted overflow-hidden">
         {/* Badges */}
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
@@ -55,6 +60,11 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
             variant="outline"
             className="bg-background/50 border-border hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-none transition-colors"
             disabled={!product.inStock}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              navigate(`/products/${product.id}`);
+            }}
           >
             <ShoppingCart className="w-4 h-4" />
           </Button>
