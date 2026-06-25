@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,6 +35,8 @@ import {
   XCircle,
   Star,
   ShieldAlert,
+  Upload,
+  ImageIcon,
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -59,6 +61,27 @@ export default function Admin() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleImageUpload(file: File) {
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const { url } = await res.json() as { url: string };
+      form.setValue("imageUrl", url, { shouldValidate: true });
+      setPreviewUrl(url);
+      toast({ title: "Image uploaded", description: "Photo is ready to use." });
+    } catch {
+      toast({ title: "Upload failed", description: "Try a JPG, PNG or WebP under 10MB.", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  }
 
   const { data: products, isLoading } = useListProducts(
     {},
@@ -267,10 +290,77 @@ export default function Admin() {
                   name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Image URL</FormLabel>
-                      <FormControl>
-                        <Input placeholder="/images/my-product.jpg" className="rounded-none bg-background border-border font-mono text-xs" {...field} />
-                      </FormControl>
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Product Image</FormLabel>
+                      {/* Hidden file input */}
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleImageUpload(file);
+                          e.target.value = "";
+                        }}
+                      />
+                      {/* Upload area */}
+                      <div
+                        className="border border-dashed border-border hover:border-primary/60 transition-colors cursor-pointer relative group"
+                        onClick={() => fileInputRef.current?.click()}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          const file = e.dataTransfer.files?.[0];
+                          if (file) handleImageUpload(file);
+                        }}
+                      >
+                        {previewUrl ? (
+                          <div className="relative h-36 bg-muted overflow-hidden">
+                            <img
+                              src={previewUrl}
+                              alt="Preview"
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                              <Upload className="w-4 h-4 text-white" />
+                              <span className="font-mono text-xs text-white uppercase tracking-wider">Change Photo</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="h-36 flex flex-col items-center justify-center gap-3 text-muted-foreground group-hover:text-primary transition-colors">
+                            {uploading ? (
+                              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                            ) : (
+                              <ImageIcon className="w-6 h-6" />
+                            )}
+                            <div className="text-center">
+                              <p className="font-mono text-xs uppercase tracking-wider">
+                                {uploading ? "Uploading..." : "Click or drag & drop"}
+                              </p>
+                              <p className="font-mono text-[10px] text-muted-foreground/60 mt-1">JPG, PNG, WebP — max 10MB</p>
+                            </div>
+                          </div>
+                        )}
+                        {uploading && (
+                          <div className="absolute inset-0 bg-background/70 flex items-center justify-center">
+                            <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                          </div>
+                        )}
+                      </div>
+                      {/* Fallback URL input */}
+                      <div className="mt-2">
+                        <FormControl>
+                          <Input
+                            placeholder="Or type an image URL manually"
+                            className="rounded-none bg-background border-border font-mono text-xs"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              setPreviewUrl(e.target.value || null);
+                            }}
+                          />
+                        </FormControl>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
