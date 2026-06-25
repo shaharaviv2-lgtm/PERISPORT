@@ -45,12 +45,12 @@ const BADGE_OPTIONS = ["", "NEW", "SALE", "HOT"] as const;
 const FIXED_CATEGORIES = ["apparel", "accessories", "equipment"];
 
 const productSchema = z.object({
-  name: z.string().min(2, "Name required"),
+  name: z.string().min(2, "נדרש שם מוצר"),
   description: z.string().optional(),
-  price: z.coerce.number().positive("Price must be positive"),
+  price: z.coerce.number().positive("המחיר חייב להיות חיובי"),
   originalPrice: z.union([z.coerce.number().positive(), z.literal("")]).optional(),
-  category: z.string().min(1, "Category required"),
-  imageUrl: z.string().min(1, "Image URL required"),
+  category: z.string().min(1, "נדרשת קטגוריה"),
+  imageUrl: z.string().min(1, "נדרשת תמונה ראשית"),
   badge: z.string().optional(),
   inStock: z.boolean(),
   featured: z.boolean(),
@@ -156,7 +156,7 @@ export default function Admin() {
         category: values.category,
         imageUrl: values.imageUrl,
         additionalImages: additionalPreviews.length > 0 ? additionalPreviews : undefined,
-        badge: values.badge || undefined,
+        badge: values.badge && values.badge !== "none" ? values.badge : undefined,
         inStock: values.inStock,
         featured: values.featured,
       },
@@ -292,16 +292,16 @@ export default function Admin() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">תווית</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value || "none"}>
                           <FormControl>
                             <SelectTrigger className="rounded-none bg-background border-border font-mono">
-                              <SelectValue placeholder="None" />
+                              <SelectValue placeholder="ללא" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="rounded-none">
                             {BADGE_OPTIONS.map((b) => (
-                              <SelectItem key={b || "none"} value={b} className="font-mono">
-                                {b || "None"}
+                              <SelectItem key={b || "none"} value={b || "none"} className="font-mono">
+                                {b || "ללא"}
                               </SelectItem>
                             ))}
                           </SelectContent>
