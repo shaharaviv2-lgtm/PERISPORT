@@ -77,7 +77,7 @@ export default function Home() {
               <span>LNG: 122.4194 W</span>
             </div>
             <div className="w-16 h-[1px] bg-foreground" />
-            <span>APEX_SYS</span>
+            <span>PERI_SYS</span>
           </div>
         </div>
       </section>

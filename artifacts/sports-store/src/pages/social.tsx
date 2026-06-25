@@ -18,11 +18,11 @@ export default function Social() {
         
         {/* Header */}
         <div className="space-y-6">
-          <div className="w-20 h-20 mx-auto bg-primary transform -skew-x-12 flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(153,255,0,0.3)]">
-            <span className="font-display font-bold text-primary-foreground text-5xl tracking-tighter italic">A</span>
+          <div className="w-24 h-24 mx-auto mb-8 flex items-center justify-center drop-shadow-[0_0_20px_rgba(234,179,8,0.4)]">
+            <img src="/images/logo.png" alt="PERI" className="w-full h-full object-contain" />
           </div>
-          <h1 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight glitch-hover" data-text="APEX_NETWORK">
-            APEX_NETWORK
+          <h1 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight glitch-hover" data-text="PERI_NETWORK">
+            PERI_NETWORK
           </h1>
           <p className="font-mono text-muted-foreground text-sm uppercase tracking-widest">
             // Establish Connection

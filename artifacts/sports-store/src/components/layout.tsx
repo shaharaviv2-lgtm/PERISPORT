@@ -39,10 +39,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       >
         <div className="container mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-primary rounded-sm transform -skew-x-12 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="font-display font-bold text-primary-foreground text-xl tracking-tighter italic">A</span>
-            </div>
-            <span className="font-display font-bold text-xl tracking-tight uppercase glitch-hover" data-text="APEX">APEX</span>
+            <img
+              src="/images/logo.png"
+              alt="PERI"
+              className="h-12 w-auto object-contain group-hover:scale-105 transition-transform drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]"
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -107,10 +108,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2 space-y-4">
               <div className="flex items-center gap-2 opacity-50">
-                <div className="w-6 h-6 bg-foreground rounded-sm transform -skew-x-12 flex items-center justify-center">
-                  <span className="font-display font-bold text-background text-sm tracking-tighter italic">A</span>
-                </div>
-                <span className="font-display font-bold text-lg tracking-tight uppercase">APEX Sport</span>
+                <img
+                  src="/images/logo.png"
+                  alt="PERI"
+                  className="h-10 w-auto object-contain opacity-60"
+                />
               </div>
               <p className="text-sm text-muted-foreground max-w-sm">
                 Engineered for the uncompromising. Track-tested, street-ready athletic wear for those who push boundaries.
@@ -136,7 +138,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} APEX Sport. All rights reserved.</p>
+            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} PERI Sport. All rights reserved.</p>
             <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground/50">
               <span>SYS.ONLINE</span>
               <span className="w-1 h-1 bg-primary rounded-full animate-pulse" />

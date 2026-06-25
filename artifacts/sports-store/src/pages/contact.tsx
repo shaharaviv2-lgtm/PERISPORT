@@ -80,8 +80,8 @@ export default function Contact() {
                   <Mail className="w-4 h-4 text-primary" /> Digital
                 </h3>
                 <p className="font-mono text-sm">
-                  support@apex-sport.sys<br/>
-                  press@apex-sport.sys
+                  support@peri-sport.sys<br/>
+                  press@peri-sport.sys
                 </p>
               </div>
 
@@ -90,7 +90,7 @@ export default function Contact() {
                   <Phone className="w-4 h-4 text-primary" /> Direct Line
                 </h3>
                 <p className="font-mono text-sm">
-                  +1 (800) 555-APEX
+                  +1 (800) 555-PERI
                 </p>
               </div>
             </div>

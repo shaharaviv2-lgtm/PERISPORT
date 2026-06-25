@@ -19,7 +19,7 @@ export default function About() {
         <div className="aspect-[21/9] w-full bg-muted relative overflow-hidden border border-border">
           <img 
             src="/images/category-footwear.png" 
-            alt="APEX Culture" 
+            alt="PERI Culture" 
             className="w-full h-full object-cover mix-blend-luminosity opacity-80"
           />
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(10,10,12,0.8))]" />
@@ -36,7 +36,7 @@ export default function About() {
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              <strong>APEX Sport</strong> was not created to fit in. We exist at the intersection of brutal performance demands and uncompromising aesthetic standards. 
+              <strong>PERI Sport</strong> was not created to fit in. We exist at the intersection of brutal performance demands and uncompromising aesthetic standards. 
             </p>
             <p>
               Most athletic wear forces a choice: look good or perform well. We rejected that binary. Every piece of gear we design undergoes rigorous stress testing before it ever sees a mood board. If it doesn't shave seconds off a sprint, hold up under heavy loads, or breathe perfectly during high-output intervals, it doesn't get made.
