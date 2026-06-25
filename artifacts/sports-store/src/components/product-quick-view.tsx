@@ -28,7 +28,7 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
             <img
               src={product.imageUrl || "/images/product-1.png"}
               alt={product.name}
-              className="object-cover w-full h-full mix-blend-luminosity"
+              className="object-cover w-full h-full"
             />
             {/* Overlay Grid lines for tech aesthetic */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />

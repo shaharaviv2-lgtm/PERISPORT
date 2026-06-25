@@ -168,7 +168,7 @@ export default function Home() {
                   <img 
                     src={category.imageUrl!} 
                     alt={category.name} 
-                    className="object-cover w-full h-full mix-blend-luminosity opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                    className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
                   
