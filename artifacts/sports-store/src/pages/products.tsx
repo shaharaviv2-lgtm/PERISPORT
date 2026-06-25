@@ -9,7 +9,7 @@ import {
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import { ProductQuickView } from "@/components/product-quick-view";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import type { Product } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Product } from "@workspace/api-client-react";
 import { Filter, SlidersHorizontal, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,10 +54,10 @@ export default function Products() {
         {/* Header */}
         <div className="mb-12 border-b border-border pb-8">
           <h1 className="font-display text-5xl md:text-6xl font-bold uppercase tracking-tighter mb-4">
-            ארסנל
+            חנות הגופיות
           </h1>
           <p className="font-mono text-muted-foreground uppercase tracking-widest text-sm mb-6">
-            // פרוטוקול סינון פעיל. מציג ציוד מוכן לקרב.
+            // גופיות ומכנסי כדורגל וכדורסל רשמיים
           </p>
 
           {/* Search bar */}

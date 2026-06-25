@@ -19,6 +19,7 @@ export interface Product {
   originalPrice?: number | null;
   category: string;
   imageUrl: string;
+  additionalImages?: string[] | null;
   /** @nullable */
   badge?: string | null;
   inStock: boolean;
@@ -32,6 +33,7 @@ export interface ProductInput {
   originalPrice?: number;
   category: string;
   imageUrl: string;
+  additionalImages?: string[];
   badge?: string;
   inStock?: boolean;
   featured?: boolean;

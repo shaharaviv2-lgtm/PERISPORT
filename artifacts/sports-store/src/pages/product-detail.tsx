@@ -30,6 +30,8 @@ export default function ProductDetail() {
   const hasSizes = sizes.length > 1;
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [added, setAdded] = useState(false);
+  const allImages = [product?.imageUrl, ...(product?.additionalImages ?? [])].filter(Boolean) as string[];
+  const [activeImage, setActiveImage] = useState(0);
 
   function handleBuy() {
     if (hasSizes && !selectedSize) {
@@ -110,34 +112,55 @@ export default function ProductDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
 
           {/* Image panel */}
-          <div className="relative aspect-square bg-card border border-border overflow-hidden">
-            <img
-              src={product.imageUrl || "/images/product-1.png"}
-              alt={product.name}
-              className="object-cover w-full h-full"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+          <div className="flex flex-col gap-3">
+            <div className="relative aspect-square bg-card border border-border overflow-hidden">
+              <img
+                src={allImages[activeImage] || "/images/product-1.png"}
+                alt={product.name}
+                className="object-cover w-full h-full"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
-              {product.badge && (
-                <Badge className="rounded-none font-mono uppercase tracking-wider px-2 py-1 bg-primary text-primary-foreground border-none text-[10px]">
-                  {product.badge}
-                </Badge>
-              )}
-              {discount && (
-                <Badge className="rounded-none font-mono uppercase tracking-wider px-2 py-1 bg-destructive text-destructive-foreground border-none text-[10px]">
-                  -{discount}%
-                </Badge>
-              )}
-              {!product.inStock && (
-                <Badge variant="destructive" className="rounded-none font-mono uppercase tracking-wider px-2 py-1 text-[10px]">
-                  Out of Stock
-                </Badge>
-              )}
+              <div className="absolute top-4 right-4 flex flex-col gap-2">
+                {product.badge && (
+                  <Badge className="rounded-none font-mono uppercase tracking-wider px-2 py-1 bg-primary text-primary-foreground border-none text-[10px]">
+                    {product.badge}
+                  </Badge>
+                )}
+                {discount && (
+                  <Badge className="rounded-none font-mono uppercase tracking-wider px-2 py-1 bg-destructive text-destructive-foreground border-none text-[10px]">
+                    -{discount}%
+                  </Badge>
+                )}
+                {!product.inStock && (
+                  <Badge variant="destructive" className="rounded-none font-mono uppercase tracking-wider px-2 py-1 text-[10px]">
+                    אזל מהמלאי
+                  </Badge>
+                )}
+              </div>
+
+              <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-primary/30 pointer-events-none" />
+              <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-primary/30 pointer-events-none" />
             </div>
 
-            <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-primary/30 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-primary/30 pointer-events-none" />
+            {/* Thumbnail strip */}
+            {allImages.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto">
+                {allImages.map((img, idx) => (
+                  <button
+                    key={img + idx}
+                    onClick={() => setActiveImage(idx)}
+                    className={`flex-shrink-0 w-16 h-16 border overflow-hidden transition-all ${
+                      activeImage === idx
+                        ? "border-primary shadow-[0_0_8px_rgba(153,255,0,0.3)]"
+                        : "border-border opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={img} alt={`תמונה ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Details panel */}

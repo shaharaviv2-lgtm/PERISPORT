@@ -33,6 +33,7 @@ export const ListProductsResponseItem = zod.object({
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
   "imageUrl": zod.string(),
+  "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),
   "inStock": zod.boolean(),
   "featured": zod.boolean().optional()
@@ -50,6 +51,7 @@ export const CreateProductBody = zod.object({
   "originalPrice": zod.number().optional(),
   "category": zod.string(),
   "imageUrl": zod.string(),
+  "additionalImages": zod.array(zod.string()).optional(),
   "badge": zod.string().optional(),
   "inStock": zod.boolean().optional(),
   "featured": zod.boolean().optional()
@@ -63,6 +65,7 @@ export const CreateProductResponse = zod.object({
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
   "imageUrl": zod.string(),
+  "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),
   "inStock": zod.boolean(),
   "featured": zod.boolean().optional()
@@ -84,6 +87,7 @@ export const GetProductResponse = zod.object({
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
   "imageUrl": zod.string(),
+  "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),
   "inStock": zod.boolean(),
   "featured": zod.boolean().optional()
@@ -114,6 +118,7 @@ export const ListFeaturedResponseItem = zod.object({
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
   "imageUrl": zod.string(),
+  "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),
   "inStock": zod.boolean(),
   "featured": zod.boolean().optional()

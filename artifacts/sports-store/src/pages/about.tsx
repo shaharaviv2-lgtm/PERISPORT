@@ -7,11 +7,11 @@ export default function About() {
         <div className="space-y-6 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 border border-border bg-card font-mono text-xs uppercase tracking-widest text-primary mb-6">
             <span className="w-2 h-2 bg-primary animate-pulse" />
-            מידע סווג
+            PERI SPORT
           </div>
           <h1 className="font-display text-5xl md:text-7xl font-bold uppercase tracking-tighter">
-            נולד במגרש. <br/>
-            <span className="text-muted-foreground">נבנה לרחוב.</span>
+            גופיות של <br/>
+            <span className="text-muted-foreground">אלופים.</span>
           </h1>
         </div>
 
@@ -36,10 +36,10 @@ export default function About() {
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              <strong>PERI Sport</strong> לא נוצרה כדי להתאים. אנחנו קיימים בצומת שבין דרישות ביצועים קשוחות ותקנים אסתטיים ללא פשרות.
+              <strong>PERI Sport</strong> הוקמה מתוך אהבה אמיתית לכדורגל ולכדורסל. אנחנו מביאים לישראל גופיות ומכנסי ספורט רשמיים של הכוכבים הגדולים ביותר — מרונאלדו ומסי ועד לוקה דונצ'יץ' וליברון ג'יימס.
             </p>
             <p>
-              רוב ביגוד הספורט מכריח בחירה: להיראות טוב או לבצע טוב. אנחנו דחינו את הבינאריות הזו. כל פריט ציוד שאנחנו מעצבים עובר בדיקות עומס קפדניות לפני שהוא מגיע לשולחן העיצוב. אם הוא לא מקצר שניות בריצה, לא מחזיק תחת עומסים כבדים, או לא נושם בצורה מושלמת — הוא פשוט לא נוצר.
+              כל גופייה שאנחנו מוכרים היא מקורית, מורשית ומגיעה ישירות מהייצור הרשמי. אנחנו מאמינים שכל פאן ראוי ללבוש את הצבעים של הכוכב שהוא אוהב — ביום המשחק ובכל יום אחר.
             </p>
           </div>
         </div>
@@ -48,15 +48,15 @@ export default function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
           <div className="md:col-span-4 md:sticky md:top-32">
-            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">הנדסה</h2>
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">האיכות</h2>
             <div className="w-12 h-1 bg-primary mt-4" />
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              החומרים שלנו מגיעים מקבלני ביטחון ומעבדות טקסטיל מתקדמות. אנו משתמשים בחוטי פחמן לחוזק מבני ובתרכובות ייחודיות לניהול לחות שמגיבות דינמית לטמפרטורת גוף הליבה.
+              אנחנו עובדים אך ורק עם ספקים מורשים. הגופיות שלנו עשויות מאותם החומרים שהשחקנים עצמם לובשים — <strong>טכנולוגיית DryFit, ניהול לחות מתקדם, תפרים מחוזקים</strong> שעומדים בעומס המשחק האמיתי.
             </p>
             <p>
-              האסתטיקה — קשוחה, חדה, כהה — היא תוצר לוואי של הפילוסופיה שלנו. <strong>אפס עודף. השפעה מקסימלית.</strong> אנחנו לא משתמשים בניאון לקישוט — אנחנו משתמשים בו לנראות. אנחנו לא לובשים שחור כדי להסתתר — הצבע הזה סופג חום ביעילות באימוני הבוקר המוקדמים. הצורה עוקבת אחרי הפונקציה, בצורה קיצונית.
+              כל הזמנה מגיעה עם תעודת מקוריות ואריזה מושקעת. משלוח מהיר לכל הארץ, עם אפשרות החזרה חינם תוך 14 יום. כי כשאתה קונה גופייה, אתה קונה חוויה.
             </p>
           </div>
         </div>

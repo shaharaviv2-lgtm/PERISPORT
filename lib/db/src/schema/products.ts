@@ -1,4 +1,4 @@
-import { pgTable, text, serial, numeric, boolean, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, numeric, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -10,6 +10,7 @@ export const productsTable = pgTable("products", {
   originalPrice: numeric("original_price", { precision: 10, scale: 2 }),
   category: text("category").notNull(),
   imageUrl: text("image_url").notNull(),
+  additionalImages: text("additional_images").array(),
   badge: text("badge"),
   inStock: boolean("in_stock").notNull().default(true),
   featured: boolean("featured").notNull().default(false),

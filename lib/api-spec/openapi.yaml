@@ -187,6 +187,11 @@ components:
           type: string
         imageUrl:
           type: string
+        additionalImages:
+          type: array
+          items:
+            type: string
+          nullable: true
         badge:
           type: ["string", "null"]
         inStock:
@@ -214,6 +219,10 @@ components:
           type: string
         imageUrl:
           type: string
+        additionalImages:
+          type: array
+          items:
+            type: string
         badge:
           type: string
         inStock:

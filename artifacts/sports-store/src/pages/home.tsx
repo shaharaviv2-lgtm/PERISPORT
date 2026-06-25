@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import { ProductQuickView } from "@/components/product-quick-view";
 import { useState } from "react";
-import type { Product } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Product } from "@workspace/api-client-react";
 
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -46,13 +46,13 @@ export default function Home() {
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold uppercase leading-[0.9] tracking-tighter">
-              ביצועים <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">מהונדסים.</span>
+              לבש את<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">האלופים.</span>
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground font-mono max-w-xl leading-relaxed">
-              ביגוד ספורט מדויק לאלה שמסרבים להתפשר.
-              נבדק במגרש. מוכן לרחוב. ללא תירוצים.
+              גופיות ומכנסי כדורגל וכדורסל רשמיים.
+              קבוצות מהליגות המובילות בעולם — במשלוח לישראל.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -121,8 +121,8 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <h2 className="font-mono text-primary text-sm uppercase tracking-widest mb-2">// מוצרים מומלצים</h2>
-              <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight">סדרת העילית</h3>
+              <h2 className="font-mono text-primary text-sm uppercase tracking-widest mb-2">// גופיות מובחרות</h2>
+              <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight">קולקציית עכשיו</h3>
             </div>
             <Button asChild variant="ghost" className="rounded-none font-mono uppercase tracking-wider hover:bg-secondary group">
               <Link href="/products">
@@ -151,7 +151,7 @@ export default function Home() {
       <section className="py-24 bg-card border-t border-border">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="font-mono text-primary text-sm uppercase tracking-widest mb-2 text-center">// קטגוריות</h2>
-          <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-center mb-16">בחר קטגוריה</h3>
+          <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-center mb-16">מה אתה מחפש?</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {isCategoriesLoading ? (
@@ -204,12 +204,12 @@ export default function Home() {
             <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-primary" />
             
             <h2 className="font-display text-5xl md:text-7xl font-bold uppercase tracking-tighter">
-              הצטרף לקהילה
+              פאן אמיתי?
             </h2>
           </div>
           
           <p className="font-mono text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
-            גישה לטיפות בלעדיות, גישה מוקדמת לציוד חדש ועדכונים ראשונים.
+            עקוב אחרינו לעדכונים על קולקציות חדשות, מבצעים בלעדיים ומשלוחים מהירים לפני כולם.
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">

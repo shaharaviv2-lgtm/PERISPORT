@@ -12,7 +12,7 @@ import {
   getGetStoreStatsQueryKey,
   getListFeaturedQueryKey,
 } from "@workspace/api-client-react";
-import type { Product } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Product } from "@workspace/api-client-react";
 import {
   Form,
   FormControl,
@@ -37,11 +37,12 @@ import {
   ShieldAlert,
   Upload,
   ImageIcon,
+  X,
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const BADGE_OPTIONS = ["", "NEW", "SALE", "HOT"] as const;
-const FIXED_CATEGORIES = ["footwear", "apparel", "accessories", "equipment"];
+const FIXED_CATEGORIES = ["apparel", "accessories", "equipment"];
 
 const productSchema = z.object({
   name: z.string().min(2, "Name required"),
@@ -62,8 +63,11 @@ export default function Admin() {
   const { toast } = useToast();
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadingAdditional, setUploadingAdditional] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [additionalPreviews, setAdditionalPreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const additionalFileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleImageUpload(file: File) {
     setUploading(true);
@@ -75,11 +79,29 @@ export default function Admin() {
       const { url } = await res.json() as { url: string };
       form.setValue("imageUrl", url, { shouldValidate: true });
       setPreviewUrl(url);
-      toast({ title: "Image uploaded", description: "Photo is ready to use." });
+      toast({ title: "תמונה הועלתה", description: "התמונה מוכנה לשימוש." });
     } catch {
-      toast({ title: "Upload failed", description: "Try a JPG, PNG or WebP under 10MB.", variant: "destructive" });
+      toast({ title: "שגיאת העלאה", description: "נסה JPG, PNG או WebP עד 10MB.", variant: "destructive" });
     } finally {
       setUploading(false);
+    }
+  }
+
+  async function handleAdditionalImageUpload(file: File) {
+    if (additionalPreviews.length >= 5) return;
+    setUploadingAdditional(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const { url } = await res.json() as { url: string };
+      setAdditionalPreviews((prev) => [...prev, url]);
+      toast({ title: "תמונה נוספת הועלתה" });
+    } catch {
+      toast({ title: "שגיאת העלאה", variant: "destructive" });
+    } finally {
+      setUploadingAdditional(false);
     }
   }
 
@@ -99,10 +121,12 @@ export default function Admin() {
         queryClient.invalidateQueries({ queryKey: getGetStoreStatsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getListFeaturedQueryKey() });
         form.reset();
-        toast({ title: "Product added", description: "Item is now live in the store." });
+        setPreviewUrl(null);
+        setAdditionalPreviews([]);
+        toast({ title: "מוצר נוסף!", description: "הפריט פעיל עכשיו בחנות." });
       },
       onError: () => {
-        toast({ title: "Failed to add product", variant: "destructive" });
+        toast({ title: "שגיאה בהוספת מוצר", variant: "destructive" });
       },
     },
   });
@@ -114,8 +138,8 @@ export default function Admin() {
       description: "",
       price: 0,
       originalPrice: "",
-      category: "footwear",
-      imageUrl: "/images/shoe-runner.jpg",
+      category: "apparel",
+      imageUrl: "",
       badge: "",
       inStock: true,
       featured: false,
@@ -131,6 +155,7 @@ export default function Admin() {
         originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
         category: values.category,
         imageUrl: values.imageUrl,
+        additionalImages: additionalPreviews.length > 0 ? additionalPreviews : undefined,
         badge: values.badge || undefined,
         inStock: values.inStock,
         featured: values.featured,
@@ -166,13 +191,13 @@ export default function Admin() {
         <div className="container mx-auto px-4 md:px-6 py-4 flex items-center gap-4">
           <ShieldAlert className="w-5 h-5 text-primary" />
           <span className="font-mono text-xs uppercase tracking-widest text-primary">
-            Admin Panel
+            פאנל ניהול
           </span>
           <span className="font-mono text-xs text-muted-foreground">
-            // Creator Access
+            // גישת מנהל
           </span>
-          <div className="ml-auto font-mono text-xs text-muted-foreground">
-            {products?.length ?? 0} products in store
+          <div className="mr-auto font-mono text-xs text-muted-foreground">
+            {products?.length ?? 0} מוצרים בחנות
           </div>
         </div>
       </div>
@@ -183,9 +208,9 @@ export default function Admin() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Plus className="w-4 h-4 text-primary" />
-              <h2 className="font-display text-xl font-bold uppercase tracking-tight">Add New Item</h2>
+              <h2 className="font-display text-xl font-bold uppercase tracking-tight">הוסף מוצר חדש</h2>
             </div>
-            <p className="font-mono text-xs text-muted-foreground">Fill in the fields and hit deploy.</p>
+            <p className="font-mono text-xs text-muted-foreground">מלא את השדות ולחץ הוסף לחנות.</p>
           </div>
 
           <div className="bg-card border border-border p-6 relative">
@@ -198,9 +223,9 @@ export default function Admin() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Product Name</FormLabel>
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">שם המוצר</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. PERI Runner Elite" className="rounded-none bg-background border-border font-mono" {...field} />
+                        <Input placeholder="לדוגמה: גופיית רונאלדו פורטוגל 2024" className="rounded-none bg-background border-border font-mono text-right" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -213,9 +238,9 @@ export default function Admin() {
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Price ($)</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מחיר (₪)</FormLabel>
                         <FormControl>
-                          <Input type="number" step="0.01" placeholder="99.99" className="rounded-none bg-background border-border font-mono" {...field} />
+                          <Input type="number" step="0.01" placeholder="199.90" className="rounded-none bg-background border-border font-mono" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -226,9 +251,9 @@ export default function Admin() {
                     name="originalPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Was ($) — optional</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מחיר מקורי (₪) — אופציונלי</FormLabel>
                         <FormControl>
-                          <Input type="number" step="0.01" placeholder="129.99" className="rounded-none bg-background border-border font-mono" {...field} />
+                          <Input type="number" step="0.01" placeholder="249.90" className="rounded-none bg-background border-border font-mono" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -242,7 +267,7 @@ export default function Admin() {
                     name="category"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Category</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">קטגוריה</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger className="rounded-none bg-background border-border font-mono capitalize">
@@ -266,7 +291,7 @@ export default function Admin() {
                     name="badge"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Badge</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">תווית</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger className="rounded-none bg-background border-border font-mono">
@@ -292,7 +317,7 @@ export default function Admin() {
                   name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Product Image</FormLabel>
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">תמונה ראשית</FormLabel>
                       {/* Hidden file input */}
                       <input
                         ref={fileInputRef}
@@ -325,7 +350,7 @@ export default function Admin() {
                             />
                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                               <Upload className="w-4 h-4 text-white" />
-                              <span className="font-mono text-xs text-white uppercase tracking-wider">Change Photo</span>
+                              <span className="font-mono text-xs text-white uppercase tracking-wider">החלף תמונה</span>
                             </div>
                           </div>
                         ) : (
@@ -337,9 +362,9 @@ export default function Admin() {
                             )}
                             <div className="text-center">
                               <p className="font-mono text-xs uppercase tracking-wider">
-                                {uploading ? "Uploading..." : "Click or drag & drop"}
+                                {uploading ? "מעלה..." : "לחץ או גרור תמונה"}
                               </p>
-                              <p className="font-mono text-[10px] text-muted-foreground/60 mt-1">JPG, PNG, WebP — max 10MB</p>
+                              <p className="font-mono text-[10px] text-muted-foreground/60 mt-1">JPG, PNG, WebP — עד 10MB</p>
                             </div>
                           </div>
                         )}
@@ -353,8 +378,8 @@ export default function Admin() {
                       <div className="mt-2">
                         <FormControl>
                           <Input
-                            placeholder="Or type an image URL manually"
-                            className="rounded-none bg-background border-border font-mono text-xs"
+                            placeholder="או הדבק כתובת URL של תמונה"
+                            className="rounded-none bg-background border-border font-mono text-xs text-right"
                             {...field}
                             onChange={(e) => {
                               field.onChange(e);
@@ -368,14 +393,59 @@ export default function Admin() {
                   )}
                 />
 
+                {/* Additional Images */}
+                <div className="space-y-2">
+                  <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">תמונות נוספות — עד 5</label>
+                  <div className="flex flex-wrap gap-2">
+                    {additionalPreviews.map((url, idx) => (
+                      <div key={url + idx} className="relative w-16 h-16 bg-muted overflow-hidden border border-border group flex-shrink-0">
+                        <img src={url} alt={`תמונה ${idx + 1}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setAdditionalPreviews((prev) => prev.filter((_, i) => i !== idx))}
+                          className="absolute inset-0 bg-destructive/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                        >
+                          <X className="w-4 h-4 text-white" />
+                        </button>
+                      </div>
+                    ))}
+                    {additionalPreviews.length < 5 && (
+                      <button
+                        type="button"
+                        onClick={() => additionalFileInputRef.current?.click()}
+                        className="w-16 h-16 border border-dashed border-border hover:border-primary cursor-pointer flex items-center justify-center text-muted-foreground hover:text-primary transition-colors flex-shrink-0"
+                        disabled={uploadingAdditional}
+                      >
+                        {uploadingAdditional ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Plus className="w-5 h-5" />
+                        )}
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    ref={additionalFileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleAdditionalImageUpload(file);
+                      e.target.value = "";
+                    }}
+                  />
+                  <p className="font-mono text-[10px] text-muted-foreground/60">תמונות הגליה יוצגו כגלריה בדף המוצר</p>
+                </div>
+
                 <FormField
                   control={form.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Description — optional</FormLabel>
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">תיאור — אופציונלי</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Short product description..." rows={3} className="rounded-none bg-background border-border font-mono text-sm resize-none" {...field} />
+                        <Textarea placeholder="תיאור קצר של המוצר..." rows={3} className="rounded-none bg-background border-border font-mono text-sm resize-none text-right" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -388,7 +458,7 @@ export default function Admin() {
                     name="inStock"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">In Stock</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">במלאי</FormLabel>
                         <div className="flex gap-2 pt-1">
                           <button
                             type="button"
@@ -413,7 +483,7 @@ export default function Admin() {
                     name="featured"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Featured</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מומלץ</FormLabel>
                         <div className="flex gap-2 pt-1">
                           <button
                             type="button"
@@ -441,9 +511,9 @@ export default function Admin() {
                   className="w-full rounded-none font-display font-bold uppercase tracking-wider h-12 bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   {createProduct.isPending ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Deploying...</>
+                    <><Loader2 className="w-4 h-4 ml-2 animate-spin" /> מוסיף...</>
                   ) : (
-                    <><Plus className="w-4 h-4 mr-2" /> Deploy to Store</>
+                    <><Plus className="w-4 h-4 ml-2" /> הוסף לחנות</>
                   )}
                 </Button>
               </form>
@@ -456,9 +526,9 @@ export default function Admin() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Package className="w-4 h-4 text-primary" />
-              <h2 className="font-display text-xl font-bold uppercase tracking-tight">Current Inventory</h2>
+              <h2 className="font-display text-xl font-bold uppercase tracking-tight">מלאי נוכחי</h2>
             </div>
-            <p className="font-mono text-xs text-muted-foreground">All live products. Remove any item instantly.</p>
+            <p className="font-mono text-xs text-muted-foreground">כל המוצרים הפעילים. ניתן למחוק בכל עת.</p>
           </div>
 
           {isLoading ? (
@@ -480,7 +550,7 @@ export default function Admin() {
               {products?.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-border">
                   <Package className="w-10 h-10 text-muted-foreground mb-4 opacity-40" />
-                  <p className="font-mono text-sm text-muted-foreground">No products yet. Add your first item.</p>
+                  <p className="font-mono text-sm text-muted-foreground">אין מוצרים עדיין. הוסף את הפריט הראשון.</p>
                 </div>
               )}
             </div>

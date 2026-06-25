@@ -13,6 +13,7 @@ export interface ProductInput {
   originalPrice?: number;
   category: string;
   imageUrl: string;
+  additionalImages?: string[];
   badge?: string;
   inStock?: boolean;
   featured?: boolean;

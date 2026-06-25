@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
-import type { Product } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Product } from "@workspace/api-client-react";
 import { ShoppingCart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

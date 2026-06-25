@@ -16,6 +16,7 @@ export interface Product {
   originalPrice?: number | null;
   category: string;
   imageUrl: string;
+  additionalImages?: string[] | null;
   /** @nullable */
   badge?: string | null;
   inStock: boolean;
