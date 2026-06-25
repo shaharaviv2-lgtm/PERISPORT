@@ -142,6 +142,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground/50">
               <span>SYS.ONLINE</span>
               <span className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+              <Link href="/admin" className="hover:text-primary transition-colors">Admin</Link>
             </div>
           </div>
         </div>

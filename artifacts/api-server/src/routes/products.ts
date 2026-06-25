@@ -60,4 +60,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const [deleted] = await db.delete(productsTable).where(eq(productsTable.id, id)).returning();
+    if (!deleted) return res.status(404).json({ error: "Product not found" });
+    res.json({ success: true });
+  } catch (err) {
+    req.log.error({ err }, "Failed to delete product");
+    res.status(500).json({ error: "Failed to delete product" });
+  }
+});
+
 export default router;
