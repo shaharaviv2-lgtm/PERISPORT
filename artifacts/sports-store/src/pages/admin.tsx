@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   useListProducts,
   useCreateProduct,
+  useUpdateProduct,
   useListCategories,
   getListProductsQueryKey,
   getListCategoriesQueryKey,
@@ -28,6 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import {
   Plus,
+  Pencil,
   Trash2,
   Package,
   Loader2,
@@ -74,6 +76,7 @@ export default function Admin() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadingAdditional, setUploadingAdditional] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -126,12 +129,16 @@ export default function Admin() {
     query: { queryKey: getListCategoriesQueryKey() },
   });
 
+  function invalidateProductQueries() {
+    queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() });
+    queryClient.invalidateQueries({ queryKey: getGetStoreStatsQueryKey() });
+    queryClient.invalidateQueries({ queryKey: getListFeaturedQueryKey() });
+  }
+
   const createProduct = useCreateProduct({
     mutation: {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() });
-        queryClient.invalidateQueries({ queryKey: getGetStoreStatsQueryKey() });
-        queryClient.invalidateQueries({ queryKey: getListFeaturedQueryKey() });
+        invalidateProductQueries();
         form.reset();
         setPreviewUrl(null);
         setAdditionalPreviews([]);
@@ -139,6 +146,22 @@ export default function Admin() {
       },
       onError: () => {
         toast({ title: "שגיאה בהוספת מוצר", variant: "destructive" });
+      },
+    },
+  });
+
+  const updateProduct = useUpdateProduct({
+    mutation: {
+      onSuccess: () => {
+        invalidateProductQueries();
+        setEditingId(null);
+        form.reset();
+        setPreviewUrl(null);
+        setAdditionalPreviews([]);
+        toast({ title: "המוצר עודכן!", description: "השינויים נשמרו בחנות." });
+      },
+      onError: () => {
+        toast({ title: "שגיאה בעדכון מוצר", variant: "destructive" });
       },
     },
   });
@@ -161,22 +184,52 @@ export default function Admin() {
   });
 
   function onSubmit(values: ProductForm) {
-    createProduct.mutate({
-      data: {
-        name: values.name,
-        description: values.description || undefined,
-        price: values.price,
-        originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
-        category: values.category,
-        sport: values.sport,
-        itemType: values.itemType,
-        imageUrl: values.imageUrl,
-        additionalImages: additionalPreviews.length > 0 ? additionalPreviews : undefined,
-        badge: values.badge && values.badge !== "none" ? values.badge : undefined,
-        inStock: values.inStock,
-        featured: values.featured,
-      },
+    const data = {
+      name: values.name,
+      description: values.description || undefined,
+      price: values.price,
+      originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
+      category: values.category,
+      sport: values.sport,
+      itemType: values.itemType,
+      imageUrl: values.imageUrl,
+      additionalImages: additionalPreviews.length > 0 ? additionalPreviews : undefined,
+      badge: values.badge && values.badge !== "none" ? values.badge : undefined,
+      inStock: values.inStock,
+      featured: values.featured,
+    };
+    if (editingId != null) {
+      updateProduct.mutate({ id: editingId, data });
+    } else {
+      createProduct.mutate({ data });
+    }
+  }
+
+  function startEdit(product: Product) {
+    setEditingId(product.id);
+    form.reset({
+      name: product.name,
+      description: product.description ?? "",
+      price: product.price,
+      originalPrice: product.originalPrice ?? "",
+      category: product.category,
+      sport: product.sport ?? "football",
+      itemType: product.itemType ?? "shirt",
+      imageUrl: product.imageUrl,
+      badge: product.badge ?? "",
+      inStock: product.inStock,
+      featured: product.featured,
     });
+    setPreviewUrl(product.imageUrl);
+    setAdditionalPreviews(product.additionalImages ?? []);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    form.reset();
+    setPreviewUrl(null);
+    setAdditionalPreviews([]);
   }
 
   async function handleDelete(id: number) {
@@ -224,9 +277,13 @@ export default function Admin() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Plus className="w-4 h-4 text-primary" />
-              <h2 className="font-display text-xl font-bold uppercase tracking-tight">הוסף מוצר חדש</h2>
+              <h2 className="font-display text-xl font-bold uppercase tracking-tight">
+                {editingId != null ? "עריכת מוצר" : "הוסף מוצר חדש"}
+              </h2>
             </div>
-            <p className="font-mono text-xs text-muted-foreground">מלא את השדות ולחץ הוסף לחנות.</p>
+            <p className="font-mono text-xs text-muted-foreground">
+              {editingId != null ? "ערוך את השדות ולחץ שמור שינויים." : "מלא את השדות ולחץ הוסף לחנות."}
+            </p>
           </div>
 
           <div className="bg-card border border-border p-6 relative">
@@ -569,17 +626,31 @@ export default function Admin() {
                   />
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={createProduct.isPending}
-                  className="w-full rounded-none font-display font-bold uppercase tracking-wider h-12 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  {createProduct.isPending ? (
-                    <><Loader2 className="w-4 h-4 ml-2 animate-spin" /> מוסיף...</>
-                  ) : (
-                    <><Plus className="w-4 h-4 ml-2" /> הוסף לחנות</>
+                <div className="flex gap-2">
+                  <Button
+                    type="submit"
+                    disabled={createProduct.isPending || updateProduct.isPending}
+                    className="flex-1 rounded-none font-display font-bold uppercase tracking-wider h-12 bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    {createProduct.isPending || updateProduct.isPending ? (
+                      <><Loader2 className="w-4 h-4 ml-2 animate-spin" /> {editingId != null ? "שומר..." : "מוסיף..."}</>
+                    ) : editingId != null ? (
+                      <><CheckCircle className="w-4 h-4 ml-2" /> שמור שינויים</>
+                    ) : (
+                      <><Plus className="w-4 h-4 ml-2" /> הוסף לחנות</>
+                    )}
+                  </Button>
+                  {editingId != null && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={cancelEdit}
+                      className="rounded-none font-display font-bold uppercase tracking-wider h-12 px-4"
+                    >
+                      ביטול
+                    </Button>
                   )}
-                </Button>
+                </div>
               </form>
             </Form>
           </div>
@@ -592,7 +663,7 @@ export default function Admin() {
               <Package className="w-4 h-4 text-primary" />
               <h2 className="font-display text-xl font-bold uppercase tracking-tight">מלאי נוכחי</h2>
             </div>
-            <p className="font-mono text-xs text-muted-foreground">כל המוצרים הפעילים. ניתן למחוק בכל עת.</p>
+            <p className="font-mono text-xs text-muted-foreground">כל המוצרים הפעילים. ניתן לערוך או למחוק בכל עת.</p>
           </div>
 
           {isLoading ? (
@@ -608,7 +679,9 @@ export default function Admin() {
                   key={product.id}
                   product={product}
                   isDeleting={deletingId === product.id}
+                  isEditing={editingId === product.id}
                   onDelete={() => handleDelete(product.id)}
+                  onEdit={() => startEdit(product)}
                 />
               ))}
               {products?.length === 0 && (
@@ -628,16 +701,20 @@ export default function Admin() {
 function AdminProductRow({
   product,
   isDeleting,
+  isEditing,
   onDelete,
+  onEdit,
 }: {
   product: Product;
   isDeleting: boolean;
+  isEditing: boolean;
   onDelete: () => void;
+  onEdit: () => void;
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
-    <div className="flex items-center gap-4 bg-card border border-border p-4 hover:border-border/80 transition-colors group">
+    <div className={`flex items-center gap-4 bg-card border p-4 transition-colors group ${isEditing ? "border-primary" : "border-border hover:border-border/80"}`}>
       <div className="w-12 h-12 bg-muted overflow-hidden flex-shrink-0">
         <img
           src={product.imageUrl}
@@ -693,14 +770,24 @@ function AdminProductRow({
             </Button>
           </>
         ) : (
-          <Button
-            size="sm"
-            variant="ghost"
-            className="rounded-none h-8 w-8 p-0 opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive transition-all"
-            onClick={() => setConfirmDelete(true)}
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
+          <>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="rounded-none h-8 w-8 p-0 opacity-0 group-hover:opacity-100 hover:bg-primary/10 hover:text-primary transition-all"
+              onClick={onEdit}
+            >
+              <Pencil className="w-4 h-4" />
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="rounded-none h-8 w-8 p-0 opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive transition-all"
+              onClick={() => setConfirmDelete(true)}
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </>
         )}
       </div>
     </div>

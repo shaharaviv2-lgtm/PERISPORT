@@ -1,1 +1,2 @@
 - [Radix Select empty value](radix-select-empty-value.md) — SelectItem value="" crashes the page; use a "none" sentinel for optional choices.
+- [Admin mutation routes](admin-mutation-routes.md) — product POST/PUT/DELETE have no server auth/validation; "admin mode" is client-side only; keep new routes consistent.

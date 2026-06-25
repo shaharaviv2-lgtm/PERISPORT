@@ -64,6 +64,29 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const [updated] = await db
+      .update(productsTable)
+      .set(req.body)
+      .where(eq(productsTable.id, id))
+      .returning();
+    if (!updated) {
+      res.status(404).json({ error: "Product not found" });
+      return;
+    }
+    res.json({
+      ...updated,
+      price: Number(updated.price),
+      originalPrice: updated.originalPrice != null ? Number(updated.originalPrice) : null,
+    });
+  } catch (err) {
+    req.log.error({ err }, "Failed to update product");
+    res.status(500).json({ error: "Failed to update product" });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);

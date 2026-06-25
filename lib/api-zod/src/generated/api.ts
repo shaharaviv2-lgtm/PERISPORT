@@ -104,6 +104,55 @@ export const GetProductResponse = zod.object({
 
 
 /**
+ * @summary Update a product
+ */
+export const UpdateProductParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateProductBody = zod.object({
+  "name": zod.string(),
+  "description": zod.string().optional(),
+  "price": zod.number(),
+  "originalPrice": zod.number().optional(),
+  "category": zod.string(),
+  "sport": zod.string().optional(),
+  "itemType": zod.string().optional(),
+  "imageUrl": zod.string(),
+  "additionalImages": zod.array(zod.string()).optional(),
+  "badge": zod.string().optional(),
+  "inStock": zod.boolean().optional(),
+  "featured": zod.boolean().optional()
+})
+
+export const UpdateProductResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "description": zod.string().nullish(),
+  "price": zod.number(),
+  "originalPrice": zod.number().nullish(),
+  "category": zod.string(),
+  "sport": zod.string().nullish(),
+  "itemType": zod.string().nullish(),
+  "imageUrl": zod.string(),
+  "additionalImages": zod.array(zod.string()).nullish(),
+  "badge": zod.string().nullish(),
+  "inStock": zod.boolean(),
+  "featured": zod.boolean().optional()
+})
+
+
+/**
+ * @summary Delete a product
+ */
+export const DeleteProductParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteProductResponse = zod.unknown()
+
+
+/**
  * @summary List all product categories
  */
 export const ListCategoriesResponseItem = zod.object({
