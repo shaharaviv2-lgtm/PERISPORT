@@ -18,6 +18,10 @@ export interface Product {
   /** @nullable */
   originalPrice?: number | null;
   category: string;
+  /** @nullable */
+  sport?: string | null;
+  /** @nullable */
+  itemType?: string | null;
   imageUrl: string;
   additionalImages?: string[] | null;
   /** @nullable */
@@ -32,6 +36,8 @@ export interface ProductInput {
   price: number;
   originalPrice?: number;
   category: string;
+  sport?: string;
+  itemType?: string;
   imageUrl: string;
   additionalImages?: string[];
   badge?: string;
@@ -67,5 +73,6 @@ export interface StoreStats {
 export type ListProductsParams = {
 category?: string;
 featured?: boolean;
+sport?: string;
 };
 

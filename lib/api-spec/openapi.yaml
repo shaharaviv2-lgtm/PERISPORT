@@ -47,6 +47,11 @@ paths:
           required: false
           schema:
             type: boolean
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: List of products
@@ -185,6 +190,10 @@ components:
           type: ["number", "null"]
         category:
           type: string
+        sport:
+          type: ["string", "null"]
+        itemType:
+          type: ["string", "null"]
         imageUrl:
           type: string
         additionalImages:
@@ -216,6 +225,10 @@ components:
         originalPrice:
           type: number
         category:
+          type: string
+        sport:
+          type: string
+        itemType:
           type: string
         imageUrl:
           type: string

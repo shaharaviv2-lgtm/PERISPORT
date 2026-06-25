@@ -22,7 +22,8 @@ export const HealthCheckResponse = zod.object({
  */
 export const ListProductsQueryParams = zod.object({
   "category": zod.coerce.string().optional(),
-  "featured": zod.coerce.boolean().optional()
+  "featured": zod.coerce.boolean().optional(),
+  "sport": zod.coerce.string().optional()
 })
 
 export const ListProductsResponseItem = zod.object({
@@ -32,6 +33,8 @@ export const ListProductsResponseItem = zod.object({
   "price": zod.number(),
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
+  "sport": zod.string().nullish(),
+  "itemType": zod.string().nullish(),
   "imageUrl": zod.string(),
   "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),
@@ -50,6 +53,8 @@ export const CreateProductBody = zod.object({
   "price": zod.number(),
   "originalPrice": zod.number().optional(),
   "category": zod.string(),
+  "sport": zod.string().optional(),
+  "itemType": zod.string().optional(),
   "imageUrl": zod.string(),
   "additionalImages": zod.array(zod.string()).optional(),
   "badge": zod.string().optional(),
@@ -64,6 +69,8 @@ export const CreateProductResponse = zod.object({
   "price": zod.number(),
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
+  "sport": zod.string().nullish(),
+  "itemType": zod.string().nullish(),
   "imageUrl": zod.string(),
   "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),
@@ -86,6 +93,8 @@ export const GetProductResponse = zod.object({
   "price": zod.number(),
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
+  "sport": zod.string().nullish(),
+  "itemType": zod.string().nullish(),
   "imageUrl": zod.string(),
   "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),
@@ -117,6 +126,8 @@ export const ListFeaturedResponseItem = zod.object({
   "price": zod.number(),
   "originalPrice": zod.number().nullish(),
   "category": zod.string(),
+  "sport": zod.string().nullish(),
+  "itemType": zod.string().nullish(),
   "imageUrl": zod.string(),
   "additionalImages": zod.array(zod.string()).nullish(),
   "badge": zod.string().nullish(),

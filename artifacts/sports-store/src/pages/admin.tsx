@@ -44,12 +44,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const BADGE_OPTIONS = ["", "NEW", "SALE", "HOT"] as const;
 const FIXED_CATEGORIES = ["apparel", "accessories", "equipment"];
 
+const SPORT_OPTIONS = [
+  { value: "football", label: "כדורגל" },
+  { value: "basketball", label: "כדורסל" },
+] as const;
+
+const TYPE_OPTIONS = [
+  { value: "shirt", label: "חולצה" },
+  { value: "pants", label: "מכנס" },
+] as const;
+
 const productSchema = z.object({
   name: z.string().min(2, "נדרש שם מוצר"),
   description: z.string().optional(),
   price: z.coerce.number().positive("המחיר חייב להיות חיובי"),
   originalPrice: z.union([z.coerce.number().positive(), z.literal("")]).optional(),
   category: z.string().min(1, "נדרשת קטגוריה"),
+  sport: z.string().min(1, "נדרש ענף ספורט"),
+  itemType: z.string().min(1, "נדרש סוג פריט"),
   imageUrl: z.string().min(1, "נדרשת תמונה ראשית"),
   badge: z.string().optional(),
   inStock: z.boolean(),
@@ -139,6 +151,8 @@ export default function Admin() {
       price: 0,
       originalPrice: "",
       category: "apparel",
+      sport: "football",
+      itemType: "shirt",
       imageUrl: "",
       badge: "",
       inStock: true,
@@ -154,6 +168,8 @@ export default function Admin() {
         price: values.price,
         originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
         category: values.category,
+        sport: values.sport,
+        itemType: values.itemType,
         imageUrl: values.imageUrl,
         additionalImages: additionalPreviews.length > 0 ? additionalPreviews : undefined,
         badge: values.badge && values.badge !== "none" ? values.badge : undefined,
@@ -278,6 +294,54 @@ export default function Admin() {
                             {categoryOptions.map((slug) => (
                               <SelectItem key={slug} value={slug} className="font-mono capitalize">
                                 {slug}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="sport"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">ענף ספורט</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="rounded-none bg-background border-border font-mono">
+                              <SelectValue placeholder="בחר ענף" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-none">
+                            {SPORT_OPTIONS.map((s) => (
+                              <SelectItem key={s.value} value={s.value} className="font-mono">
+                                {s.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="itemType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">סוג פריט</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="rounded-none bg-background border-border font-mono">
+                              <SelectValue placeholder="בחר סוג" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-none">
+                            {TYPE_OPTIONS.map((t) => (
+                              <SelectItem key={t.value} value={t.value} className="font-mono">
+                                {t.label}
                               </SelectItem>
                             ))}
                           </SelectContent>

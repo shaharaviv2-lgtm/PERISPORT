@@ -22,8 +22,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const navLinks = [
     { href: "/", label: "דף הבית" },
-    { href: "/products?q=football", label: "כדורגל" },
-    { href: "/products?q=basketball", label: "כדורסל" },
+    { href: "/category/football", label: "כדורגל" },
+    { href: "/category/basketball", label: "כדורסל" },
     { href: "/social", label: "רשתות חברתיות" },
     { href: "/contact", label: "צור קשר" },
   ];
@@ -130,8 +130,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="space-y-4">
               <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">ניווט</h4>
               <ul className="space-y-2">
-                <li><Link href="/products?q=football" className="text-sm hover:text-primary transition-colors">כדורגל</Link></li>
-                <li><Link href="/products?q=basketball" className="text-sm hover:text-primary transition-colors">כדורסל</Link></li>
+                <li><Link href="/category/football" className="text-sm hover:text-primary transition-colors">כדורגל</Link></li>
+                <li><Link href="/category/basketball" className="text-sm hover:text-primary transition-colors">כדורסל</Link></li>
                 <li><Link href="/social" className="text-sm hover:text-primary transition-colors">רשתות חברתיות</Link></li>
                 <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">צור קשר</Link></li>
               </ul>

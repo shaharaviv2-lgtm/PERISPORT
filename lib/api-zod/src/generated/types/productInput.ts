@@ -12,6 +12,8 @@ export interface ProductInput {
   price: number;
   originalPrice?: number;
   category: string;
+  sport?: string;
+  itemType?: string;
   imageUrl: string;
   additionalImages?: string[];
   badge?: string;

@@ -8,9 +8,10 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { category, featured } = req.query as { category?: string; featured?: string };
+    const { category, featured, sport } = req.query as { category?: string; featured?: string; sport?: string };
     const conditions = [];
     if (category) conditions.push(eq(productsTable.category, category));
+    if (sport) conditions.push(eq(productsTable.sport, sport));
     if (featured === "true") conditions.push(eq(productsTable.featured, true));
 
     const products = conditions.length
@@ -48,7 +49,10 @@ router.get("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const [product] = await db.select().from(productsTable).where(eq(productsTable.id, id));
-    if (!product) return res.status(404).json({ error: "Product not found" });
+    if (!product) {
+      res.status(404).json({ error: "Product not found" });
+      return;
+    }
     res.json({
       ...product,
       price: Number(product.price),
@@ -64,7 +68,10 @@ router.delete("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const [deleted] = await db.delete(productsTable).where(eq(productsTable.id, id)).returning();
-    if (!deleted) return res.status(404).json({ error: "Product not found" });
+    if (!deleted) {
+      res.status(404).json({ error: "Product not found" });
+      return;
+    }
     res.json({ success: true });
   } catch (err) {
     req.log.error({ err }, "Failed to delete product");

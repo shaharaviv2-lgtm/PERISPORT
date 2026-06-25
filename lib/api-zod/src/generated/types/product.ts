@@ -15,6 +15,10 @@ export interface Product {
   /** @nullable */
   originalPrice?: number | null;
   category: string;
+  /** @nullable */
+  sport?: string | null;
+  /** @nullable */
+  itemType?: string | null;
   imageUrl: string;
   additionalImages?: string[] | null;
   /** @nullable */
