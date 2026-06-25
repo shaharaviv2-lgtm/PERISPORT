@@ -33,12 +33,12 @@ export default function ProductDetail() {
 
   function handleBuy() {
     if (hasSizes && !selectedSize) {
-      toast({ title: "Select a size", description: "Please pick your size before continuing.", variant: "destructive" });
+      toast({ title: "בחר מידה", description: "אנא בחר את המידה שלך לפני שתמשיך.", variant: "destructive" });
       return;
     }
     toast({
-      title: "Added to cart!",
-      description: `${product?.name}${selectedSize ? ` — Size ${selectedSize}` : ""} is ready for checkout.`,
+      title: "נוסף לסל!",
+      description: `${product?.name}${selectedSize ? ` — מידה ${selectedSize}` : ""} מוכן לתשלום.`,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -46,12 +46,12 @@ export default function ProductDetail() {
 
   function handleCheckout() {
     if (hasSizes && !selectedSize) {
-      toast({ title: "Select a size", description: "Please pick your size before continuing.", variant: "destructive" });
+      toast({ title: "בחר מידה", description: "אנא בחר את המידה שלך לפני שתמשיך.", variant: "destructive" });
       return;
     }
     toast({
-      title: "Checkout coming soon",
-      description: "Payment integration will be connected here.",
+      title: "תשלום בקרוב",
+      description: "אינטגרציית תשלום תחובר כאן בקרוב.",
     });
   }
 
@@ -81,9 +81,9 @@ export default function ProductDetail() {
       <div className="min-h-screen bg-background pt-8 pb-24 flex items-center justify-center">
         <div className="text-center border border-dashed border-border p-16 bg-card/30">
           <span className="font-mono text-muted-foreground uppercase block mb-2">Error 404</span>
-          <h2 className="font-display text-3xl font-bold uppercase mb-6">Product not found</h2>
+          <h2 className="font-display text-3xl font-bold uppercase mb-6">מוצר לא נמצא</h2>
           <Button variant="outline" className="rounded-none font-mono uppercase" onClick={() => navigate("/products")}>
-            Back to Arsenal
+            חזרה לחנות
           </Button>
         </div>
       </div>
@@ -103,8 +103,8 @@ export default function ProductDetail() {
           onClick={() => navigate("/products")}
           className="flex items-center gap-2 font-mono text-xs text-muted-foreground hover:text-primary uppercase tracking-widest transition-colors mb-10 group"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Arsenal
+          <ArrowLeft className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          חזרה לחנות
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
@@ -149,7 +149,7 @@ export default function ProductDetail() {
                 // {product.category}
               </span>
               <span className="font-mono text-xs text-muted-foreground">
-                REF: {product.id.toString().padStart(5, "0")}
+                מק"ט: {product.id.toString().padStart(5, "0")}
               </span>
             </div>
 
@@ -174,7 +174,7 @@ export default function ProductDetail() {
             {product.description && (
               <div className="mb-8">
                 <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3 pb-2 border-b border-border/50">
-                  Specs
+                  מפרט
                 </h3>
                 <p className="text-foreground/80 leading-relaxed text-sm md:text-base">
                   {product.description}
@@ -187,11 +187,11 @@ export default function ProductDetail() {
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-3 pb-2 border-b border-border/50">
                   <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                    Select Size
+                    בחר מידה
                   </h3>
                   {selectedSize && (
                     <span className="font-mono text-xs text-primary uppercase">
-                      Selected: {selectedSize}
+                      נבחר: {selectedSize}
                     </span>
                   )}
                 </div>
@@ -218,9 +218,9 @@ export default function ProductDetail() {
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-3 mb-8">
               {[
-                { icon: Truck, label: "Next Day" },
-                { icon: Shield, label: "Authentic" },
-                { icon: Package, label: "Free Return" },
+                { icon: Truck, label: "משלוח מהיר" },
+                { icon: Shield, label: "אותנטי" },
+                { icon: Package, label: "החזרה חינם" },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex flex-col items-center gap-1.5 bg-card border border-border p-3 text-center">
                   <Icon className="w-4 h-4 text-primary" />
@@ -238,13 +238,13 @@ export default function ProductDetail() {
               >
                 {added ? (
                   <>
-                    <CheckCircle2 className="w-5 h-5 mr-2" />
-                    Added!
+                    <CheckCircle2 className="w-5 h-5 ml-2" />
+                    נוסף!
                   </>
                 ) : (
                   <>
-                    <ShoppingCart className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                    {product.inStock ? "Add to Cart" : "Out of Stock"}
+                    <ShoppingCart className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
+                    {product.inStock ? "הוסף לסל" : "אזל מהמלאי"}
                   </>
                 )}
               </Button>
@@ -254,8 +254,8 @@ export default function ProductDetail() {
                 variant="outline"
                 className="flex-1 rounded-none font-display font-bold uppercase tracking-wider h-14 text-base border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
               >
-                <Zap className="w-5 h-5 mr-2" />
-                Buy Now
+                <Zap className="w-5 h-5 ml-2" />
+                קנה עכשיו
               </Button>
             </div>
           </div>

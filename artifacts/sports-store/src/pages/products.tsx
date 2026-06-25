@@ -54,25 +54,25 @@ export default function Products() {
         {/* Header */}
         <div className="mb-12 border-b border-border pb-8">
           <h1 className="font-display text-5xl md:text-6xl font-bold uppercase tracking-tighter mb-4">
-            Arsenal
+            ארסנל
           </h1>
           <p className="font-mono text-muted-foreground uppercase tracking-widest text-sm mb-6">
-            // Filter protocol active. Displaying combat-ready gear.
+            // פרוטוקול סינון פעיל. מציג ציוד מוכן לקרב.
           </p>
 
           {/* Search bar */}
           <div className="relative max-w-xl">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search products..."
-              className="pl-9 pr-9 rounded-none bg-card border-border font-mono text-sm h-11 focus-visible:ring-primary focus-visible:border-primary"
+              placeholder="חיפוש מוצרים..."
+              className="pr-9 pl-9 rounded-none bg-card border-border font-mono text-sm h-11 focus-visible:ring-primary focus-visible:border-primary text-right"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -86,7 +86,7 @@ export default function Products() {
           {/* Tabs / Filters Sidebar */}
           <div className="w-full md:w-64 shrink-0 sticky top-24 z-10 bg-background/95 backdrop-blur-sm p-1 md:p-0">
             <div className="flex items-center justify-between md:hidden mb-4 border border-border p-4 bg-card">
-              <span className="font-mono font-bold uppercase">Divisions</span>
+              <span className="font-mono font-bold uppercase">קטגוריות</span>
               <Filter className="w-4 h-4 text-primary" />
             </div>
             
@@ -101,7 +101,7 @@ export default function Products() {
                   value="all"
                   className="rounded-none justify-start px-4 py-3 font-mono uppercase tracking-wider text-xs border border-border data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary transition-all whitespace-nowrap"
                 >
-                  All Gear
+                  כל המוצרים
                 </TabsTrigger>
                 
                 {isCategoriesLoading ? (
@@ -125,15 +125,15 @@ export default function Products() {
             <div className="hidden md:block mt-8 border border-border p-4 bg-card/50">
               <div className="flex items-center gap-2 mb-4 text-muted-foreground border-b border-border/50 pb-2">
                 <SlidersHorizontal className="w-4 h-4" />
-                <span className="font-mono text-xs uppercase tracking-widest">Parameters</span>
+                <span className="font-mono text-xs uppercase tracking-widest">סינון</span>
               </div>
               <div className="space-y-4 font-mono text-xs">
                 <div className="flex justify-between items-center opacity-50 cursor-not-allowed">
-                  <span>Price: High to Low</span>
+                  <span>מחיר: גבוה לנמוך</span>
                   <div className="w-3 h-3 border border-current" />
                 </div>
                 <div className="flex justify-between items-center opacity-50 cursor-not-allowed">
-                  <span>In Stock Only</span>
+                  <span>במלאי בלבד</span>
                   <div className="w-3 h-3 border border-current" />
                 </div>
               </div>
@@ -144,10 +144,10 @@ export default function Products() {
           <div className="flex-1 w-full">
             <div className="flex justify-between items-center mb-6">
               <span className="font-mono text-xs text-muted-foreground uppercase">
-                {isProductsLoading ? 'Searching...' : (
+                {isProductsLoading ? 'מחפש...' : (
                   searchQuery
-                    ? `${filteredProducts.length} of ${products?.length ?? 0} results for "${searchQuery}"`
-                    : `Showing ${filteredProducts.length} Results`
+                    ? `${filteredProducts.length} מתוך ${products?.length ?? 0} תוצאות עבור "${searchQuery}"`
+                    : `מציג ${filteredProducts.length} תוצאות`
                 )}
               </span>
               {searchQuery && (
@@ -155,7 +155,7 @@ export default function Products() {
                   onClick={() => setSearchQuery("")}
                   className="font-mono text-xs text-primary hover:underline uppercase tracking-wider"
                 >
-                  Clear Search
+                  נקה חיפוש
                 </button>
               )}
             </div>
@@ -165,18 +165,18 @@ export default function Products() {
                 Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)
               ) : filteredProducts.length === 0 ? (
                 <div className="col-span-full py-24 text-center border border-dashed border-border bg-card/30">
-                  <span className="font-mono text-muted-foreground uppercase block mb-2">Error 404</span>
+                  <span className="font-mono text-muted-foreground uppercase block mb-2">שגיאה 404</span>
                   <h3 className="font-display text-2xl font-bold uppercase text-foreground mb-4">
-                    {searchQuery ? `No results for "${searchQuery}"` : "No assets found"}
+                    {searchQuery ? `אין תוצאות עבור "${searchQuery}"` : "לא נמצאו מוצרים"}
                   </h3>
                   <div className="flex gap-3 justify-center">
                     {searchQuery && (
                       <Button variant="default" className="rounded-none font-mono uppercase bg-primary" onClick={() => setSearchQuery("")}>
-                        Clear Search
+                        נקה חיפוש
                       </Button>
                     )}
                     <Button variant="outline" className="rounded-none font-mono uppercase" onClick={() => { setActiveTab('all'); setSearchQuery(""); }}>
-                      Reset Parameters
+                      אפס סינון
                     </Button>
                   </div>
                 </div>

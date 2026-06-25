@@ -25,7 +25,7 @@ export default function Social() {
             PERI_NETWORK
           </h1>
           <p className="font-mono text-muted-foreground text-sm uppercase tracking-widest">
-            // Establish Connection
+            // התחבר אלינו
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export default function Social() {
         <div className="pt-8 border-t border-border/50">
           <div className="flex items-center justify-center gap-2 font-mono text-xs text-muted-foreground uppercase tracking-widest">
             <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-            Transmission Secure
+            חיבור מאובטח
           </div>
         </div>
 

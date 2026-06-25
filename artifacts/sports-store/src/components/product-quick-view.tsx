@@ -55,7 +55,7 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
                   ID: {product.id.toString().padStart(4, '0')}
                 </span>
               </div>
-              <DialogTitle className="font-display text-3xl md:text-4xl uppercase leading-none tracking-tight">
+              <DialogTitle className="font-display text-3xl md:text-4xl uppercase leading-none tracking-tight" dir="rtl">
                 {product.name}
               </DialogTitle>
               
@@ -73,23 +73,23 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
 
             <div className="space-y-6 flex-1">
               <div>
-                <h4 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-2 border-b border-border/50 pb-2">Specs</h4>
-                <DialogDescription className="text-foreground text-sm md:text-base leading-relaxed">
-                  {product.description || "Premium athletic gear engineered for peak performance. Constructed with advanced materials for durability and comfort under extreme conditions."}
+                <h4 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-2 border-b border-border/50 pb-2">מפרט</h4>
+                <DialogDescription className="text-foreground text-sm md:text-base leading-relaxed text-right">
+                  {product.description || "ציוד ספורט פרימיום מהונדס לביצועי שיא. מיוצר מחומרים מתקדמים לעמידות ונוחות בתנאי קיצון."}
                 </DialogDescription>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-background border border-border p-3">
-                  <span className="font-mono text-[10px] text-muted-foreground uppercase block mb-1">Status</span>
+                  <span className="font-mono text-[10px] text-muted-foreground uppercase block mb-1">סטטוס</span>
                   <span className={`font-mono text-sm font-bold uppercase ${product.inStock ? 'text-primary' : 'text-destructive'}`}>
-                    {product.inStock ? 'IN STOCK' : 'UNAVAILABLE'}
+                    {product.inStock ? 'במלאי' : 'אזל'}
                   </span>
                 </div>
                 <div className="bg-background border border-border p-3">
-                  <span className="font-mono text-[10px] text-muted-foreground uppercase block mb-1">Shipping</span>
+                  <span className="font-mono text-[10px] text-muted-foreground uppercase block mb-1">משלוח</span>
                   <span className="font-mono text-sm font-bold uppercase">
-                    NEXT DAY
+                    יום הבא
                   </span>
                 </div>
               </div>
@@ -100,15 +100,15 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
                 className="flex-1 rounded-none font-display font-bold uppercase tracking-wider h-14 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(153,255,0,0.3)] transition-all group"
                 disabled={!product.inStock}
               >
-                <ShoppingCart className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                {product.inStock ? 'Acquire Gear' : 'Out of Stock'}
+                <ShoppingCart className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
+                {product.inStock ? 'רכוש ציוד' : 'אזל מהמלאי'}
               </Button>
               <Button 
                 variant="outline" 
                 className="rounded-none font-mono uppercase tracking-wider h-14 border-border hover:bg-secondary hover:text-foreground transition-all"
               >
-                <Zap className="w-5 h-5 mr-2" />
-                Wishlist
+                <Zap className="w-5 h-5 ml-2" />
+                רשימת משאלות
               </Button>
             </div>
           </div>

@@ -7,11 +7,11 @@ export default function About() {
         <div className="space-y-6 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 border border-border bg-card font-mono text-xs uppercase tracking-widest text-primary mb-6">
             <span className="w-2 h-2 bg-primary animate-pulse" />
-            Classified Intel
+            מידע סווג
           </div>
           <h1 className="font-display text-5xl md:text-7xl font-bold uppercase tracking-tighter">
-            Born on the track. <br/>
-            <span className="text-muted-foreground">Built for the street.</span>
+            נולד במגרש. <br/>
+            <span className="text-muted-foreground">נבנה לרחוב.</span>
           </h1>
         </div>
 
@@ -23,23 +23,23 @@ export default function About() {
             className="w-full h-full object-cover mix-blend-luminosity opacity-80"
           />
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(10,10,12,0.8))]" />
-          <div className="absolute bottom-6 left-6 font-mono text-xs text-primary uppercase tracking-widest">
-            // Initial Prototype Testing, 2023
+          <div className="absolute bottom-6 right-6 font-mono text-xs text-primary uppercase tracking-widest">
+            // בדיקות אב-טיפוס ראשוניות, 2023
           </div>
         </div>
 
         {/* Story Blocks */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
           <div className="md:col-span-4 md:sticky md:top-32">
-            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">The Directive</h2>
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">המשימה</h2>
             <div className="w-12 h-1 bg-primary mt-4" />
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              <strong>PERI Sport</strong> was not created to fit in. We exist at the intersection of brutal performance demands and uncompromising aesthetic standards. 
+              <strong>PERI Sport</strong> לא נוצרה כדי להתאים. אנחנו קיימים בצומת שבין דרישות ביצועים קשוחות ותקנים אסתטיים ללא פשרות.
             </p>
             <p>
-              Most athletic wear forces a choice: look good or perform well. We rejected that binary. Every piece of gear we design undergoes rigorous stress testing before it ever sees a mood board. If it doesn't shave seconds off a sprint, hold up under heavy loads, or breathe perfectly during high-output intervals, it doesn't get made.
+              רוב ביגוד הספורט מכריח בחירה: להיראות טוב או לבצע טוב. אנחנו דחינו את הבינאריות הזו. כל פריט ציוד שאנחנו מעצבים עובר בדיקות עומס קפדניות לפני שהוא מגיע לשולחן העיצוב. אם הוא לא מקצר שניות בריצה, לא מחזיק תחת עומסים כבדים, או לא נושם בצורה מושלמת — הוא פשוט לא נוצר.
             </p>
           </div>
         </div>
@@ -48,15 +48,15 @@ export default function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
           <div className="md:col-span-4 md:sticky md:top-32">
-            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">Engineering</h2>
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">הנדסה</h2>
             <div className="w-12 h-1 bg-primary mt-4" />
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              Our materials are sourced from military contractors and advanced textile labs. We employ carbon-infused threading for structural integrity and proprietary moisture-wicking compounds that react dynamically to core body temperature.
+              החומרים שלנו מגיעים מקבלני ביטחון ומעבדות טקסטיל מתקדמות. אנו משתמשים בחוטי פחמן לחוזק מבני ובתרכובות ייחודיות לניהול לחות שמגיבות דינמית לטמפרטורת גוף הליבה.
             </p>
             <p>
-              The aesthetic—stark, sharp, dark—is a byproduct of our philosophy. <strong>Zero excess. High impact.</strong> We don't use neon for decoration; we use it for visibility. We don't use black to be stealthy; we use it because it absorbs heat efficiently during early morning training. Form follows function, violently.
+              האסתטיקה — קשוחה, חדה, כהה — היא תוצר לוואי של הפילוסופיה שלנו. <strong>אפס עודף. השפעה מקסימלית.</strong> אנחנו לא משתמשים בניאון לקישוט — אנחנו משתמשים בו לנראות. אנחנו לא לובשים שחור כדי להסתתר — הצבע הזה סופג חום ביעילות באימוני הבוקר המוקדמים. הצורה עוקבת אחרי הפונקציה, בצורה קיצונית.
             </p>
           </div>
         </div>

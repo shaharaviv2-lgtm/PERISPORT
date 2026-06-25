@@ -21,11 +21,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }, [location]);
 
   const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/products?q=football", label: "Football" },
-    { href: "/products?q=basketball", label: "Basketball" },
-    { href: "/social", label: "Social Media" },
-    { href: "/contact", label: "Contact" },
+    { href: "/", label: "דף הבית" },
+    { href: "/products?q=football", label: "כדורגל" },
+    { href: "/products?q=basketball", label: "כדורסל" },
+    { href: "/social", label: "רשתות חברתיות" },
+    { href: "/contact", label: "צור קשר" },
   ];
 
   const isNavActive = (href: string) => {
@@ -37,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background text-foreground dark">
+    <div className="min-h-[100dvh] flex flex-col bg-background text-foreground dark" dir="rtl">
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
@@ -123,35 +123,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 />
               </div>
               <p className="text-sm text-muted-foreground max-w-sm">
-                Engineered for the uncompromising. Track-tested, street-ready athletic wear for those who push boundaries.
+                מהונדס עבור חסרי הפשרות. ביגוד ספורט שנבדק במגרש ומוכן לרחוב — לאלה שדוחפים גבולות.
               </p>
             </div>
             
             <div className="space-y-4">
-              <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">Directory</h4>
+              <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">ניווט</h4>
               <ul className="space-y-2">
-                <li><Link href="/products?q=football" className="text-sm hover:text-primary transition-colors">Football</Link></li>
-                <li><Link href="/products?q=basketball" className="text-sm hover:text-primary transition-colors">Basketball</Link></li>
-                <li><Link href="/social" className="text-sm hover:text-primary transition-colors">Social Media</Link></li>
-                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link></li>
+                <li><Link href="/products?q=football" className="text-sm hover:text-primary transition-colors">כדורגל</Link></li>
+                <li><Link href="/products?q=basketball" className="text-sm hover:text-primary transition-colors">כדורסל</Link></li>
+                <li><Link href="/social" className="text-sm hover:text-primary transition-colors">רשתות חברתיות</Link></li>
+                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">צור קשר</Link></li>
               </ul>
             </div>
 
             <div className="space-y-4">
-              <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">Support</h4>
+              <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">תמיכה</h4>
               <ul className="space-y-2">
-                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">Comms</Link></li>
-                <li><span className="text-sm text-muted-foreground cursor-not-allowed">Returns</span></li>
-                <li><span className="text-sm text-muted-foreground cursor-not-allowed">Sizing Guide</span></li>
+                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">יצירת קשר</Link></li>
+                <li><span className="text-sm text-muted-foreground cursor-not-allowed">החזרות</span></li>
+                <li><span className="text-sm text-muted-foreground cursor-not-allowed">מדריך מידות</span></li>
               </ul>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} PERI Sport. All rights reserved.</p>
+            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} PERI Sport. כל הזכויות שמורות.</p>
             <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground/50">
-              <span>SYS.ONLINE</span>
+              <span>המערכת פעילה</span>
               <span className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-              <Link href="/admin" className="hover:text-primary transition-colors">Admin</Link>
+              <Link href="/admin" className="hover:text-primary transition-colors">מנהל</Link>
             </div>
           </div>
         </div>

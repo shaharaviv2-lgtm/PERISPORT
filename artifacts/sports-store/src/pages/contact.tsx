@@ -16,10 +16,10 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  subject: z.string().min(2, "Subject is required"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  name: z.string().min(2, "השם חייב להכיל לפחות 2 תווים"),
+  email: z.string().email("כתובת אימייל לא תקינה"),
+  subject: z.string().min(2, "נדרש נושא"),
+  message: z.string().min(10, "ההודעה חייבת להכיל לפחות 10 תווים"),
 });
 
 export default function Contact() {
@@ -37,8 +37,8 @@ export default function Contact() {
 
   function onSubmit(values: z.infer<typeof contactSchema>) {
     toast({
-      title: "Transmission Sent",
-      description: "We've received your comms. Expect a response within 24 hours.",
+      title: "ההודעה נשלחה!",
+      description: "קיבלנו את הודעתך. צפה לתגובה תוך 24 שעות.",
       className: "border-primary bg-card font-mono rounded-none",
     });
     form.reset();
@@ -50,10 +50,10 @@ export default function Contact() {
         
         <div className="mb-16">
           <h1 className="font-display text-5xl md:text-6xl font-bold uppercase tracking-tighter mb-4">
-            Comms
+            צור קשר
           </h1>
           <p className="font-mono text-muted-foreground uppercase tracking-widest text-sm">
-            // Secure channel open. Awaiting input.
+            // ערוץ מאובטח פתוח. ממתין לקלט.
           </p>
         </div>
 
@@ -66,18 +66,18 @@ export default function Contact() {
               
               <div>
                 <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4 border-b border-border/50 pb-2 flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-primary" /> HQ Location
+                  <MapPin className="w-4 h-4 text-primary" /> מיקום המטה
                 </h3>
                 <p className="font-display text-lg uppercase leading-snug">
-                  482 Performance Way<br/>
-                  Sector 7, District<br/>
-                  Neo-Tokyo 104-0061
+                  482 דרך הביצועים<br/>
+                  מגזר 7, מחוז<br/>
+                  תל אביב 6100101
                 </p>
               </div>
 
               <div>
                 <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4 border-b border-border/50 pb-2 flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-primary" /> Digital
+                  <Mail className="w-4 h-4 text-primary" /> אימייל
                 </h3>
                 <p className="font-mono text-sm">
                   support@peri-sport.sys<br/>
@@ -87,10 +87,10 @@ export default function Contact() {
 
               <div>
                 <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4 border-b border-border/50 pb-2 flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-primary" /> Direct Line
+                  <Phone className="w-4 h-4 text-primary" /> קו ישיר
                 </h3>
                 <p className="font-mono text-sm">
-                  +1 (800) 555-PERI
+                  03-555-7374
                 </p>
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function Contact() {
             <div className="bg-card border border-border p-6 md:p-10 relative">
               <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
               
-              <h2 className="font-display text-2xl font-bold uppercase mb-8">Initialize Message</h2>
+              <h2 className="font-display text-2xl font-bold uppercase mb-8">שלח הודעה</h2>
               
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -111,9 +111,9 @@ export default function Contact() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Operator Name</FormLabel>
+                          <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">שם מלא</FormLabel>
                           <FormControl>
-                            <Input placeholder="John Doe" {...field} className="rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary h-12 font-mono" />
+                            <Input placeholder="ישראל ישראלי" {...field} className="rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary h-12 font-mono text-right" />
                           </FormControl>
                           <FormMessage className="font-mono text-[10px]" />
                         </FormItem>
@@ -124,9 +124,9 @@ export default function Contact() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Return Address</FormLabel>
+                          <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">כתובת אימייל</FormLabel>
                           <FormControl>
-                            <Input placeholder="john@example.com" {...field} className="rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary h-12 font-mono" />
+                            <Input placeholder="israel@example.com" {...field} className="rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary h-12 font-mono" />
                           </FormControl>
                           <FormMessage className="font-mono text-[10px]" />
                         </FormItem>
@@ -139,9 +139,9 @@ export default function Contact() {
                     name="subject"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Subject Line</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">נושא</FormLabel>
                         <FormControl>
-                          <Input placeholder="Equipment Inquiry" {...field} className="rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary h-12 font-mono" />
+                          <Input placeholder="שאלה על ציוד" {...field} className="rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary h-12 font-mono text-right" />
                         </FormControl>
                         <FormMessage className="font-mono text-[10px]" />
                       </FormItem>
@@ -153,11 +153,11 @@ export default function Contact() {
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Payload</FormLabel>
+                        <FormLabel className="font-mono text-xs uppercase tracking-widest text-muted-foreground">הודעה</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Enter message..." 
-                            className="resize-none rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary min-h-[200px] font-mono"
+                            placeholder="כתוב את הודעתך כאן..." 
+                            className="resize-none rounded-none border-border bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary min-h-[200px] font-mono text-right"
                             {...field} 
                           />
                         </FormControl>
@@ -167,7 +167,7 @@ export default function Contact() {
                   />
 
                   <Button type="submit" className="w-full md:w-auto min-w-[200px] rounded-none font-display font-bold uppercase tracking-wider h-14 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(153,255,0,0.3)] transition-all">
-                    Transmit
+                    שלח
                   </Button>
                 </form>
               </Form>

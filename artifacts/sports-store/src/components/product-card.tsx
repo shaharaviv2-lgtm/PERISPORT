@@ -27,7 +27,7 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
           )}
           {!product.inStock && (
             <Badge variant="destructive" className="rounded-none font-mono uppercase tracking-wider text-[10px] px-2 py-0.5">
-              Out of Stock
+              אזל מהמלאי
             </Badge>
           )}
         </div>
