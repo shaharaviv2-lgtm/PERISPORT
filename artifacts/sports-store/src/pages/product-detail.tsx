@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ShoppingCart, Zap, CheckCircle2, Package, Truck, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/context/cart";
 
 const SIZES_BY_CATEGORY: Record<string, string[]> = {
   apparel: ["XS", "S", "M", "L", "XL", "XXL"],
@@ -26,6 +27,7 @@ export default function ProductDetail() {
     query: { queryKey: getGetProductQueryKey(productId), enabled: !!productId },
   });
 
+  const { addItem } = useCart();
   const sizes = product ? getSizes(product.category) : [];
   const hasSizes = sizes.length > 1;
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -38,10 +40,13 @@ export default function ProductDetail() {
       toast({ title: "בחר מידה", description: "אנא בחר את המידה שלך לפני שתמשיך.", variant: "destructive" });
       return;
     }
-    toast({
-      title: "נוסף לסל!",
-      description: `${product?.name}${selectedSize ? ` — מידה ${selectedSize}` : ""} מוכן לתשלום.`,
-    });
+    if (product) {
+      addItem(product, selectedSize || undefined);
+      toast({
+        title: "נוסף לסל!",
+        description: `${product.name}${selectedSize ? ` — מידה ${selectedSize}` : ""} נוסף לסל הקניות.`,
+      });
+    }
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   }

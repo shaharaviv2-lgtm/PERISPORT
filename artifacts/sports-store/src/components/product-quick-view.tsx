@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Zap } from "lucide-react";
 import type { Product } from "@workspace/api-client-react";
+import { useCart } from "@/context/cart";
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -17,6 +18,7 @@ interface ProductQuickViewProps {
 }
 
 export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewProps) {
+  const { addItem } = useCart();
   if (!product) return null;
 
   return (
@@ -99,9 +101,10 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
               <Button 
                 className="flex-1 rounded-none font-display font-bold uppercase tracking-wider h-14 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(153,255,0,0.3)] transition-all group"
                 disabled={!product.inStock}
+                onClick={() => { addItem(product); onClose(); }}
               >
                 <ShoppingCart className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
-                {product.inStock ? 'רכוש ציוד' : 'אזל מהמלאי'}
+                {product.inStock ? 'הוסף לסל' : 'אזל מהמלאי'}
               </Button>
               <Button 
                 variant="outline" 

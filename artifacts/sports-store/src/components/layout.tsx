@@ -2,10 +2,12 @@ import { Link, useLocation } from "wouter";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/cart";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalItems } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -69,10 +71,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="hidden md:flex relative hover:text-primary hover:bg-primary/10">
-              <ShoppingBag className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
-            </Button>
+            <Link href="/cart">
+              <Button variant="ghost" size="icon" className="relative hover:text-primary hover:bg-primary/10">
+                <ShoppingBag className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-primary text-primary-foreground rounded-full text-[10px] font-mono font-bold flex items-center justify-center px-1">
+                    {totalItems}
+                  </span>
+                )}
+              </Button>
+            </Link>
 
             {/* Mobile Menu Toggle */}
             <Button
