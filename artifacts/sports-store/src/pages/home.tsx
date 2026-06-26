@@ -1,4 +1,4 @@
-import { useListFeatured, useGetStoreStats, getListFeaturedQueryKey, getGetStoreStatsQueryKey } from "@workspace/api-client-react";
+import { useListProducts, useGetStoreStats, getListProductsQueryKey, getGetStoreStatsQueryKey } from "@workspace/api-client-react";
 import { Link } from "wouter";
 import { ArrowRight, Activity, Globe, Box, Award, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,10 @@ import type { Product } from "@workspace/api-client-react";
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const { data: featuredProducts, isLoading: isFeaturedLoading } = useListFeatured({
-    query: { queryKey: getListFeaturedQueryKey() }
-  });
+  const { data: featuredProducts, isLoading: isFeaturedLoading } = useListProducts(
+    { newest: true, limit: 5 },
+    { query: { queryKey: getListProductsQueryKey({ newest: true, limit: 5 }) } }
+  );
 
   const { data: storeStats, isLoading: isStatsLoading } = useGetStoreStats({
     query: { queryKey: getGetStoreStatsQueryKey() }
@@ -118,8 +119,8 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <h2 className="font-mono text-primary text-sm uppercase tracking-widest mb-2">// גופיות מובחרות</h2>
-              <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight">קולקציית עכשיו</h3>
+              <h2 className="font-mono text-primary text-sm uppercase tracking-widest mb-2">// הגיע לאחרונה</h2>
+              <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight">חדש בחנות</h3>
             </div>
             <Button asChild variant="ghost" className="rounded-none font-mono uppercase tracking-wider hover:bg-secondary group">
               <Link href="/products">

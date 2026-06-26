@@ -1,22 +1,28 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
 import { productsTable } from "@workspace/db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { logger } from "../lib/logger";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { category, featured, sport } = req.query as { category?: string; featured?: string; sport?: string };
+    const { category, featured, sport, newest, limit } = req.query as { category?: string; featured?: string; sport?: string; newest?: string; limit?: string };
     const conditions = [];
     if (category) conditions.push(eq(productsTable.category, category));
     if (sport) conditions.push(eq(productsTable.sport, sport));
     if (featured === "true") conditions.push(eq(productsTable.featured, true));
 
-    const products = conditions.length
-      ? await db.select().from(productsTable).where(and(...conditions))
-      : await db.select().from(productsTable);
+    const limitNum = limit ? parseInt(limit) : undefined;
+    const whereClause = conditions.length ? and(...conditions) : undefined;
+
+    const products = await db
+      .select()
+      .from(productsTable)
+      .where(whereClause)
+      .orderBy(newest === "true" ? desc(productsTable.id) : productsTable.id)
+      .limit(limitNum ?? 10000);
 
     res.json(
       products.map((p) => ({

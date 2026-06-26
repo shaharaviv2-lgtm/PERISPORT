@@ -23,7 +23,9 @@ export const HealthCheckResponse = zod.object({
 export const ListProductsQueryParams = zod.object({
   "category": zod.coerce.string().optional(),
   "featured": zod.coerce.boolean().optional(),
-  "sport": zod.coerce.string().optional()
+  "sport": zod.coerce.string().optional(),
+  "newest": zod.coerce.boolean().optional(),
+  "limit": zod.coerce.number().optional()
 })
 
 export const ListProductsResponseItem = zod.object({

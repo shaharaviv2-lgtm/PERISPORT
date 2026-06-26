@@ -10,4 +10,6 @@ export type ListProductsParams = {
 category?: string;
 featured?: boolean;
 sport?: string;
+newest?: boolean;
+limit?: number;
 };
