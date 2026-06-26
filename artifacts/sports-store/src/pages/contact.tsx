@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone, Instagram, MessageCircle } from "lucide-react";
 
 const contactSchema = z.object({
   name: z.string().min(2, "השם חייב להכיל לפחות 2 תווים"),
@@ -92,6 +92,45 @@ export default function Contact() {
                 <p className="font-mono text-sm">
                   03-555-7374
                 </p>
+              </div>
+
+              <div>
+                <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4 border-b border-border/50 pb-2">// עקבו אחרינו</h3>
+                <div className="space-y-3">
+                  <a
+                    href="https://instagram.com/perisport"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 group hover:text-primary transition-colors"
+                  >
+                    <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all flex-shrink-0">
+                      <Instagram className="w-4 h-4" />
+                    </div>
+                    <span className="font-mono text-sm">@perisport</span>
+                  </a>
+                  <a
+                    href="https://wa.me/972555737400"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 group hover:text-primary transition-colors"
+                  >
+                    <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all flex-shrink-0">
+                      <MessageCircle className="w-4 h-4" />
+                    </div>
+                    <span className="font-mono text-sm">WhatsApp</span>
+                  </a>
+                  <a
+                    href="https://tiktok.com/@perisport"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 group hover:text-primary transition-colors"
+                  >
+                    <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all font-mono text-[11px] font-bold flex-shrink-0">
+                      TK
+                    </div>
+                    <span className="font-mono text-sm">@perisport</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

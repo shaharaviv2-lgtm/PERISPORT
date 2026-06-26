@@ -24,7 +24,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", label: "דף הבית" },
     { href: "/category/football", label: "כדורגל" },
     { href: "/category/basketball", label: "כדורסל" },
-    { href: "/social", label: "רשתות חברתיות" },
     { href: "/contact", label: "צור קשר" },
   ];
 
@@ -132,7 +131,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-2">
                 <li><Link href="/category/football" className="text-sm hover:text-primary transition-colors">כדורגל</Link></li>
                 <li><Link href="/category/basketball" className="text-sm hover:text-primary transition-colors">כדורסל</Link></li>
-                <li><Link href="/social" className="text-sm hover:text-primary transition-colors">רשתות חברתיות</Link></li>
                 <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">צור קשר</Link></li>
               </ul>
             </div>
@@ -141,7 +139,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">תמיכה</h4>
               <ul className="space-y-2">
                 <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">יצירת קשר</Link></li>
-                <li><span className="text-sm text-muted-foreground cursor-not-allowed">החזרות</span></li>
                 <li><span className="text-sm text-muted-foreground cursor-not-allowed">מדריך מידות</span></li>
               </ul>
             </div>

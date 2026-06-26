@@ -223,7 +223,7 @@ export default function Home() {
               <Link href="/contact">צור קשר</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-none font-mono uppercase tracking-wider h-14 border-border hover:bg-secondary">
-              <Link href="/social">לרשתות החברתיות</Link>
+              <a href="https://instagram.com/perisport" target="_blank" rel="noopener noreferrer">Instagram</a>
             </Button>
           </div>
         </div>
