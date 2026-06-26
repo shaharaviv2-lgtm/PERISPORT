@@ -131,6 +131,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-2">
                 <li><Link href="/category/football" className="text-sm hover:text-primary transition-colors">כדורגל</Link></li>
                 <li><Link href="/category/basketball" className="text-sm hover:text-primary transition-colors">כדורסל</Link></li>
+                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">צור קשר</Link></li>
               </ul>
             </div>
 
