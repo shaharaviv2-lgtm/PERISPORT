@@ -40,12 +40,12 @@ function getSizes(category: string): string[] {
 }
 
 const SIZE_GUIDE_ROWS = [
-  { size: "XS", chest: "82–87", waist: "68–73", height: "162–167" },
-  { size: "S",  chest: "88–93", waist: "74–79", height: "168–172" },
-  { size: "M",  chest: "94–99", waist: "80–85", height: "173–177" },
-  { size: "L",  chest: "100–105", waist: "86–91", height: "178–182" },
-  { size: "XL", chest: "106–111", waist: "92–97", height: "183–187" },
-  { size: "XXL",chest: "112–117", waist: "98–103", height: "188–193" },
+  { size: "XS",  chestCm: "82–87",   chestIn: '32–34"', waistCm: "68–73",   waistIn: '27–29"', heightCm: "162–167", heightIn: '64–66"' },
+  { size: "S",   chestCm: "88–93",   chestIn: '35–37"', waistCm: "74–79",   waistIn: '29–31"', heightCm: "168–172", heightIn: '66–68"' },
+  { size: "M",   chestCm: "94–99",   chestIn: '37–39"', waistCm: "80–85",   waistIn: '31–33"', heightCm: "173–177", heightIn: '68–70"' },
+  { size: "L",   chestCm: "100–105", chestIn: '39–41"', waistCm: "86–91",   waistIn: '34–36"', heightCm: "178–182", heightIn: '70–72"' },
+  { size: "XL",  chestCm: "106–111", chestIn: '42–44"', waistCm: "92–97",   waistIn: '36–38"', heightCm: "183–187", heightIn: '72–74"' },
+  { size: "XXL", chestCm: "112–117", chestIn: '44–46"', waistCm: "98–103",  waistIn: '39–41"', heightCm: "188–193", heightIn: '74–76"' },
 ];
 
 export default function ProductDetail() {
@@ -387,24 +387,24 @@ export default function ProductDetail() {
           <DialogHeader>
             <DialogTitle className="font-display text-2xl uppercase tracking-tight">מדריך מידות</DialogTitle>
           </DialogHeader>
-          <p className="font-mono text-xs text-muted-foreground mb-4">כל המידות בסנטימטרים. מדוד עם בגד תחתון צמוד.</p>
+          <p className="font-mono text-xs text-muted-foreground mb-4">מדוד עם בגד תחתון צמוד. בין שתי מידות — בחר את הגדולה.</p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm font-mono">
               <thead>
                 <tr className="border-b border-border">
                   <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">מידה</th>
-                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">חזה</th>
-                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">מותן</th>
-                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">גובה</th>
+                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">חזה (ס"מ / אינץ')</th>
+                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">מותן (ס"מ / אינץ')</th>
+                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">גובה (ס"מ / אינץ')</th>
                 </tr>
               </thead>
               <tbody>
                 {SIZE_GUIDE_ROWS.map((row, i) => (
                   <tr key={row.size} className={i % 2 === 0 ? "bg-background/50" : ""}>
                     <td className="py-2 px-3 font-bold text-primary">{row.size}</td>
-                    <td className="py-2 px-3">{row.chest}</td>
-                    <td className="py-2 px-3">{row.waist}</td>
-                    <td className="py-2 px-3">{row.height}</td>
+                    <td className="py-2 px-3">{row.chestCm} <span className="text-muted-foreground">/ {row.chestIn}</span></td>
+                    <td className="py-2 px-3">{row.waistCm} <span className="text-muted-foreground">/ {row.waistIn}</span></td>
+                    <td className="py-2 px-3">{row.heightCm} <span className="text-muted-foreground">/ {row.heightIn}</span></td>
                   </tr>
                 ))}
               </tbody>

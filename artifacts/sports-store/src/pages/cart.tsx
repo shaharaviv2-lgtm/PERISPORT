@@ -10,6 +10,8 @@ export default function Cart() {
 
   useEffect(() => {
     document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "סל הקניות שלך ב-PERI Sport — בדוק את הפריטים שבחרת וסיים את הרכישה.");
   }, [totalItems]);
 
   if (items.length === 0) {

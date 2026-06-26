@@ -33,6 +33,8 @@ export default function Products() {
 
   useEffect(() => {
     document.title = "חנות הגופיות | PERI Sport";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "עיין בכל גופיות הספורט של PERI Sport — כדורגל, כדורסל, ג'רזי רשמיים. סינון לפי ספורט, מידה ומחיר.");
   }, []);
 
   const { data: categories, isLoading: isCategoriesLoading } = useListCategories({

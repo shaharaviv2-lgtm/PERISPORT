@@ -25,6 +25,8 @@ const socials = [
 export default function Contact() {
   useEffect(() => {
     document.title = "צור קשר | PERI Sport";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "צור קשר עם PERI Sport — ב-WhatsApp, אינסטגרם או TikTok. נשמח לעזור עם הזמנות, מידות ומשלוחים.");
   }, []);
 
   return (

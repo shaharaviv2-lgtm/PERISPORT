@@ -12,6 +12,8 @@ export default function Home() {
 
   useEffect(() => {
     document.title = "PERI Sport — גופיות ספורט רשמיות";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "PERI Sport — חנות גופיות כדורגל וכדורסל רשמיות. ג'רזי NBA, ליגות אירופה ועוד. משלוח מהיר לכל הארץ.");
   }, []);
 
   const { data: featuredProducts, isLoading: isFeaturedLoading } = useListProducts(

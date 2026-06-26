@@ -36,7 +36,9 @@ export default function Category() {
 
   useEffect(() => {
     document.title = `${meta.title} | PERI Sport`;
-  }, [meta.title]);
+    const metaEl = document.querySelector('meta[name="description"]');
+    if (metaEl) metaEl.setAttribute("content", `גופיות ${meta.title} רשמיות — קנה ב-PERI Sport. מידות XS עד XXL, משלוח מהיר לכל הארץ.`);
+  }, [meta.title, meta.subtitle]);
 
   const { data: products, isLoading } = useListProducts(
     { sport },

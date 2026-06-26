@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, Zap } from "lucide-react";
 import type { Product } from "@workspace/api-client-react";
 import { useCart } from "@/context/cart";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { useLocation } from "wouter";
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -19,7 +22,25 @@ interface ProductQuickViewProps {
 
 export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewProps) {
   const { addItem } = useCart();
+  const { toast } = useToast();
+  const [, navigate] = useLocation();
+
   if (!product) return null;
+
+  function handleAddToCart() {
+    if (!product) return;
+    addItem(product);
+    onClose();
+    toast({
+      title: "נוסף לסל!",
+      description: `${product.name} נוסף לסל הקניות.`,
+      action: (
+        <ToastAction altText="צפה בסל" onClick={() => navigate("/cart")}>
+          צפה בסל
+        </ToastAction>
+      ),
+    });
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -32,7 +53,6 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
               alt={product.name}
               className="object-cover w-full h-full"
             />
-            {/* Overlay Grid lines for tech aesthetic */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
             
             <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -101,7 +121,7 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
               <Button 
                 className="flex-1 rounded-none font-display font-bold uppercase tracking-wider h-14 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(153,255,0,0.3)] transition-all group"
                 disabled={!product.inStock}
-                onClick={() => { addItem(product); onClose(); }}
+                onClick={handleAddToCart}
               >
                 <ShoppingCart className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
                 {product.inStock ? 'הוסף לסל' : 'אזל מהמלאי'}

@@ -16,7 +16,7 @@ export default function NotFound() {
         </p>
         
         <Button asChild className="w-full rounded-none font-display font-bold uppercase tracking-wider h-12 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(153,255,0,0.3)] transition-all">
-          <Link href="/">חזרה לדף הבית</Link>
+          <Link href="/products">חזרה לחנות</Link>
         </Button>
       </div>
     </div>
