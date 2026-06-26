@@ -24,7 +24,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", label: "דף הבית" },
     { href: "/category/football", label: "כדורגל" },
     { href: "/category/basketball", label: "כדורסל" },
-    { href: "/contact", label: "צור קשר" },
   ];
 
   const isNavActive = (href: string) => {
