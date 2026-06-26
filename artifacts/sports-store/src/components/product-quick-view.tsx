@@ -61,11 +61,11 @@ export function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewP
               
               <div className="flex items-baseline gap-3">
                 <span className="font-mono text-3xl text-primary font-bold">
-                  ${product.price.toFixed(2)}
+                  ₪{product.price.toFixed(2)}
                 </span>
                 {product.originalPrice && (
                   <span className="font-mono text-lg text-muted-foreground line-through decoration-destructive decoration-2">
-                    ${product.originalPrice.toFixed(2)}
+                    ₪{product.originalPrice.toFixed(2)}
                   </span>
                 )}
               </div>

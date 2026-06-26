@@ -80,11 +80,11 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
         </h3>
         <div className="flex items-baseline gap-2 mt-auto">
           <span className="font-mono font-bold text-primary text-lg">
-            ${product.price.toFixed(2)}
+            ₪{product.price.toFixed(2)}
           </span>
           {product.originalPrice && (
             <span className="font-mono text-xs text-muted-foreground line-through">
-              ${product.originalPrice.toFixed(2)}
+              ₪{product.originalPrice.toFixed(2)}
             </span>
           )}
         </div>

@@ -184,11 +184,11 @@ export default function ProductDetail() {
             {/* Price */}
             <div className="flex items-baseline gap-4 mb-8 pb-8 border-b border-border">
               <span className="font-mono text-4xl font-bold text-primary">
-                ${product.price.toFixed(2)}
+                ₪{product.price.toFixed(2)}
               </span>
               {product.originalPrice && (
                 <span className="font-mono text-xl text-muted-foreground line-through decoration-destructive decoration-2">
-                  ${product.originalPrice.toFixed(2)}
+                  ₪{product.originalPrice.toFixed(2)}
                 </span>
               )}
             </div>

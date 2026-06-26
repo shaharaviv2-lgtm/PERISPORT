@@ -740,7 +740,7 @@ function AdminProductRow({
         </div>
         <div className="flex items-center gap-3 mt-0.5">
           <span className="font-mono text-xs text-muted-foreground capitalize">{product.category}</span>
-          <span className="font-mono text-xs font-bold">${product.price.toFixed(2)}</span>
+          <span className="font-mono text-xs font-bold">₪{product.price.toFixed(2)}</span>
           <span className={`flex items-center gap-1 font-mono text-[10px] uppercase ${product.inStock ? "text-primary" : "text-destructive"}`}>
             {product.inStock ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
             {product.inStock ? "In Stock" : "Out of Stock"}
