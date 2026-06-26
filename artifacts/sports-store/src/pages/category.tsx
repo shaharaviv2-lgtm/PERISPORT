@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams } from "wouter";
 import {
   useListProducts,
@@ -33,6 +33,10 @@ export default function Category() {
 
   const [typeFilter, setTypeFilter] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    document.title = `${meta.title} | PERI Sport`;
+  }, [meta.title]);
 
   const { data: products, isLoading } = useListProducts(
     { sport },

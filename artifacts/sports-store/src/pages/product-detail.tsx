@@ -1,11 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
-import { useGetProduct, getGetProductQueryKey } from "@workspace/api-client-react";
+import {
+  useGetProduct,
+  getGetProductQueryKey,
+  useListProducts,
+  getListProductsQueryKey,
+} from "@workspace/api-client-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Zap, CheckCircle2, Package, Truck, Shield } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  ArrowLeft,
+  ShoppingCart,
+  Zap,
+  CheckCircle2,
+  Package,
+  Truck,
+  Shield,
+  HelpCircle,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { useCart } from "@/context/cart";
+import { ProductCard } from "@/components/product-card";
 
 const SIZES_BY_CATEGORY: Record<string, string[]> = {
   apparel: ["XS", "S", "M", "L", "XL", "XXL"],
@@ -16,6 +38,15 @@ const SIZES_BY_CATEGORY: Record<string, string[]> = {
 function getSizes(category: string): string[] {
   return SIZES_BY_CATEGORY[category.toLowerCase()] ?? ["S", "M", "L", "XL"];
 }
+
+const SIZE_GUIDE_ROWS = [
+  { size: "XS", chest: "82–87", waist: "68–73", height: "162–167" },
+  { size: "S",  chest: "88–93", waist: "74–79", height: "168–172" },
+  { size: "M",  chest: "94–99", waist: "80–85", height: "173–177" },
+  { size: "L",  chest: "100–105", waist: "86–91", height: "178–182" },
+  { size: "XL", chest: "106–111", waist: "92–97", height: "183–187" },
+  { size: "XXL",chest: "112–117", waist: "98–103", height: "188–193" },
+];
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -32,12 +63,35 @@ export default function ProductDetail() {
   const hasSizes = sizes.length > 1;
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [added, setAdded] = useState(false);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
   const allImages = [product?.imageUrl, ...(product?.additionalImages ?? [])].filter(Boolean) as string[];
   const [activeImage, setActiveImage] = useState(0);
 
+  const productSport = product?.sport ?? undefined;
+  const { data: allProducts } = useListProducts(
+    { sport: productSport },
+    {
+      query: {
+        queryKey: getListProductsQueryKey({ sport: productSport }),
+        enabled: !!productSport,
+      },
+    }
+  );
+  const relatedProducts = allProducts?.filter((p) => p.id !== productId).slice(0, 4) ?? [];
+
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} | PERI Sport`;
+    }
+  }, [product]);
+
   function handleBuy() {
     if (hasSizes && !selectedSize) {
-      toast({ title: "בחר מידה", description: "אנא בחר את המידה שלך לפני שתמשיך.", variant: "destructive" });
+      toast({
+        title: "בחר מידה",
+        description: "אנא בחר את המידה שלך לפני שתמשיך.",
+        variant: "destructive",
+      });
       return;
     }
     if (product) {
@@ -45,6 +99,11 @@ export default function ProductDetail() {
       toast({
         title: "נוסף לסל!",
         description: `${product.name}${selectedSize ? ` — מידה ${selectedSize}` : ""} נוסף לסל הקניות.`,
+        action: (
+          <ToastAction altText="צפה בסל" onClick={() => navigate("/cart")}>
+            צפה בסל
+          </ToastAction>
+        ),
       });
     }
     setAdded(true);
@@ -53,7 +112,11 @@ export default function ProductDetail() {
 
   function handleCheckout() {
     if (hasSizes && !selectedSize) {
-      toast({ title: "בחר מידה", description: "אנא בחר את המידה שלך לפני שתמשיך.", variant: "destructive" });
+      toast({
+        title: "בחר מידה",
+        description: "אנא בחר את המידה שלך לפני שתמשיך.",
+        variant: "destructive",
+      });
       return;
     }
     toast({
@@ -214,9 +277,18 @@ export default function ProductDetail() {
             {hasSizes && (
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-3 pb-2 border-b border-border/50">
-                  <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                    בחר מידה
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                      בחר מידה
+                    </h3>
+                    <button
+                      onClick={() => setShowSizeGuide(true)}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                      title="מדריך מידות"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                   {selectedSize && (
                     <span className="font-mono text-xs text-primary uppercase">
                       נבחר: {selectedSize}
@@ -288,7 +360,61 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
+
+        {/* Related products */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-24">
+            <div className="flex items-baseline gap-4 mb-8 border-b border-border pb-4">
+              <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
+                אולי יעניין אותך גם
+              </h2>
+              <span className="font-mono text-xs text-primary uppercase tracking-widest">
+                // {product.sport === "football" ? "כדורגל" : product.sport === "basketball" ? "כדורסל" : product.sport}
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((p) => (
+                <ProductCard key={p.id} product={p} onQuickView={() => {}} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Size Guide Dialog */}
+      <Dialog open={showSizeGuide} onOpenChange={setShowSizeGuide}>
+        <DialogContent className="max-w-lg bg-card border-border rounded-none sm:rounded-none">
+          <DialogHeader>
+            <DialogTitle className="font-display text-2xl uppercase tracking-tight">מדריך מידות</DialogTitle>
+          </DialogHeader>
+          <p className="font-mono text-xs text-muted-foreground mb-4">כל המידות בסנטימטרים. מדוד עם בגד תחתון צמוד.</p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm font-mono">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">מידה</th>
+                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">חזה</th>
+                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">מותן</th>
+                  <th className="py-2 px-3 text-right text-xs text-muted-foreground uppercase">גובה</th>
+                </tr>
+              </thead>
+              <tbody>
+                {SIZE_GUIDE_ROWS.map((row, i) => (
+                  <tr key={row.size} className={i % 2 === 0 ? "bg-background/50" : ""}>
+                    <td className="py-2 px-3 font-bold text-primary">{row.size}</td>
+                    <td className="py-2 px-3">{row.chest}</td>
+                    <td className="py-2 px-3">{row.waist}</td>
+                    <td className="py-2 px-3">{row.height}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="font-mono text-[10px] text-muted-foreground mt-2">
+            בין שתי מידות? בחר את הגדולה יותר לנוחות מרבית.
+          </p>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

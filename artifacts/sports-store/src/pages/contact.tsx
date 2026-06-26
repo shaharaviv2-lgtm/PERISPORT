@@ -1,4 +1,5 @@
 import { Instagram, MessageCircle } from "lucide-react";
+import { useEffect } from "react";
 
 const socials = [
   {
@@ -22,6 +23,10 @@ const socials = [
 ];
 
 export default function Contact() {
+  useEffect(() => {
+    document.title = "צור קשר | PERI Sport";
+  }, []);
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center w-full pt-16 pb-24 px-4">
       <h1 className="font-display text-5xl md:text-6xl font-bold uppercase tracking-tighter mb-4 text-center">

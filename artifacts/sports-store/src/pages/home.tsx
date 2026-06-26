@@ -4,11 +4,15 @@ import { ArrowRight, Activity, Globe, Box, Award, ChevronRight } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import { ProductQuickView } from "@/components/product-quick-view";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Product } from "@workspace/api-client-react";
 
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    document.title = "PERI Sport — גופיות ספורט רשמיות";
+  }, []);
 
   const { data: featuredProducts, isLoading: isFeaturedLoading } = useListProducts(
     { newest: true, limit: 5 },

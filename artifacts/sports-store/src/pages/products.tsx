@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "wouter";
 import { 
   useListProducts, 
@@ -8,22 +8,32 @@ import {
 } from "@workspace/api-client-react";
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import { ProductQuickView } from "@/components/product-quick-view";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Product } from "@workspace/api-client-react";
 import { Filter, SlidersHorizontal, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+const SPORT_FILTERS = [
+  { value: "all", label: "הכל" },
+  { value: "football", label: "⚽ כדורגל" },
+  { value: "basketball", label: "🏀 כדורסל" },
+];
+
 export default function Products() {
   const [location] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
   const initialCategory = searchParams.get('category') || 'all';
-  
   const initialSearch = new URLSearchParams(window.location.search).get('q') || "";
 
   const [activeTab, setActiveTab] = useState(initialCategory);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [sportFilter, setSportFilter] = useState("all");
+
+  useEffect(() => {
+    document.title = "חנות הגופיות | PERI Sport";
+  }, []);
 
   const { data: categories, isLoading: isCategoriesLoading } = useListCategories({
     query: { queryKey: getListCategoriesQueryKey() }
@@ -37,15 +47,21 @@ export default function Products() {
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
-    if (!searchQuery.trim()) return products;
-    const q = searchQuery.toLowerCase();
-    return products.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        (p.description ?? "").toLowerCase().includes(q)
-    );
-  }, [products, searchQuery]);
+    let result = products;
+    if (sportFilter !== "all") {
+      result = result.filter((p) => p.sport === sportFilter);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          (p.description ?? "").toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [products, searchQuery, sportFilter]);
 
   return (
     <div className="flex flex-col w-full bg-background min-h-screen pt-8 pb-24">
@@ -60,23 +76,40 @@ export default function Products() {
             // גופיות ומכנסי כדורגל וכדורסל רשמיים
           </p>
 
-          {/* Search bar */}
-          <div className="relative max-w-xl">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="חיפוש מוצרים..."
-              className="pr-9 pl-9 rounded-none bg-card border-border font-mono text-sm h-11 focus-visible:ring-primary focus-visible:border-primary text-right"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+          {/* Search bar + sport filter */}
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            <div className="relative max-w-xl w-full sm:w-auto sm:flex-1">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="חיפוש מוצרים..."
+                className="pr-9 pl-9 rounded-none bg-card border-border font-mono text-sm h-11 focus-visible:ring-primary focus-visible:border-primary text-right"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <div className="flex gap-2">
+              {SPORT_FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  onClick={() => setSportFilter(f.value)}
+                  className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all whitespace-nowrap ${
+                    sportFilter === f.value
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-card border-border text-muted-foreground hover:border-primary/60 hover:text-foreground"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

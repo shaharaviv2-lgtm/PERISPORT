@@ -1,4 +1,5 @@
 import { useLocation } from "wouter";
+import { useEffect } from "react";
 import { useCart } from "@/context/cart";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
@@ -6,6 +7,10 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
 export default function Cart() {
   const [, navigate] = useLocation();
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
+
+  useEffect(() => {
+    document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
+  }, [totalItems]);
 
   if (items.length === 0) {
     return (
