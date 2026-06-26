@@ -24,6 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", label: "דף הבית" },
     { href: "/category/football", label: "כדורגל" },
     { href: "/category/basketball", label: "כדורסל" },
+    { href: "/contact", label: "צור קשר" },
   ];
 
   const isNavActive = (href: string) => {
@@ -133,13 +134,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </ul>
             </div>
 
-            <div className="space-y-4">
-              <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">תמיכה</h4>
-              <ul className="space-y-2">
-                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">יצירת קשר</Link></li>
-                <li><span className="text-sm text-muted-foreground cursor-not-allowed">מדריך מידות</span></li>
-              </ul>
-            </div>
           </div>
           <div className="mt-12 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} PERI Sport. כל הזכויות שמורות.</p>
