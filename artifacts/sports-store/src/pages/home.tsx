@@ -220,9 +220,6 @@ export default function Home() {
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
             <Button asChild size="lg" className="rounded-none font-display font-bold uppercase tracking-wider text-lg h-14 bg-primary text-primary-foreground hover:bg-primary/90">
-              <Link href="/contact">צור קשר</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="rounded-none font-mono uppercase tracking-wider h-14 border-border hover:bg-secondary">
               <a href="https://instagram.com/perisport" target="_blank" rel="noopener noreferrer">Instagram</a>
             </Button>
           </div>
