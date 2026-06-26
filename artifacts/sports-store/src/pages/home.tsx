@@ -1,4 +1,4 @@
-import { useListFeatured, useGetStoreStats, useListCategories, getListFeaturedQueryKey, getGetStoreStatsQueryKey, getListCategoriesQueryKey } from "@workspace/api-client-react";
+import { useListFeatured, useGetStoreStats, getListFeaturedQueryKey, getGetStoreStatsQueryKey } from "@workspace/api-client-react";
 import { Link } from "wouter";
 import { ArrowRight, Activity, Globe, Box, Award, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,9 +18,6 @@ export default function Home() {
     query: { queryKey: getGetStoreStatsQueryKey() }
   });
 
-  const { data: categories, isLoading: isCategoriesLoading } = useListCategories({
-    query: { queryKey: getListCategoriesQueryKey() }
-  });
 
   return (
     <div className="flex flex-col w-full">
@@ -153,39 +150,48 @@ export default function Home() {
           <h2 className="font-mono text-primary text-sm uppercase tracking-widest mb-2 text-center">// קטגוריות</h2>
           <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-center mb-16">מה אתה מחפש?</h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {isCategoriesLoading ? (
-              Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="aspect-[16/9] bg-muted animate-pulse border border-border" />
-              ))
-            ) : (
-              categories?.filter(c => c.imageUrl).slice(0, 3).map((category, index) => (
-                <Link 
-                  key={category.id} 
-                  href={`/products?category=${category.slug}`}
-                  className="group relative aspect-[4/3] md:aspect-[3/4] lg:aspect-square border border-border overflow-hidden bg-background block"
-                >
-                  <img 
-                    src={category.imageUrl!} 
-                    alt={category.name} 
-                    className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-[opacity,transform] duration-300 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-                  
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="font-mono text-xs text-primary mb-2 block uppercase tracking-widest">0{index + 1} / {category.productCount} פריטים</span>
-                        <h4 className="font-display text-2xl font-bold uppercase tracking-tight group-hover:text-primary transition-colors">{category.name}</h4>
-                      </div>
-                      <div className="w-10 h-10 border border-border flex items-center justify-center bg-background/50 backdrop-blur group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all">
-                        <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-                      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                label: "כדורגל",
+                sub: "01",
+                href: "/category/football",
+                img: "/images/uploads/1782411677960-qg8c3u.jpg",
+                alt: "גופיית כדורגל",
+              },
+              {
+                label: "כדורסל",
+                sub: "02",
+                href: "/category/basketball",
+                img: "/images/uploads/1782411301659-1ebdq8.jpg",
+                alt: "גופיית כדורסל",
+              },
+            ].map((sport) => (
+              <Link
+                key={sport.href}
+                href={sport.href}
+                className="group relative aspect-[4/3] border border-border overflow-hidden bg-background block"
+              >
+                <img
+                  src={sport.img}
+                  alt={sport.alt}
+                  className="object-cover w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-[opacity,transform] duration-300 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-mono text-xs text-primary mb-2 block uppercase tracking-widest">{sport.sub}</span>
+                      <h4 className="font-display text-3xl font-bold uppercase tracking-tight group-hover:text-primary transition-colors">{sport.label}</h4>
+                    </div>
+                    <div className="w-10 h-10 border border-border flex items-center justify-center bg-background/50 backdrop-blur group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all">
+                      <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                     </div>
                   </div>
-                </Link>
-              ))
-            )}
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
