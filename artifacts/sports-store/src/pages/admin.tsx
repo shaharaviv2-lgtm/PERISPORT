@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
-const ADMIN_USER = import.meta.env.VITE_ADMIN_USERNAME as string;
-const ADMIN_PASS = import.meta.env.VITE_ADMIN_PASSWORD as string;
+const ADMIN_USER = "7zonot";
+const ADMIN_PASS = "4578932";
 const SESSION_KEY = "peri_admin_auth";
 
 function AdminLogin({ onLogin }: { onLogin: () => void }) {
