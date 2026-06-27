@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { logger } from "./logger.js";
 
-const ADMIN_EMAIL = "Talparienta@gmail.com";
+const ADMIN_EMAIL = "shaharaviv2@gmail.com";
 
 export interface OrderEmailData {
   orderId: number;
