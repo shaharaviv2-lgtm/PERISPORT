@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/cart";
 
-const WHATSAPP_URL = "https://wa.me/972555737400";
+const WHATSAPP_URL = "https://wa.me/972507755525";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();

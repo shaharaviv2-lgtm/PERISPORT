@@ -11,7 +11,7 @@ const socials = [
   {
     label: "WhatsApp",
     handle: "שלח הודעה",
-    href: "https://wa.me/972555737400",
+    href: "https://wa.me/972507755525",
     icon: <MessageCircle className="w-6 h-6" />,
   },
   {
