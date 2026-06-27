@@ -142,6 +142,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </svg>
       </a>
 
+      <footer className="border-t border-border bg-card py-12 mt-auto">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="md:col-span-2 space-y-4">
+              <div className="flex items-center gap-2 opacity-50">
+                <img
+                  src="/images/logo.png"
+                  alt="PERI"
+                  className="h-10 w-auto object-contain opacity-60"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h4 className="font-display font-bold uppercase tracking-wider text-sm text-muted-foreground">ניווט</h4>
+              <ul className="space-y-2">
+                <li><Link href="/category/football" className="text-sm hover:text-primary transition-colors">כדורגל</Link></li>
+                <li><Link href="/category/basketball" className="text-sm hover:text-primary transition-colors">כדורסל</Link></li>
+                <li><Link href="/contact" className="text-sm hover:text-primary transition-colors">צור קשר</Link></li>
+              </ul>
+            </div>
+
+          </div>
+          <div className="mt-12 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} PERI Sport. כל הזכויות שמורות.</p>
+            <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground/50">
+              <span>המערכת פעילה</span>
+              <span className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+              <Link href="/admin" className="hover:text-primary transition-colors">מנהל</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
