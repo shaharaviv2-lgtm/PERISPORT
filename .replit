@@ -21,3 +21,9 @@ timeoutMs = 20000
 
 [nix]
 channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+VITE_ADMIN_USERNAME = "7zonot"
+VITE_ADMIN_PASSWORD = "4578932"
