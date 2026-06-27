@@ -10,8 +10,8 @@ export default function About() {
             PERI SPORT
           </div>
           <h1 className="font-display text-5xl md:text-7xl font-bold uppercase tracking-tighter">
-            גופיות של <br/>
-            <span className="text-muted-foreground">אלופים.</span>
+            אנחנו פשוט<br/>
+            <span className="text-muted-foreground">אוהבים כדור.</span>
           </h1>
         </div>
 
@@ -24,22 +24,22 @@ export default function About() {
           />
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(10,10,12,0.8))]" />
           <div className="absolute bottom-6 right-6 font-mono text-xs text-primary uppercase tracking-widest">
-            // בדיקות אב-טיפוס ראשוניות, 2023
+            // הגופייה החלה הכל
           </div>
         </div>
 
         {/* Story Blocks */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
           <div className="md:col-span-4 md:sticky md:top-32">
-            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">המשימה</h2>
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">איך זה התחיל</h2>
             <div className="w-12 h-1 bg-primary mt-4" />
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              <strong>PERI Sport</strong> הוקמה מתוך אהבה אמיתית לכדורגל ולכדורסל. אנחנו מביאים לישראל גופיות ומכנסי ספורט רשמיים של הכוכבים הגדולים ביותר — מרונאלדו ומסי ועד לוקה דונצ'יץ' וליברון ג'יימס.
+              ישבנו עם חברים, ראינו משחק, ואחד אמר "תראה את הגופייה של רונאלדו, אין אותה בארץ". אז פשוט הזמנו. ואז הזמנו עוד אחת. ואז עוד. ופתאום זה הפך לעסק.
             </p>
             <p>
-              כל גופייה שאנחנו מוכרים היא מקורית, מורשית ומגיעה ישירות מהייצור הרשמי. אנחנו מאמינים שכל פאן ראוי ללבוש את הצבעים של הכוכב שהוא אוהב — ביום המשחק ובכל יום אחר.
+              <strong>PERI Sport</strong> זה לא קורפורייט — זה אנחנו, כמה חובבי ספורט שרצו לראות גופיות אמיתיות בארץ ולא מצאו. אז הבאנו לבד.
             </p>
           </div>
         </div>
@@ -48,15 +48,29 @@ export default function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
           <div className="md:col-span-4 md:sticky md:top-32">
-            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">האיכות</h2>
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">מה שלא נוכל</h2>
             <div className="w-12 h-1 bg-primary mt-4" />
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              אנחנו עובדים אך ורק עם ספקים מורשים. הגופיות שלנו עשויות מאותם החומרים שהשחקנים עצמם לובשים — <strong>טכנולוגיית DryFit, ניהול לחות מתקדם, תפרים מחוזקים</strong> שעומדים בעומס המשחק האמיתי.
+              לא תמצא פה ריפליקות. לא "כמו מקורי". לא "באיכות גבוהה". פה יש רק <strong>מקורי אמיתי</strong> — אותה גופייה שהשחקן לובש על המגרש, רק שהיא שלך.
             </p>
             <p>
-              כל הזמנה מגיעה עם תעודת מקוריות ואריזה מושקעת. משלוח מהיר לכל הארץ, עם אפשרות החזרה חינם תוך 14 יום. כי כשאתה קונה גופייה, אתה קונה חוויה.
+              כי יש הבדל בין לראות את המשחק לבין לחיות אותו.
+            </p>
+          </div>
+        </div>
+
+        <div className="w-full h-[1px] bg-border" />
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
+          <div className="md:col-span-4 md:sticky md:top-32">
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">צרו קשר</h2>
+            <div className="w-12 h-1 bg-primary mt-4" />
+          </div>
+          <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed">
+            <p>
+              שאלה על מידה? רוצה גופייה שלא רואה באתר? מתלבט בין שניים? תכתוב לנו בוואטסאפ — אנחנו עונים מהר ואנחנו בני אדם אמיתיים, לא בוט.
             </p>
           </div>
         </div>

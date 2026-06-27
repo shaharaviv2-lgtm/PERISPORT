@@ -137,10 +137,6 @@ export default function Cart() {
                   <span className="text-muted-foreground">סה"כ פריטים</span>
                   <span>{totalItems}</span>
                 </div>
-                <div className="flex justify-between font-mono">
-                  <span className="text-muted-foreground">משלוח</span>
-                  <span className="text-primary">חינם</span>
-                </div>
                 <div className="border-t border-border pt-3 flex justify-between font-mono font-bold text-lg">
                   <span>סה"כ</span>
                   <span className="text-primary">₪{totalPrice.toFixed(2)}</span>
@@ -156,9 +152,6 @@ export default function Cart() {
                 לתשלום
               </Button>
 
-              <p className="font-mono text-[10px] text-muted-foreground text-center mt-4 uppercase tracking-wide">
-                משלוח חינם לכל הארץ
-              </p>
             </div>
           </div>
         </div>
