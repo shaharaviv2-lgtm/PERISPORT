@@ -1,19 +1,7 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { logger } from "./logger.js";
 
 const ADMIN_EMAIL = "Talparienta@gmail.com";
-
-function createTransporter() {
-  const user = process.env["GMAIL_USER"];
-  const pass = process.env["GMAIL_APP_PASSWORD"];
-  if (!user || !pass) {
-    return null;
-  }
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: { user, pass },
-  });
-}
 
 export interface OrderEmailData {
   orderId: number;
@@ -94,15 +82,17 @@ function buildEmailHtml(order: OrderEmailData): string {
 }
 
 export async function sendOrderEmail(order: OrderEmailData): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email not configured — skipping order notification (set GMAIL_USER + GMAIL_APP_PASSWORD)");
+  const apiKey = process.env["RESEND_API_KEY"];
+  if (!apiKey) {
+    logger.warn("RESEND_API_KEY not set — skipping order notification email");
     return;
   }
 
+  const resend = new Resend(apiKey);
+
   try {
-    await transporter.sendMail({
-      from: `"PERI Sport" <${process.env["GMAIL_USER"]}>`,
+    await resend.emails.send({
+      from: "PERI Sport <onboarding@resend.dev>",
       to: ADMIN_EMAIL,
       subject: `🛒 הזמנה חדשה #${order.orderId} — ${order.customerName}`,
       html: buildEmailHtml(order),
