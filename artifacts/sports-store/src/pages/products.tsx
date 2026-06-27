@@ -10,9 +10,16 @@ import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import { ProductQuickView } from "@/components/product-quick-view";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Product } from "@workspace/api-client-react";
-import { Filter, SlidersHorizontal, Search, X } from "lucide-react";
+import { Filter, SlidersHorizontal, Search, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+const SORT_OPTIONS = [
+  { value: "newest", label: "נוסף לאחרונה" },
+  { value: "price-asc", label: "מחיר: נמוך לגבוה" },
+  { value: "price-desc", label: "מחיר: גבוה לנמוך" },
+  { value: "name", label: "לפי שם" },
+];
 
 const SPORT_FILTERS = [
   { value: "all", label: "הכל" },
@@ -30,6 +37,9 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [sportFilter, setSportFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
 
   useEffect(() => {
     document.title = "חנות הגופיות | PERI Sport";
@@ -49,9 +59,16 @@ export default function Products() {
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
-    let result = products;
+    let result = [...products];
+
     if (sportFilter !== "all") {
       result = result.filter((p) => p.sport === sportFilter);
+    }
+    if (inStockOnly) {
+      result = result.filter((p) => p.inStock);
+    }
+    if (maxPrice !== null) {
+      result = result.filter((p) => p.price <= maxPrice);
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -62,8 +79,25 @@ export default function Products() {
           (p.description ?? "").toLowerCase().includes(q)
       );
     }
+
+    switch (sortBy) {
+      case "price-asc":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case "name":
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "newest":
+      default:
+        result.sort((a, b) => b.id - a.id);
+        break;
+    }
+
     return result;
-  }, [products, searchQuery, sportFilter]);
+  }, [products, searchQuery, sportFilter, sortBy, inStockOnly, maxPrice]);
 
   return (
     <div className="flex flex-col w-full bg-background min-h-screen pt-8 pb-24">
@@ -157,27 +191,79 @@ export default function Products() {
               </TabsList>
             </Tabs>
             
-            <div className="hidden md:block mt-8 border border-border p-4 bg-card/50">
-              <div className="flex items-center gap-2 mb-4 text-muted-foreground border-b border-border/50 pb-2">
+            <div className="hidden md:block mt-8 border border-border p-4 bg-card/50 space-y-5">
+              <div className="flex items-center gap-2 text-muted-foreground border-b border-border/50 pb-2">
                 <SlidersHorizontal className="w-4 h-4" />
-                <span className="font-mono text-xs uppercase tracking-widest">סינון</span>
+                <span className="font-mono text-xs uppercase tracking-widest">סינון ומיון</span>
               </div>
-              <div className="space-y-4 font-mono text-xs">
-                <div className="flex justify-between items-center opacity-50 cursor-not-allowed">
-                  <span>מחיר: גבוה לנמוך</span>
-                  <div className="w-3 h-3 border border-current" />
-                </div>
-                <div className="flex justify-between items-center opacity-50 cursor-not-allowed">
+
+              {/* Sort */}
+              <div className="space-y-2">
+                <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">מיון</p>
+                {SORT_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setSortBy(opt.value)}
+                    className={`w-full text-right font-mono text-xs px-3 py-2 border transition-all ${
+                      sortBy === opt.value
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Price range */}
+              <div className="space-y-2">
+                <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">מחיר מקסימלי</p>
+                {[null, 150, 250, 350].map((price) => (
+                  <button
+                    key={price ?? "all"}
+                    onClick={() => setMaxPrice(price)}
+                    className={`w-full text-right font-mono text-xs px-3 py-2 border transition-all ${
+                      maxPrice === price
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                    }`}
+                  >
+                    {price === null ? "הכל" : `עד ₪${price}`}
+                  </button>
+                ))}
+              </div>
+
+              {/* In stock */}
+              <div className="space-y-2">
+                <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">זמינות</p>
+                <button
+                  onClick={() => setInStockOnly(!inStockOnly)}
+                  className={`w-full flex items-center justify-between font-mono text-xs px-3 py-2 border transition-all ${
+                    inStockOnly
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                  }`}
+                >
                   <span>במלאי בלבד</span>
-                  <div className="w-3 h-3 border border-current" />
-                </div>
+                  <div className={`w-3 h-3 border transition-all ${inStockOnly ? "bg-primary border-primary" : "border-current"}`} />
+                </button>
               </div>
+
+              {/* Reset */}
+              {(sortBy !== "newest" || inStockOnly || maxPrice !== null) && (
+                <button
+                  onClick={() => { setSortBy("newest"); setInStockOnly(false); setMaxPrice(null); }}
+                  className="w-full font-mono text-[10px] uppercase tracking-wider text-destructive hover:text-destructive/80 transition-colors text-right"
+                >
+                  אפס פילטרים
+                </button>
+              )}
             </div>
           </div>
 
           {/* Product Grid */}
           <div className="flex-1 w-full">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 gap-4">
               <span className="font-mono text-xs text-muted-foreground uppercase">
                 {isProductsLoading ? 'מחפש...' : (
                   searchQuery
@@ -185,14 +271,29 @@ export default function Products() {
                     : `מציג ${filteredProducts.length} תוצאות`
                 )}
               </span>
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="font-mono text-xs text-primary hover:underline uppercase tracking-wider"
-                >
-                  נקה חיפוש
-                </button>
-              )}
+              <div className="flex items-center gap-3">
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="font-mono text-xs text-primary hover:underline uppercase tracking-wider"
+                  >
+                    נקה חיפוש
+                  </button>
+                )}
+                {/* Sort dropdown — visible on all screens */}
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="appearance-none bg-card border border-border font-mono text-xs uppercase tracking-wider text-foreground px-3 py-2 pr-8 cursor-pointer hover:border-primary/60 focus:outline-none focus:border-primary transition-colors"
+                  >
+                    {SORT_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground pointer-events-none" />
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
