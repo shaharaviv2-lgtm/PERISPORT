@@ -34,7 +34,7 @@ function formatDate(iso: string) {
 
 function parseItems(itemsJson: string) {
   try {
-    return JSON.parse(itemsJson) as Array<{ product: { name: string; imageUrl: string }; quantity: number; size?: string }>;
+    return JSON.parse(itemsJson) as Array<{ name: string; size?: string; quantity: number; price: number }>;
   } catch {
     return [];
   }
@@ -106,13 +106,10 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
           <div className="flex flex-wrap gap-3">
             {items.map((item, idx) => (
               <div key={idx} className="flex items-center gap-2 bg-background border border-border px-3 py-2">
-                <div className="w-8 h-8 bg-muted overflow-hidden flex-shrink-0">
-                  <img src={item.product.imageUrl} alt={item.product.name} className="w-full h-full object-cover" />
-                </div>
                 <div>
-                  <p className="font-mono text-xs font-bold leading-tight">{item.product.name}</p>
+                  <p className="font-mono text-xs font-bold leading-tight">{item.name}</p>
                   <p className="font-mono text-[10px] text-muted-foreground">
-                    כמות: {item.quantity}{item.size ? ` · מידה: ${item.size}` : ""}
+                    כמות: {item.quantity}{item.size ? ` · מידה: ${item.size}` : ""} · ₪{(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
               </div>
