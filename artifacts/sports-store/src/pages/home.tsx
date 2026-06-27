@@ -227,7 +227,7 @@ export default function Home() {
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
             <Button asChild size="lg" className="rounded-none font-display font-bold uppercase tracking-wider text-lg h-14 bg-primary text-primary-foreground hover:bg-primary/90">
-              <a href="https://instagram.com/perisport" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://www.instagram.com/peri_football_jerseys?igsh=NmR5eDF1cWk3cDlu" target="_blank" rel="noopener noreferrer">Instagram</a>
             </Button>
           </div>
         </div>
