@@ -174,19 +174,21 @@ export default function Products() {
                 </TabsTrigger>
                 
                 {isCategoriesLoading ? (
-                  Array.from({ length: 4 }).map((_, i) => (
+                  Array.from({ length: 2 }).map((_, i) => (
                     <div key={i} className="h-10 w-full bg-muted animate-pulse border border-border" />
                   ))
                 ) : (
-                  categories?.map((cat) => (
-                    <TabsTrigger 
-                      key={cat.slug} 
-                      value={cat.slug}
-                      className="rounded-none justify-start px-4 py-3 font-mono uppercase tracking-wider text-xs border border-border data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary transition-all whitespace-nowrap"
-                    >
-                      {cat.name}
-                    </TabsTrigger>
-                  ))
+                  categories
+                    ?.filter((cat) => !["accessories", "equipment"].includes(cat.slug))
+                    .map((cat) => (
+                      <TabsTrigger 
+                        key={cat.slug} 
+                        value={cat.slug}
+                        className="rounded-none justify-start px-4 py-3 font-mono uppercase tracking-wider text-xs border border-border data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary transition-all whitespace-nowrap"
+                      >
+                        {cat.name}
+                      </TabsTrigger>
+                    ))
                 )}
               </TabsList>
             </Tabs>
