@@ -4,8 +4,8 @@ import { useEffect } from "react";
 const socials = [
   {
     label: "Instagram",
-    handle: "@perisport",
-    href: "https://instagram.com/perisport",
+    handle: "@peri_football_jerseys",
+    href: "https://www.instagram.com/peri_football_jerseys?igsh=NmR5eDF1cWk3cDlu",
     icon: <Instagram className="w-6 h-6" />,
   },
   {
@@ -16,8 +16,8 @@ const socials = [
   },
   {
     label: "TikTok",
-    handle: "@perisport",
-    href: "https://tiktok.com/@perisport",
+    handle: "@football_jerseys_i",
+    href: "https://tiktok.com/@football_jerseys_i",
     icon: <span className="font-mono text-sm font-bold">TK</span>,
   },
 ];
