@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db } from "@workspace/db";
 import { ordersTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
+import { sendOrderEmail } from "../lib/mailer.js";
 
 const VALID_STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"] as const;
 type OrderStatus = (typeof VALID_STATUSES)[number];
@@ -54,11 +55,25 @@ router.post("/", async (req, res) => {
         status: "pending",
       })
       .returning();
-    res.status(201).json({
+
+    const response = {
       ...order,
       totalPrice: Number(order.totalPrice),
       createdAt: order.createdAt.toISOString(),
-    });
+    };
+
+    res.status(201).json(response);
+
+    sendOrderEmail({
+      orderId: order.id,
+      customerName: order.customerName,
+      customerPhone: order.customerPhone,
+      items: order.items,
+      totalPrice: Number(order.totalPrice),
+      notes: order.notes,
+      createdAt: order.createdAt.toISOString(),
+    }).catch(() => {});
+
   } catch (err) {
     req.log.error({ err }, "Failed to create order");
     res.status(500).json({ error: "Failed to create order" });
