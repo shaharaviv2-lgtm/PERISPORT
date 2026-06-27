@@ -91,13 +91,17 @@ export async function sendOrderEmail(order: OrderEmailData): Promise<void> {
   const resend = new Resend(apiKey);
 
   try {
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: "PERI Sport <onboarding@resend.dev>",
       to: ADMIN_EMAIL,
       subject: `🛒 הזמנה חדשה #${order.orderId} — ${order.customerName}`,
       html: buildEmailHtml(order),
     });
-    logger.info({ orderId: order.orderId }, "Order notification email sent");
+    if (error) {
+      logger.error({ error, orderId: order.orderId }, "Resend rejected the email");
+    } else {
+      logger.info({ orderId: order.orderId, emailId: data?.id }, "Order notification email sent");
+    }
   } catch (err) {
     logger.error({ err, orderId: order.orderId }, "Failed to send order notification email");
   }
