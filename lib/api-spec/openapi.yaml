@@ -16,6 +16,8 @@ tags:
     description: Category operations
   - name: social
     description: Social/network links
+  - name: orders
+    description: Order operations
 paths:
   /healthz:
     get:
@@ -208,6 +210,65 @@ paths:
               schema:
                 $ref: "#/components/schemas/StoreStats"
 
+  /orders:
+    get:
+      operationId: listOrders
+      tags: [orders]
+      summary: List all orders
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      operationId: createOrder
+      tags: [orders]
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+      responses:
+        "201":
+          description: Created order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  /orders/{id}/status:
+    patch:
+      operationId: updateOrderStatus
+      tags: [orders]
+      summary: Update order status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStatusUpdate"
+      responses:
+        "200":
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Not found
+
 components:
   schemas:
     HealthStatus:
@@ -338,6 +399,9 @@ components:
         - totalCategories
         - featuredCount
         - brandsCount
+        - totalOrders
+        - pendingOrders
+        - totalRevenue
       properties:
         totalProducts:
           type: integer
@@ -347,3 +411,64 @@ components:
           type: integer
         brandsCount:
           type: integer
+        totalOrders:
+          type: integer
+        pendingOrders:
+          type: integer
+        totalRevenue:
+          type: number
+
+    Order:
+      type: object
+      required:
+        - id
+        - customerName
+        - customerPhone
+        - items
+        - totalPrice
+        - status
+        - createdAt
+      properties:
+        id:
+          type: integer
+        customerName:
+          type: string
+        customerPhone:
+          type: string
+        items:
+          type: string
+        totalPrice:
+          type: number
+        status:
+          type: string
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    OrderInput:
+      type: object
+      required:
+        - customerName
+        - customerPhone
+        - items
+        - totalPrice
+      properties:
+        customerName:
+          type: string
+        customerPhone:
+          type: string
+        items:
+          type: string
+        totalPrice:
+          type: number
+        notes:
+          type: string
+
+    OrderStatusUpdate:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string

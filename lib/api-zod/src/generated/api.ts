@@ -208,7 +208,72 @@ export const GetStoreStatsResponse = zod.object({
   "totalProducts": zod.number(),
   "totalCategories": zod.number(),
   "featuredCount": zod.number(),
-  "brandsCount": zod.number()
+  "brandsCount": zod.number(),
+  "totalOrders": zod.number(),
+  "pendingOrders": zod.number(),
+  "totalRevenue": zod.number()
+})
+
+
+/**
+ * @summary List all orders
+ */
+export const ListOrdersResponseItem = zod.object({
+  "id": zod.number(),
+  "customerName": zod.string(),
+  "customerPhone": zod.string(),
+  "items": zod.string(),
+  "totalPrice": zod.number(),
+  "status": zod.string(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const ListOrdersResponse = zod.array(ListOrdersResponseItem)
+
+
+/**
+ * @summary Create a new order
+ */
+export const CreateOrderBody = zod.object({
+  "customerName": zod.string(),
+  "customerPhone": zod.string(),
+  "items": zod.string(),
+  "totalPrice": zod.number(),
+  "notes": zod.string().optional()
+})
+
+export const CreateOrderResponse = zod.object({
+  "id": zod.number(),
+  "customerName": zod.string(),
+  "customerPhone": zod.string(),
+  "items": zod.string(),
+  "totalPrice": zod.number(),
+  "status": zod.string(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Update order status
+ */
+export const UpdateOrderStatusParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateOrderStatusBody = zod.object({
+  "status": zod.string()
+})
+
+export const UpdateOrderStatusResponse = zod.object({
+  "id": zod.number(),
+  "customerName": zod.string(),
+  "customerPhone": zod.string(),
+  "items": zod.string(),
+  "totalPrice": zod.number(),
+  "status": zod.string(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
 })
 
 

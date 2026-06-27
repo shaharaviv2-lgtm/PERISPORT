@@ -11,4 +11,7 @@ export interface StoreStats {
   totalCategories: number;
   featuredCount: number;
   brandsCount: number;
+  totalOrders: number;
+  pendingOrders: number;
+  totalRevenue: number;
 }

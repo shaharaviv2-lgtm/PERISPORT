@@ -68,6 +68,33 @@ export interface StoreStats {
   totalCategories: number;
   featuredCount: number;
   brandsCount: number;
+  totalOrders: number;
+  pendingOrders: number;
+  totalRevenue: number;
+}
+
+export interface Order {
+  id: number;
+  customerName: string;
+  customerPhone: string;
+  items: string;
+  totalPrice: number;
+  status: string;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface OrderInput {
+  customerName: string;
+  customerPhone: string;
+  items: string;
+  totalPrice: number;
+  notes?: string;
+}
+
+export interface OrderStatusUpdate {
+  status: string;
 }
 
 export type ListProductsParams = {
