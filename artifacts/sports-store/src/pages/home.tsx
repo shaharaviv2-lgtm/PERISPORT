@@ -229,6 +229,12 @@ export default function Home() {
             <Button asChild size="lg" className="rounded-none font-display font-bold uppercase tracking-wider text-lg h-14 bg-primary text-primary-foreground hover:bg-primary/90">
               <a href="https://www.instagram.com/peri_football_jerseys?igsh=NmR5eDF1cWk3cDlu" target="_blank" rel="noopener noreferrer">Instagram</a>
             </Button>
+            <Button asChild size="lg" variant="outline" className="rounded-none font-display font-bold uppercase tracking-wider text-lg h-14 border-border hover:bg-secondary">
+              <a href="https://tiktok.com/@football_jerseys_i" target="_blank" rel="noopener noreferrer">TikTok</a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="rounded-none font-display font-bold uppercase tracking-wider text-lg h-14 border-green-600 text-green-400 hover:bg-green-950">
+              <a href="https://wa.me/972507755525" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            </Button>
           </div>
         </div>
       </section>
