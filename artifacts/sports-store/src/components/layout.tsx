@@ -173,6 +173,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Link href="/admin" className="hover:text-primary transition-colors">מנהל</Link>
             </div>
           </div>
+          <div className="mt-4 text-center">
+            <p className="font-mono text-[10px] text-muted-foreground/30">נבנה על ידי נירית אחי</p>
+          </div>
         </div>
       </footer>
     </div>
