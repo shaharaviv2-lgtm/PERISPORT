@@ -22,7 +22,8 @@ export default function Cart() {
   const [showModal, setShowModal] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string }>({});
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
 
   useEffect(() => {
     document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
@@ -31,9 +32,12 @@ export default function Cart() {
   }, [totalItems]);
 
   function validateForm(): boolean {
-    const errors: { name?: string; phone?: string } = {};
+    const errors: { name?: string; phone?: string; email?: string } = {};
     if (!customerName.trim()) errors.name = "נא להזין שם";
     if (!customerPhone.trim()) errors.phone = "נא להזין מספר טלפון";
+    if (customerEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim())) {
+      errors.email = "כתובת מייל לא תקינה";
+    }
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   }
@@ -58,6 +62,7 @@ export default function Cart() {
         body: JSON.stringify({
           customerName: customerName.trim(),
           customerPhone: customerPhone.trim(),
+          customerEmail: customerEmail.trim() || undefined,
           items: itemsSummary,
           totalPrice,
         }),
@@ -279,6 +284,22 @@ export default function Cart() {
                   />
                   {formErrors.phone && (
                     <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.phone}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    placeholder="אימייל (לסיכום הזמנה)"
+                    value={customerEmail}
+                    onChange={(e) => {
+                      setCustomerEmail(e.target.value);
+                      if (formErrors.email) setFormErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
+                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                    dir="ltr"
+                  />
+                  {formErrors.email && (
+                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.email}</p>
                   )}
                 </div>
               </div>

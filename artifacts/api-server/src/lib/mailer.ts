@@ -7,6 +7,7 @@ export interface OrderEmailData {
   orderId: number;
   customerName: string;
   customerPhone: string;
+  customerEmail?: string | null;
   items: string;
   totalPrice: number;
   notes?: string | null;
@@ -89,13 +90,16 @@ export async function sendOrderEmail(order: OrderEmailData): Promise<void> {
   }
 
   const resend = new Resend(apiKey);
+  const html = buildEmailHtml(order);
+  const to = [ADMIN_EMAIL];
+  if (order.customerEmail) to.push(order.customerEmail);
 
   try {
     const { data, error } = await resend.emails.send({
       from: "PERI Sport <onboarding@resend.dev>",
-      to: ADMIN_EMAIL,
+      to,
       subject: `🛒 הזמנה חדשה #${order.orderId} — ${order.customerName}`,
-      html: buildEmailHtml(order),
+      html,
     });
     if (error) {
       logger.error({ error, orderId: order.orderId }, "Resend rejected the email");
