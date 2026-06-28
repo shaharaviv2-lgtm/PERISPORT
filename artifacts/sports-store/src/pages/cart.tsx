@@ -4,16 +4,11 @@ import { useCart } from "@/context/cart";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, X } from "lucide-react";
 
-const ADMIN_PHONE_PAYBOX = "0507755525";
 const ADMIN_PHONE_WA = "972507755525";
+const PAYBOX_LINK = "https://links.payboxapp.com/YtCtferkl4b";
 
-function buildPayboxUrl(total: number, comment: string) {
-  const params = new URLSearchParams({
-    to: ADMIN_PHONE_PAYBOX,
-    amount: total.toFixed(2),
-    comment,
-  });
-  return `https://payboxapp.com/send/?${params.toString()}`;
+function buildPayboxUrl() {
+  return PAYBOX_LINK;
 }
 
 function buildWhatsAppUrl(message: string) {
@@ -74,11 +69,7 @@ export default function Cart() {
   async function handlePaybox() {
     if (!validateForm()) return;
     await saveOrder();
-    const itemsComment = items
-      .map((i) => `${i.product.name}${i.size ? ` (${i.size})` : ""} x${i.quantity}`)
-      .join(", ");
-    const comment = `PERI Sport — ${customerName}: ${itemsComment}`;
-    window.open(buildPayboxUrl(totalPrice, comment), "_blank");
+    window.open(buildPayboxUrl(), "_blank");
   }
 
   async function handleWhatsApp() {
