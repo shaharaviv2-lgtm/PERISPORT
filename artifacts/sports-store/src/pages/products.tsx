@@ -42,9 +42,9 @@ export default function Products() {
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
 
   useEffect(() => {
-    document.title = "חנות הגופיות | PERI Sport";
+    document.title = "חנות החולצות | PERI Sport";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "עיין בכל גופיות הספורט של PERI Sport — כדורגל, כדורסל, ג'רזי רשמיים. סינון לפי ספורט, מידה ומחיר.");
+    if (meta) meta.setAttribute("content", "עיין בכל חולצות הספורט של PERI Sport — כדורגל, כדורסל, ג'רזי רשמיים. סינון לפי ספורט, מידה ומחיר.");
   }, []);
 
   const { data: categories, isLoading: isCategoriesLoading } = useListCategories({
@@ -106,10 +106,10 @@ export default function Products() {
         {/* Header */}
         <div className="mb-12 border-b border-border pb-8">
           <h1 className="font-display text-5xl md:text-6xl font-bold uppercase tracking-tighter mb-4">
-            חנות הגופיות
+            חנות החולצות
           </h1>
           <p className="font-mono text-muted-foreground uppercase tracking-widest text-sm mb-6">
-            // גופיות ומכנסי כדורגל וכדורסל רשמיים
+            // חולצות ומכנסי כדורגל וכדורסל רשמיים
           </p>
 
           {/* Search bar + sport filter */}

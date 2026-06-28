@@ -12,11 +12,11 @@ import { Trophy } from "lucide-react";
 const SPORT_META: Record<string, { title: string; subtitle: string }> = {
   football: {
     title: "כדורגל",
-    subtitle: "// גופיות ומכנסי כדורגל רשמיים",
+    subtitle: "// חולצות ומכנסי כדורגל רשמיים",
   },
   basketball: {
     title: "כדורסל",
-    subtitle: "// גופיות ומכנסי כדורסל רשמיים",
+    subtitle: "// חולצות ומכנסי כדורסל רשמיים",
   },
 };
 
@@ -37,7 +37,7 @@ export default function Category() {
   useEffect(() => {
     document.title = `${meta.title} | PERI Sport`;
     const metaEl = document.querySelector('meta[name="description"]');
-    if (metaEl) metaEl.setAttribute("content", `גופיות ${meta.title} רשמיות — קנה ב-PERI Sport. מידות XS עד XXL, משלוח מהיר לכל הארץ.`);
+    if (metaEl) metaEl.setAttribute("content", `חולצות ${meta.title} רשמיות — קנה ב-PERI Sport. מידות XS עד XXL, משלוח מהיר לכל הארץ.`);
   }, [meta.title, meta.subtitle]);
 
   const { data: products, isLoading } = useListProducts(

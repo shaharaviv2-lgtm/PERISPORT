@@ -11,9 +11,9 @@ export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    document.title = "PERI Sport — גופיות ספורט רשמיות";
+    document.title = "PERI Sport — חולצות ספורט רשמיות";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "PERI Sport — חנות גופיות כדורגל וכדורסל רשמיות. ג'רזי NBA, ליגות אירופה ועוד. משלוח מהיר לכל הארץ.");
+    if (meta) meta.setAttribute("content", "PERI Sport — חנות חולצות כדורגל וכדורסל רשמיות. ג'רזי NBA, ליגות אירופה ועוד. משלוח מהיר לכל הארץ.");
   }, []);
 
   const { data: featuredProducts, isLoading: isFeaturedLoading } = useListProducts(
@@ -55,7 +55,7 @@ export default function Home() {
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground font-mono max-w-xl leading-relaxed">
-              גופיות ומכנסי כדורגל וכדורסל רשמיים.
+              חולצות ומכנסי כדורגל וכדורסל רשמיים.
               קבוצות מהליגות המובילות בעולם — במשלוח לישראל.
             </p>
             
