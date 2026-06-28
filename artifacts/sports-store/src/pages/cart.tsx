@@ -39,7 +39,8 @@ export default function Cart() {
     }));
 
     try {
-      const res = await fetch("/api/orders", {
+      // 1. Save order to DB
+      const orderRes = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -50,13 +51,19 @@ export default function Cart() {
           notes: form.notes.trim() || undefined,
         }),
       });
+      if (!orderRes.ok) throw new Error("order failed");
 
-      if (!res.ok) {
-        throw new Error("server error");
-      }
+      // 2. Create Stripe Checkout session
+      const checkoutRes = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: orderItems }),
+      });
+      if (!checkoutRes.ok) throw new Error("checkout failed");
 
-      setModalState("success");
+      const { url } = await checkoutRes.json() as { url: string };
       clearCart();
+      window.location.href = url;
     } catch {
       setErrorMsg("שגיאה בשליחת ההזמנה. נסה שוב.");
       setModalState("error");
