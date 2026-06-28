@@ -24,6 +24,9 @@ export default function Cart() {
   const [, navigate] = useLocation();
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
   const [showModal, setShowModal] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string }>({});
 
   useEffect(() => {
     document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
@@ -31,22 +34,56 @@ export default function Cart() {
     if (meta) meta.setAttribute("content", "סל הקניות שלך ב-PERI Sport — בדוק את הפריטים שבחרת וסיים את הרכישה.");
   }, [totalItems]);
 
+  function validateForm(): boolean {
+    const errors: { name?: string; phone?: string } = {};
+    if (!customerName.trim()) errors.name = "נא להזין שם";
+    if (!customerPhone.trim()) errors.phone = "נא להזין מספר טלפון";
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   function buildOrderSummaryText() {
     const lines = items.map(
       (item) =>
         `• ${item.product.name}${item.size ? ` (מידה ${item.size})` : ""} × ${item.quantity} — ₪${(item.product.price * item.quantity).toFixed(2)}`
     );
-    return `הזמנה מ-PERI Sport:\n${lines.join("\n")}\n\nסה"כ: ₪${totalPrice.toFixed(2)}`;
+    const customerInfo = `שם: ${customerName}\nטלפון: ${customerPhone}`;
+    return `הזמנה מ-PERI Sport:\n${customerInfo}\n\n${lines.join("\n")}\n\nסה"כ: ₪${totalPrice.toFixed(2)}`;
   }
 
-  function handlePaybox() {
-    const comment = items
+  async function saveOrder() {
+    const itemsSummary = items
       .map((i) => `${i.product.name}${i.size ? ` (${i.size})` : ""} x${i.quantity}`)
       .join(", ");
-    window.open(buildPayboxUrl(totalPrice, `PERI Sport: ${comment}`), "_blank");
+    try {
+      await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName: customerName.trim(),
+          customerPhone: customerPhone.trim(),
+          items: itemsSummary,
+          totalPrice,
+        }),
+      });
+    } catch {
+      // best-effort — don't block the customer from paying
+    }
   }
 
-  function handleWhatsApp() {
+  async function handlePaybox() {
+    if (!validateForm()) return;
+    await saveOrder();
+    const itemsComment = items
+      .map((i) => `${i.product.name}${i.size ? ` (${i.size})` : ""} x${i.quantity}`)
+      .join(", ");
+    const comment = `PERI Sport — ${customerName}: ${itemsComment}`;
+    window.open(buildPayboxUrl(totalPrice, comment), "_blank");
+  }
+
+  async function handleWhatsApp() {
+    if (!validateForm()) return;
+    await saveOrder();
     window.open(buildWhatsAppUrl(buildOrderSummaryText()), "_blank");
   }
 
@@ -217,11 +254,42 @@ export default function Cart() {
                 </div>
               </div>
 
-              {/* Instructions */}
-              <p className="font-mono text-xs text-muted-foreground text-center mb-5 leading-relaxed">
-                בחר את אמצעי התשלום המועדף עליך.<br />
-                לאחר התשלום נציור איתך קשר לאישור ההזמנה.
-              </p>
+              {/* Contact details form */}
+              <div className="border border-border bg-background/50 p-4 mb-6 space-y-3">
+                <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-1">פרטי יצירת קשר</h3>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="שם מלא *"
+                    value={customerName}
+                    onChange={(e) => {
+                      setCustomerName(e.target.value);
+                      if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: undefined }));
+                    }}
+                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                    dir="rtl"
+                  />
+                  {formErrors.name && (
+                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.name}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="tel"
+                    placeholder="מספר טלפון *"
+                    value={customerPhone}
+                    onChange={(e) => {
+                      setCustomerPhone(e.target.value);
+                      if (formErrors.phone) setFormErrors((prev) => ({ ...prev, phone: undefined }));
+                    }}
+                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                    dir="rtl"
+                  />
+                  {formErrors.phone && (
+                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.phone}</p>
+                  )}
+                </div>
+              </div>
 
               {/* Payment buttons */}
               <div className="space-y-3">
