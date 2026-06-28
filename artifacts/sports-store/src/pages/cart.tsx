@@ -7,8 +7,9 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, X } from "lucide-react";
 const ADMIN_PHONE_WA = "972507755525";
 const PAYBOX_LINK = "https://links.payboxapp.com/YtCtferkl4b";
 
-function buildPayboxUrl() {
-  return PAYBOX_LINK;
+function buildPayboxUrl(totalShekel: number) {
+  const agorot = Math.round(totalShekel * 100);
+  return `${PAYBOX_LINK}?amount=${agorot}`;
 }
 
 function buildWhatsAppUrl(message: string) {
@@ -69,7 +70,7 @@ export default function Cart() {
   async function handlePaybox() {
     if (!validateForm()) return;
     await saveOrder();
-    window.open(buildPayboxUrl(), "_blank");
+    window.open(buildPayboxUrl(totalPrice), "_blank");
   }
 
   async function handleWhatsApp() {
