@@ -2,24 +2,28 @@ import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/cart";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, X, CheckCircle2, Loader2 } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, X } from "lucide-react";
 
-interface CheckoutForm {
-  name: string;
-  phone: string;
-  notes: string;
+const ADMIN_PHONE_PAYBOX = "0507755525";
+const ADMIN_PHONE_WA = "972507755525";
+
+function buildPayboxUrl(total: number, comment: string) {
+  const params = new URLSearchParams({
+    to: ADMIN_PHONE_PAYBOX,
+    amount: total.toFixed(2),
+    comment,
+  });
+  return `https://payboxapp.com/send/?${params.toString()}`;
 }
 
-type ModalState = "idle" | "form" | "loading" | "success" | "error";
+function buildWhatsAppUrl(message: string) {
+  return `https://wa.me/${ADMIN_PHONE_WA}?text=${encodeURIComponent(message)}`;
+}
 
 export default function Cart() {
   const [, navigate] = useLocation();
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
-  const [modalState, setModalState] = useState<ModalState>("idle");
-  const [form, setForm] = useState<CheckoutForm>({ name: "", phone: "", notes: "" });
-  const [errorMsg, setErrorMsg] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
@@ -27,55 +31,26 @@ export default function Cart() {
     if (meta) meta.setAttribute("content", "סל הקניות שלך ב-PERI Sport — בדוק את הפריטים שבחרת וסיים את הרכישה.");
   }, [totalItems]);
 
-  async function submitOrder() {
-    if (!form.name.trim() || !form.phone.trim()) return;
-    setModalState("loading");
-
-    const orderItems = items.map((item) => ({
-      name: item.product.name,
-      size: item.size,
-      quantity: item.quantity,
-      price: item.product.price,
-    }));
-
-    try {
-      // 1. Save order to DB
-      const orderRes = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customerName: form.name.trim(),
-          customerPhone: form.phone.trim(),
-          items: JSON.stringify(orderItems),
-          totalPrice,
-          notes: form.notes.trim() || undefined,
-        }),
-      });
-      if (!orderRes.ok) throw new Error("order failed");
-
-      // 2. Create Stripe Checkout session
-      const checkoutRes = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: orderItems }),
-      });
-      if (!checkoutRes.ok) throw new Error("checkout failed");
-
-      const { url } = await checkoutRes.json() as { url: string };
-      clearCart();
-      window.location.href = url;
-    } catch {
-      setErrorMsg("שגיאה בשליחת ההזמנה. נסה שוב.");
-      setModalState("error");
-    }
+  function buildOrderSummaryText() {
+    const lines = items.map(
+      (item) =>
+        `• ${item.product.name}${item.size ? ` (מידה ${item.size})` : ""} × ${item.quantity} — ₪${(item.product.price * item.quantity).toFixed(2)}`
+    );
+    return `הזמנה מ-PERI Sport:\n${lines.join("\n")}\n\nסה"כ: ₪${totalPrice.toFixed(2)}`;
   }
 
-  function closeModal() {
-    setModalState("idle");
-    setErrorMsg("");
+  function handlePaybox() {
+    const comment = items
+      .map((i) => `${i.product.name}${i.size ? ` (${i.size})` : ""} x${i.quantity}`)
+      .join(", ");
+    window.open(buildPayboxUrl(totalPrice, `PERI Sport: ${comment}`), "_blank");
   }
 
-  if (items.length === 0 && modalState !== "success") {
+  function handleWhatsApp() {
+    window.open(buildWhatsAppUrl(buildOrderSummaryText()), "_blank");
+  }
+
+  if (items.length === 0) {
     return (
       <div className="min-h-screen bg-background pt-8 pb-24 flex items-center justify-center">
         <div className="text-center border border-dashed border-border p-16 bg-card/30">
@@ -199,7 +174,7 @@ export default function Cart() {
 
                 <Button
                   className="w-full mt-6 rounded-none font-display font-bold uppercase tracking-wider h-14 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(153,255,0,0.3)] transition-all"
-                  onClick={() => setModalState("form")}
+                  onClick={() => setShowModal(true)}
                 >
                   לתשלום
                 </Button>
@@ -209,125 +184,79 @@ export default function Cart() {
         </div>
       </div>
 
-      {/* Checkout Modal */}
-      {modalState !== "idle" && (
+      {/* Payment modal */}
+      {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-card border border-border w-full max-w-md relative">
-
-            {/* Success */}
-            {modalState === "success" && (
-              <div className="p-10 text-center">
-                <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-4" />
-                <h2 className="font-display text-3xl font-bold uppercase mb-3">ההזמנה התקבלה!</h2>
-                <p className="text-muted-foreground text-sm mb-8">ניצור איתך קשר בהקדם לאישור.</p>
-                <Button
-                  className="rounded-none font-display font-bold uppercase tracking-wider bg-primary text-primary-foreground"
-                  onClick={() => { setModalState("idle"); navigate("/"); }}
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
+                <h2 className="font-display text-2xl font-bold uppercase">סיכום הזמנה</h2>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  חזרה לדף הבית
-                </Button>
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-            )}
 
-            {/* Error */}
-            {modalState === "error" && (
-              <div className="p-8 text-center">
-                <p className="text-destructive mb-6 text-sm">{errorMsg}</p>
-                <Button variant="outline" className="rounded-none" onClick={closeModal}>
-                  נסה שוב
-                </Button>
-              </div>
-            )}
-
-            {/* Form */}
-            {(modalState === "form" || modalState === "loading") && (
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
-                  <h2 className="font-display text-2xl font-bold uppercase">פרטי הזמנה</h2>
-                  <button onClick={closeModal} className="text-muted-foreground hover:text-foreground transition-colors">
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="font-mono text-xs text-muted-foreground uppercase tracking-widest block mb-1">
-                      שם מלא *
-                    </label>
-                    <Input
-                      className="rounded-none border-border bg-background font-mono"
-                      value={form.name}
-                      onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                      placeholder="ישראל ישראלי"
-                      disabled={modalState === "loading"}
-                      dir="rtl"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="font-mono text-xs text-muted-foreground uppercase tracking-widest block mb-1">
-                      טלפון *
-                    </label>
-                    <Input
-                      className="rounded-none border-border bg-background font-mono"
-                      value={form.phone}
-                      onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                      placeholder="050-0000000"
-                      disabled={modalState === "loading"}
-                      dir="ltr"
-                      type="tel"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="font-mono text-xs text-muted-foreground uppercase tracking-widest block mb-1">
-                      הערות (אופציונלי)
-                    </label>
-                    <Textarea
-                      className="rounded-none border-border bg-background font-mono resize-none"
-                      value={form.notes}
-                      onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
-                      placeholder="הערות מיוחדות לגבי ההזמנה..."
-                      disabled={modalState === "loading"}
-                      rows={3}
-                      dir="rtl"
-                    />
-                  </div>
-
-                  {/* Order summary in modal */}
-                  <div className="border border-border p-4 bg-background/50 space-y-2">
-                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3">סיכום</h3>
-                    {items.map((item) => (
-                      <div key={`${item.product.id}_${item.size ?? ""}`} className="flex justify-between text-sm font-mono">
-                        <span className="text-muted-foreground truncate ml-4">
-                          {item.product.name}{item.size ? ` (${item.size})` : ""} ×{item.quantity}
-                        </span>
-                        <span>₪{(item.product.price * item.quantity).toFixed(2)}</span>
-                      </div>
-                    ))}
-                    <div className="border-t border-border pt-2 flex justify-between font-mono font-bold text-primary">
-                      <span>סה"כ</span>
-                      <span>₪{totalPrice.toFixed(2)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <Button
-                  className="w-full mt-6 rounded-none font-display font-bold uppercase tracking-wider h-14 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                  onClick={submitOrder}
-                  disabled={modalState === "loading" || !form.name.trim() || !form.phone.trim()}
-                >
-                  {modalState === "loading" ? (
-                    <span className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      שולח הזמנה...
+              {/* Items */}
+              <div className="border border-border bg-background/50 p-4 space-y-2 mb-6">
+                <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-3">הפריטים שלך</h3>
+                {items.map((item) => (
+                  <div key={`${item.product.id}_${item.size ?? ""}`} className="flex justify-between text-sm font-mono">
+                    <span className="text-muted-foreground truncate ml-4">
+                      {item.product.name}{item.size ? ` (${item.size})` : ""} ×{item.quantity}
                     </span>
-                  ) : (
-                    "אישור הזמנה"
-                  )}
-                </Button>
+                    <span>₪{(item.product.price * item.quantity).toFixed(2)}</span>
+                  </div>
+                ))}
+                <div className="border-t border-border pt-2 flex justify-between font-mono font-bold text-primary text-base">
+                  <span>סה"כ לתשלום</span>
+                  <span>₪{totalPrice.toFixed(2)}</span>
+                </div>
               </div>
-            )}
+
+              {/* Instructions */}
+              <p className="font-mono text-xs text-muted-foreground text-center mb-5 leading-relaxed">
+                בחר את אמצעי התשלום המועדף עליך.<br />
+                לאחר התשלום נציור איתך קשר לאישור ההזמנה.
+              </p>
+
+              {/* Payment buttons */}
+              <div className="space-y-3">
+                {/* Paybox */}
+                <button
+                  onClick={handlePaybox}
+                  className="w-full h-14 flex items-center justify-center gap-3 bg-[#6C3AE8] hover:bg-[#5a2fd4] text-white font-bold text-base transition-colors"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="24" height="24" rx="6" fill="white" fillOpacity="0.2"/>
+                    <path d="M7 8h10M7 12h7M7 16h5" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  שלם עם Paybox
+                </button>
+
+                {/* WhatsApp */}
+                <button
+                  onClick={handleWhatsApp}
+                  className="w-full h-14 flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-base transition-colors"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                    <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.427A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.963 7.963 0 01-4.105-1.14l-.295-.175-3.059.877.858-3.023-.192-.31A7.96 7.96 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/>
+                  </svg>
+                  הזמן בוואטסאפ
+                </button>
+
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="w-full font-mono text-xs text-muted-foreground hover:text-foreground uppercase tracking-widest transition-colors pt-1"
+                >
+                  חזרה לסל
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
