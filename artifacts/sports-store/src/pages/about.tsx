@@ -24,7 +24,7 @@ export default function About() {
           />
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(10,10,12,0.8))]" />
           <div className="absolute bottom-6 right-6 font-mono text-xs text-primary uppercase tracking-widest">
-            // הגופייה החלה הכל
+            // החולצה החלה הכל
           </div>
         </div>
 
@@ -36,7 +36,7 @@ export default function About() {
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              ישבנו עם חברים, ראינו משחק, ואחד אמר "תראה את הגופייה של רונאלדו, אין אותה בארץ". אז פשוט הזמנו. ואז הזמנו עוד אחת. ואז עוד. ופתאום זה הפך לעסק.
+              ישבנו עם חברים, ראינו משחק, ואחד אמר "תראה את החולצה של רונאלדו, אין אותה בארץ". אז פשוט הזמנו. ואז הזמנו עוד אחת. ואז עוד. ופתאום זה הפך לעסק.
             </p>
             <p>
               <strong>PERI Sport</strong> זה לא קורפורייט — זה אנחנו, כמה חובבי ספורט שרצו לראות חולצות אמיתיות בארץ ולא מצאו. אז הבאנו לבד.
@@ -53,7 +53,7 @@ export default function About() {
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              לא תמצא פה ריפליקות. לא "כמו מקורי". לא "באיכות גבוהה". פה יש רק <strong>מקורי אמיתי</strong> — אותה גופייה שהשחקן לובש על המגרש, רק שהיא שלך.
+              לא תמצא פה ריפליקות. לא "כמו מקורי". לא "באיכות גבוהה". פה יש רק <strong>מקורי אמיתי</strong> — אותה חולצה שהשחקן לובש על המגרש, רק שהיא שלך.
             </p>
             <p>
               כי יש הבדל בין לראות את המשחק לבין לחיות אותו.
@@ -70,7 +70,7 @@ export default function About() {
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed">
             <p>
-              שאלה על מידה? רוצה גופייה שלא רואה באתר? מתלבט בין שניים? תכתוב לנו בוואטסאפ — אנחנו עונים מהר ואנחנו בני אדם אמיתיים, לא בוט.
+              שאלה על מידה? רוצה חולצה שלא רואה באתר? מתלבט בין שניים? תכתוב לנו בוואטסאפ — אנחנו עונים מהר ואנחנו בני אדם אמיתיים, לא בוט.
             </p>
           </div>
         </div>

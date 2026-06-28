@@ -348,7 +348,7 @@ export function AdminProductsTab() {
                   <FormItem>
                     <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">שם המוצר</FormLabel>
                     <FormControl>
-                      <Input placeholder="לדוגמה: גופיית רונאלדו פורטוגל 2024" className="rounded-none bg-background border-border font-mono text-right" {...field} />
+                      <Input placeholder="לדוגמה: חולצת רונאלדו פורטוגל 2024" className="rounded-none bg-background border-border font-mono text-right" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

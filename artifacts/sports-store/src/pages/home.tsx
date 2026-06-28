@@ -164,14 +164,14 @@ export default function Home() {
                 sub: "01",
                 href: "/category/football",
                 img: "/images/uploads/1782411677960-qg8c3u.jpg",
-                alt: "גופיית כדורגל",
+                alt: "חולצת כדורגל",
               },
               {
                 label: "כדורסל",
                 sub: "02",
                 href: "/category/basketball",
                 img: "/images/uploads/1782411301659-1ebdq8.jpg",
-                alt: "גופיית כדורסל",
+                alt: "חולצת כדורסל",
               },
             ].map((sport) => (
               <Link
