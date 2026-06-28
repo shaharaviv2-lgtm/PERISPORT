@@ -283,6 +283,13 @@ export default function Cart() {
                 </div>
               </div>
 
+              {/* Amount reminder */}
+              <div className="border-2 border-primary bg-primary/10 p-3 mb-4 text-center">
+                <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-1">סכום לתשלום ב-Paybox</p>
+                <p className="font-display text-4xl font-bold text-primary">₪{totalPrice.toFixed(2)}</p>
+                <p className="font-mono text-xs text-muted-foreground mt-1">הזן סכום זה ידנית ב-Paybox</p>
+              </div>
+
               {/* Payment buttons */}
               <div className="space-y-3">
                 {/* Paybox */}
