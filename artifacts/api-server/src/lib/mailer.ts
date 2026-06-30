@@ -1,6 +1,6 @@
 import { logger } from "./logger.js";
 
-const ADMIN_EMAIL = "shaharaviv2@gmail.com";
+const ADMIN_EMAIL = "Talparienta@gmail.com";
 
 export interface OrderEmailData {
   orderId: number;
