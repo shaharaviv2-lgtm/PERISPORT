@@ -222,6 +222,7 @@ export const ListOrdersResponseItem = zod.object({
   "id": zod.number(),
   "customerName": zod.string(),
   "customerPhone": zod.string(),
+  "customerEmail": zod.string().nullish(),
   "items": zod.string(),
   "totalPrice": zod.number(),
   "status": zod.string(),
@@ -237,6 +238,7 @@ export const ListOrdersResponse = zod.array(ListOrdersResponseItem)
 export const CreateOrderBody = zod.object({
   "customerName": zod.string(),
   "customerPhone": zod.string(),
+  "customerEmail": zod.string().optional(),
   "items": zod.string(),
   "totalPrice": zod.number(),
   "notes": zod.string().optional()
@@ -246,6 +248,7 @@ export const CreateOrderResponse = zod.object({
   "id": zod.number(),
   "customerName": zod.string(),
   "customerPhone": zod.string(),
+  "customerEmail": zod.string().nullish(),
   "items": zod.string(),
   "totalPrice": zod.number(),
   "status": zod.string(),
@@ -269,6 +272,7 @@ export const UpdateOrderStatusResponse = zod.object({
   "id": zod.number(),
   "customerName": zod.string(),
   "customerPhone": zod.string(),
+  "customerEmail": zod.string().nullish(),
   "items": zod.string(),
   "totalPrice": zod.number(),
   "status": zod.string(),

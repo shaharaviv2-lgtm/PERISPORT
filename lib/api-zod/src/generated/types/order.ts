@@ -10,6 +10,8 @@ export interface Order {
   id: number;
   customerName: string;
   customerPhone: string;
+  /** @nullable */
+  customerEmail?: string | null;
   items: string;
   totalPrice: number;
   status: string;

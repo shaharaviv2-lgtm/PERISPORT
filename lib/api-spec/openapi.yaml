@@ -435,6 +435,8 @@ components:
           type: string
         customerPhone:
           type: string
+        customerEmail:
+          type: ["string", "null"]
         items:
           type: string
         totalPrice:
@@ -457,6 +459,8 @@ components:
         customerName:
           type: string
         customerPhone:
+          type: string
+        customerEmail:
           type: string
         items:
           type: string

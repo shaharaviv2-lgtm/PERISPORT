@@ -7,8 +7,7 @@ import {
 } from "@workspace/api-client-react";
 import type { Order } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, ShoppingBag, Phone, User, Clock } from "lucide-react";
+import { Loader2, ShoppingBag, Phone, User, Clock, CheckCircle2, Mail } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -74,6 +73,12 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
               <Phone className="w-3.5 h-3.5" />
               {order.customerPhone}
             </a>
+            {order.customerEmail && (
+              <span className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
+                <Mail className="w-3 h-3" />
+                {order.customerEmail}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
             <Clock className="w-3 h-3" />
@@ -81,10 +86,20 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap justify-end">
           <span className="font-mono font-bold text-lg text-primary">₪{order.totalPrice.toFixed(2)}</span>
-          <div className="flex items-center gap-2">
-            {updating && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
+          {updating && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
+          {order.status === "pending" && (
+            <button
+              onClick={() => handleStatusChange("confirmed")}
+              disabled={updating}
+              className="flex items-center gap-2 bg-primary text-primary-foreground font-mono text-xs font-bold uppercase tracking-wider px-4 py-2 hover:bg-primary/90 transition-colors disabled:opacity-50"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              אשר תשלום — שלח מייל
+            </button>
+          )}
+          {order.status !== "pending" && (
             <Select value={order.status} onValueChange={handleStatusChange} disabled={updating}>
               <SelectTrigger className="rounded-none bg-background border-border font-mono text-xs w-32 h-8">
                 <SelectValue />
@@ -95,7 +110,7 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          )}
         </div>
       </div>
 

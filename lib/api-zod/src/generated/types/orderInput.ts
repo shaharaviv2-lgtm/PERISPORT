@@ -9,6 +9,7 @@
 export interface OrderInput {
   customerName: string;
   customerPhone: string;
+  customerEmail?: string;
   items: string;
   totalPrice: number;
   notes?: string;
