@@ -119,10 +119,10 @@ export default function ProductDetail() {
       });
       return;
     }
-    toast({
-      title: "תשלום בקרוב",
-      description: "אינטגרציית תשלום תחובר כאן בקרוב.",
-    });
+    if (product) {
+      addItem(product, selectedSize || undefined);
+      navigate("/cart");
+    }
   }
 
   if (isLoading) {
