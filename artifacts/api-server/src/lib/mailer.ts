@@ -1,4 +1,3 @@
-import { Resend } from "resend";
 import { logger } from "./logger.js";
 
 const ADMIN_EMAIL = "shaharaviv2@gmail.com";
@@ -54,19 +53,10 @@ function buildAdminHtml(order: OrderEmailData): string {
     </div>
     <h2 style="font-size:20px;margin-bottom:24px;color:#ffffff;">🛒 הזמנה חדשה #${order.orderId}</h2>
     <table style="width:100%;border-collapse:collapse;margin-bottom:24px;background:#141414;border:1px solid #2a2a2a;">
-      <tr>
-        <td style="padding:12px;color:#888;width:40%;border-bottom:1px solid #2a2a2a;">שם לקוח</td>
-        <td style="padding:12px;font-weight:bold;border-bottom:1px solid #2a2a2a;">${order.customerName}</td>
-      </tr>
-      <tr>
-        <td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">טלפון</td>
-        <td style="padding:12px;font-weight:bold;border-bottom:1px solid #2a2a2a;">${order.customerPhone}</td>
-      </tr>
+      <tr><td style="padding:12px;color:#888;width:40%;border-bottom:1px solid #2a2a2a;">שם לקוח</td><td style="padding:12px;font-weight:bold;border-bottom:1px solid #2a2a2a;">${order.customerName}</td></tr>
+      <tr><td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">טלפון</td><td style="padding:12px;font-weight:bold;border-bottom:1px solid #2a2a2a;">${order.customerPhone}</td></tr>
       ${order.customerEmail ? `<tr><td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">אימייל</td><td style="padding:12px;border-bottom:1px solid #2a2a2a;">${order.customerEmail}</td></tr>` : ""}
-      <tr>
-        <td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">תאריך</td>
-        <td style="padding:12px;border-bottom:1px solid #2a2a2a;">${new Date(order.createdAt).toLocaleString("he-IL")}</td>
-      </tr>
+      <tr><td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">תאריך</td><td style="padding:12px;border-bottom:1px solid #2a2a2a;">${new Date(order.createdAt).toLocaleString("he-IL")}</td></tr>
       ${order.notes ? `<tr><td style="padding:12px;color:#888;">הערות</td><td style="padding:12px;">${order.notes}</td></tr>` : ""}
     </table>
     <h3 style="margin-bottom:12px;color:#ffffff;">פריטים שהוזמנו</h3>
@@ -112,46 +102,51 @@ function buildCustomerHtml(order: OrderEmailData): string {
 </html>`;
 }
 
+async function sendViaBrevo(to: string, subject: string, html: string, apiKey: string, senderEmail: string): Promise<void> {
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "PERI Sport", email: senderEmail },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Brevo error ${res.status}: ${text}`);
+  }
+}
+
 export async function sendOrderEmail(order: OrderEmailData): Promise<void> {
-  const apiKey = process.env["RESEND_API_KEY"];
+  const apiKey = process.env["BREVO_API_KEY"];
+  const senderEmail = process.env["BREVO_SENDER_EMAIL"] ?? ADMIN_EMAIL;
+
   if (!apiKey) {
-    logger.warn("RESEND_API_KEY not set — skipping order notification email");
+    logger.warn("BREVO_API_KEY not set — skipping order emails");
     return;
   }
-
-  const resend = new Resend(apiKey);
 
   const tasks: Promise<void>[] = [];
 
   // Email to admin
   tasks.push(
-    resend.emails.send({
-      from: "PERI Sport <onboarding@resend.dev>",
-      to: ADMIN_EMAIL,
-      subject: `🛒 הזמנה חדשה #${order.orderId} — ${order.customerName}`,
-      html: buildAdminHtml(order),
-    }).then(({ error }) => {
-      if (error) logger.error({ error, orderId: order.orderId }, "Resend rejected admin email");
-      else logger.info({ orderId: order.orderId }, "Admin order email sent");
-    }).catch((err: unknown) => {
-      logger.error({ err, orderId: order.orderId }, "Failed to send admin order email");
-    })
+    sendViaBrevo(ADMIN_EMAIL, `🛒 הזמנה חדשה #${order.orderId} — ${order.customerName}`, buildAdminHtml(order), apiKey, senderEmail)
+      .then(() => logger.info({ orderId: order.orderId }, "Admin order email sent"))
+      .catch((err: unknown) => logger.error({ err, orderId: order.orderId }, "Failed to send admin email"))
   );
 
-  // Email to customer (only if email provided)
+  // Email to customer
   if (order.customerEmail) {
     tasks.push(
-      resend.emails.send({
-        from: "PERI Sport <onboarding@resend.dev>",
-        to: ADMIN_EMAIL, // Resend free plan: can only send to verified address
-        subject: `אישור הזמנה #${order.orderId} — PERI Sport`,
-        html: buildCustomerHtml(order),
-      }).then(({ error }) => {
-        if (error) logger.error({ error, orderId: order.orderId }, "Resend rejected customer email");
-        else logger.info({ orderId: order.orderId, customerEmail: order.customerEmail }, "Customer confirmation email sent");
-      }).catch((err: unknown) => {
-        logger.error({ err, orderId: order.orderId }, "Failed to send customer confirmation email");
-      })
+      sendViaBrevo(order.customerEmail, `אישור הזמנה #${order.orderId} — PERI Sport`, buildCustomerHtml(order), apiKey, senderEmail)
+        .then(() => logger.info({ orderId: order.orderId }, "Customer confirmation email sent"))
+        .catch((err: unknown) => logger.error({ err, orderId: order.orderId }, "Failed to send customer email"))
     );
   }
 
