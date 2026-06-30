@@ -19,9 +19,6 @@ import {
   ShoppingCart,
   Zap,
   CheckCircle2,
-  Package,
-  Truck,
-  Shield,
   HelpCircle,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -315,19 +312,6 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Trust badges */}
-            <div className="grid grid-cols-3 gap-3 mb-8">
-              {[
-                { icon: Truck, label: "משלוח מהיר" },
-                { icon: Shield, label: "אותנטי" },
-                { icon: Package, label: "100% מקורי" },
-              ].map(({ icon: Icon, label }) => (
-                <div key={label} className="flex flex-col items-center gap-1.5 bg-card border border-border p-3 text-center">
-                  <Icon className="w-4 h-4 text-primary" />
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
-                </div>
-              ))}
-            </div>
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mt-auto">
