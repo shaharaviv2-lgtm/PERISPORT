@@ -79,10 +79,10 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
                 {order.customerEmail}
               </span>
             )}
-            {order.customerAddress && (
+            {order.customerStreet && (
               <span className="flex items-center gap-1.5 font-mono text-xs text-primary/80">
                 <MapPin className="w-3 h-3" />
-                {order.customerAddress}
+                {order.customerStreet} {order.customerHouseNumber}, {order.customerCity}{order.customerZipCode ? ` ${order.customerZipCode}` : ""}
               </span>
             )}
           </div>

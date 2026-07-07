@@ -33,11 +33,13 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { customerName, customerPhone, customerEmail, customerAddress, items, totalPrice, notes } = req.body as Record<string, unknown>;
+  const { customerName, customerPhone, customerEmail, customerCity, customerStreet, customerHouseNumber, customerZipCode, items, totalPrice, notes } = req.body as Record<string, unknown>;
   if (
     typeof customerName !== "string" || !customerName.trim() ||
     typeof customerPhone !== "string" || !customerPhone.trim() ||
-    typeof customerAddress !== "string" || !customerAddress.trim() ||
+    typeof customerCity !== "string" || !customerCity.trim() ||
+    typeof customerStreet !== "string" || !customerStreet.trim() ||
+    typeof customerHouseNumber !== "string" || !customerHouseNumber.trim() ||
     typeof items !== "string" || !items.trim() ||
     typeof totalPrice !== "number" || totalPrice <= 0
   ) {
@@ -51,7 +53,10 @@ router.post("/", async (req, res) => {
         customerName: customerName.trim(),
         customerPhone: customerPhone.trim(),
         customerEmail: typeof customerEmail === "string" && customerEmail.trim() ? customerEmail.trim() : null,
-        customerAddress: customerAddress.trim(),
+        customerCity: customerCity.trim(),
+        customerStreet: customerStreet.trim(),
+        customerHouseNumber: customerHouseNumber.trim(),
+        customerZipCode: typeof customerZipCode === "string" && customerZipCode.trim() ? customerZipCode.trim() : null,
         items,
         totalPrice: String(totalPrice),
         notes: typeof notes === "string" && notes.trim() ? notes.trim() : null,
@@ -73,7 +78,10 @@ router.post("/", async (req, res) => {
       customerName: order.customerName,
       customerPhone: order.customerPhone,
       customerEmail: order.customerEmail,
-      customerAddress: order.customerAddress,
+      customerCity: order.customerCity,
+      customerStreet: order.customerStreet,
+      customerHouseNumber: order.customerHouseNumber,
+      customerZipCode: order.customerZipCode,
       items: order.items,
       totalPrice: Number(order.totalPrice),
       notes: order.notes,

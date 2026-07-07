@@ -13,7 +13,13 @@ export interface Order {
   /** @nullable */
   customerEmail?: string | null;
   /** @nullable */
-  customerAddress?: string | null;
+  customerCity?: string | null;
+  /** @nullable */
+  customerStreet?: string | null;
+  /** @nullable */
+  customerHouseNumber?: string | null;
+  /** @nullable */
+  customerZipCode?: string | null;
   items: string;
   totalPrice: number;
   status: string;

@@ -80,7 +80,13 @@ export interface Order {
   /** @nullable */
   customerEmail?: string | null;
   /** @nullable */
-  customerAddress?: string | null;
+  customerCity?: string | null;
+  /** @nullable */
+  customerStreet?: string | null;
+  /** @nullable */
+  customerHouseNumber?: string | null;
+  /** @nullable */
+  customerZipCode?: string | null;
   items: string;
   totalPrice: number;
   status: string;
@@ -93,7 +99,10 @@ export interface OrderInput {
   customerName: string;
   customerPhone: string;
   customerEmail?: string;
-  customerAddress?: string;
+  customerCity?: string;
+  customerStreet?: string;
+  customerHouseNumber?: string;
+  customerZipCode?: string;
   items: string;
   totalPrice: number;
   notes?: string;

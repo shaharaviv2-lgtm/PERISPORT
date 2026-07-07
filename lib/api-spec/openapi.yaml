@@ -437,7 +437,13 @@ components:
           type: string
         customerEmail:
           type: ["string", "null"]
-        customerAddress:
+        customerCity:
+          type: ["string", "null"]
+        customerStreet:
+          type: ["string", "null"]
+        customerHouseNumber:
+          type: ["string", "null"]
+        customerZipCode:
           type: ["string", "null"]
         items:
           type: string
@@ -464,7 +470,13 @@ components:
           type: string
         customerEmail:
           type: string
-        customerAddress:
+        customerCity:
+          type: string
+        customerStreet:
+          type: string
+        customerHouseNumber:
+          type: string
+        customerZipCode:
           type: string
         items:
           type: string

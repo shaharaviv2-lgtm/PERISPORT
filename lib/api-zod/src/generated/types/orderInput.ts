@@ -10,7 +10,10 @@ export interface OrderInput {
   customerName: string;
   customerPhone: string;
   customerEmail?: string;
-  customerAddress?: string;
+  customerCity?: string;
+  customerStreet?: string;
+  customerHouseNumber?: string;
+  customerZipCode?: string;
   items: string;
   totalPrice: number;
   notes?: string;

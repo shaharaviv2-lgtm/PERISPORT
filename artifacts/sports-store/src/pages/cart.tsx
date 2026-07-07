@@ -24,8 +24,11 @@ export default function Cart() {
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
-  const [customerAddress, setCustomerAddress] = useState("");
-  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string; email?: string; address?: string }>({});
+  const [customerCity, setCustomerCity] = useState("");
+  const [customerStreet, setCustomerStreet] = useState("");
+  const [customerHouseNumber, setCustomerHouseNumber] = useState("");
+  const [customerZipCode, setCustomerZipCode] = useState("");
+  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string; email?: string; city?: string; street?: string; houseNumber?: string }>({});
 
   useEffect(() => {
     document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
@@ -34,10 +37,12 @@ export default function Cart() {
   }, [totalItems]);
 
   function validateForm(): boolean {
-    const errors: { name?: string; phone?: string; email?: string; address?: string } = {};
+    const errors: { name?: string; phone?: string; email?: string; city?: string; street?: string; houseNumber?: string } = {};
     if (!customerName.trim()) errors.name = "נא להזין שם";
     if (!customerPhone.trim()) errors.phone = "נא להזין מספר טלפון";
-    if (!customerAddress.trim()) errors.address = "נא להזין כתובת למשלוח";
+    if (!customerCity.trim()) errors.city = "נא להזין עיר";
+    if (!customerStreet.trim()) errors.street = "נא להזין רחוב";
+    if (!customerHouseNumber.trim()) errors.houseNumber = "נא להזין מספר בית";
     if (customerEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim())) {
       errors.email = "כתובת מייל לא תקינה";
     }
@@ -66,7 +71,10 @@ export default function Cart() {
           customerName: customerName.trim(),
           customerPhone: customerPhone.trim(),
           customerEmail: customerEmail.trim() || undefined,
-          customerAddress: customerAddress.trim(),
+          customerCity: customerCity.trim(),
+          customerStreet: customerStreet.trim(),
+          customerHouseNumber: customerHouseNumber.trim(),
+          customerZipCode: customerZipCode.trim() || undefined,
           items: itemsSummary,
           totalPrice,
         }),
@@ -295,21 +303,50 @@ export default function Cart() {
                     <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.phone}</p>
                   )}
                 </div>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="כתובת למשלוח (רחוב, עיר) *"
-                    value={customerAddress}
-                    onChange={(e) => {
-                      setCustomerAddress(e.target.value);
-                      if (formErrors.address) setFormErrors((prev) => ({ ...prev, address: undefined }));
-                    }}
-                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
-                    dir="rtl"
-                  />
-                  {formErrors.address && (
-                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.address}</p>
-                  )}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="עיר *"
+                      value={customerCity}
+                      onChange={(e) => { setCustomerCity(e.target.value); if (formErrors.city) setFormErrors((p) => ({ ...p, city: undefined })); }}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                      dir="rtl"
+                    />
+                    {formErrors.city && <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.city}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="רחוב *"
+                      value={customerStreet}
+                      onChange={(e) => { setCustomerStreet(e.target.value); if (formErrors.street) setFormErrors((p) => ({ ...p, street: undefined })); }}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                      dir="rtl"
+                    />
+                    {formErrors.street && <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.street}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder='מס׳ בית *'
+                      value={customerHouseNumber}
+                      onChange={(e) => { setCustomerHouseNumber(e.target.value); if (formErrors.houseNumber) setFormErrors((p) => ({ ...p, houseNumber: undefined })); }}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                      dir="rtl"
+                    />
+                    {formErrors.houseNumber && <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.houseNumber}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="מיקוד"
+                      value={customerZipCode}
+                      onChange={(e) => setCustomerZipCode(e.target.value)}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                      dir="ltr"
+                    />
+                  </div>
                 </div>
                 <div>
                   <input
