@@ -7,7 +7,7 @@ import {
 } from "@workspace/api-client-react";
 import type { Order } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ShoppingBag, Phone, User, Clock, CheckCircle2, Mail } from "lucide-react";
+import { Loader2, ShoppingBag, Phone, User, Clock, CheckCircle2, Mail, MapPin } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -77,6 +77,12 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
               <span className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
                 <Mail className="w-3 h-3" />
                 {order.customerEmail}
+              </span>
+            )}
+            {order.customerAddress && (
+              <span className="flex items-center gap-1.5 font-mono text-xs text-primary/80">
+                <MapPin className="w-3 h-3" />
+                {order.customerAddress}
               </span>
             )}
           </div>

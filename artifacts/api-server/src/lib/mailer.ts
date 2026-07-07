@@ -7,6 +7,7 @@ export interface OrderEmailData {
   customerName: string;
   customerPhone: string;
   customerEmail?: string | null;
+  customerAddress?: string | null;
   items: string;
   totalPrice: number;
   notes?: string | null;
@@ -56,6 +57,7 @@ function buildAdminHtml(order: OrderEmailData): string {
       <tr><td style="padding:12px;color:#888;width:40%;border-bottom:1px solid #2a2a2a;">שם לקוח</td><td style="padding:12px;font-weight:bold;border-bottom:1px solid #2a2a2a;">${order.customerName}</td></tr>
       <tr><td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">טלפון</td><td style="padding:12px;font-weight:bold;border-bottom:1px solid #2a2a2a;">${order.customerPhone}</td></tr>
       ${order.customerEmail ? `<tr><td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">אימייל</td><td style="padding:12px;border-bottom:1px solid #2a2a2a;">${order.customerEmail}</td></tr>` : ""}
+      ${order.customerAddress ? `<tr><td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">כתובת למשלוח</td><td style="padding:12px;font-weight:bold;border-bottom:1px solid #2a2a2a;">${order.customerAddress}</td></tr>` : ""}
       <tr><td style="padding:12px;color:#888;border-bottom:1px solid #2a2a2a;">תאריך</td><td style="padding:12px;border-bottom:1px solid #2a2a2a;">${new Date(order.createdAt).toLocaleString("he-IL")}</td></tr>
       ${order.notes ? `<tr><td style="padding:12px;color:#888;">הערות</td><td style="padding:12px;">${order.notes}</td></tr>` : ""}
     </table>

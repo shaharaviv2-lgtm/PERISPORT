@@ -33,10 +33,11 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { customerName, customerPhone, customerEmail, items, totalPrice, notes } = req.body as Record<string, unknown>;
+  const { customerName, customerPhone, customerEmail, customerAddress, items, totalPrice, notes } = req.body as Record<string, unknown>;
   if (
     typeof customerName !== "string" || !customerName.trim() ||
     typeof customerPhone !== "string" || !customerPhone.trim() ||
+    typeof customerAddress !== "string" || !customerAddress.trim() ||
     typeof items !== "string" || !items.trim() ||
     typeof totalPrice !== "number" || totalPrice <= 0
   ) {
@@ -50,6 +51,7 @@ router.post("/", async (req, res) => {
         customerName: customerName.trim(),
         customerPhone: customerPhone.trim(),
         customerEmail: typeof customerEmail === "string" && customerEmail.trim() ? customerEmail.trim() : null,
+        customerAddress: customerAddress.trim(),
         items,
         totalPrice: String(totalPrice),
         notes: typeof notes === "string" && notes.trim() ? notes.trim() : null,
@@ -71,6 +73,7 @@ router.post("/", async (req, res) => {
       customerName: order.customerName,
       customerPhone: order.customerPhone,
       customerEmail: order.customerEmail,
+      customerAddress: order.customerAddress,
       items: order.items,
       totalPrice: Number(order.totalPrice),
       notes: order.notes,

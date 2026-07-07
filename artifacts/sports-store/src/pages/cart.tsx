@@ -24,7 +24,8 @@ export default function Cart() {
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
-  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
+  const [customerAddress, setCustomerAddress] = useState("");
+  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string; email?: string; address?: string }>({});
 
   useEffect(() => {
     document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
@@ -33,9 +34,10 @@ export default function Cart() {
   }, [totalItems]);
 
   function validateForm(): boolean {
-    const errors: { name?: string; phone?: string; email?: string } = {};
+    const errors: { name?: string; phone?: string; email?: string; address?: string } = {};
     if (!customerName.trim()) errors.name = "נא להזין שם";
     if (!customerPhone.trim()) errors.phone = "נא להזין מספר טלפון";
+    if (!customerAddress.trim()) errors.address = "נא להזין כתובת למשלוח";
     if (customerEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim())) {
       errors.email = "כתובת מייל לא תקינה";
     }
@@ -64,6 +66,7 @@ export default function Cart() {
           customerName: customerName.trim(),
           customerPhone: customerPhone.trim(),
           customerEmail: customerEmail.trim() || undefined,
+          customerAddress: customerAddress.trim(),
           items: itemsSummary,
           totalPrice,
         }),
@@ -290,6 +293,22 @@ export default function Cart() {
                   />
                   {formErrors.phone && (
                     <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.phone}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="כתובת למשלוח (רחוב, עיר) *"
+                    value={customerAddress}
+                    onChange={(e) => {
+                      setCustomerAddress(e.target.value);
+                      if (formErrors.address) setFormErrors((prev) => ({ ...prev, address: undefined }));
+                    }}
+                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                    dir="rtl"
+                  />
+                  {formErrors.address && (
+                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.address}</p>
                   )}
                 </div>
                 <div>

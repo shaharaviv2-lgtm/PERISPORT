@@ -12,6 +12,8 @@ export interface Order {
   customerPhone: string;
   /** @nullable */
   customerEmail?: string | null;
+  /** @nullable */
+  customerAddress?: string | null;
   items: string;
   totalPrice: number;
   status: string;

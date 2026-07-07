@@ -7,6 +7,7 @@ export const ordersTable = pgTable("orders", {
   customerName: text("customer_name").notNull(),
   customerPhone: text("customer_phone").notNull(),
   customerEmail: text("customer_email"),
+  customerAddress: text("customer_address"),
   items: text("items").notNull(),
   totalPrice: numeric("total_price", { precision: 10, scale: 2 }).notNull(),
   status: text("status").notNull().default("pending"),

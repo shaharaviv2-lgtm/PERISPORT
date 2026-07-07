@@ -79,6 +79,8 @@ export interface Order {
   customerPhone: string;
   /** @nullable */
   customerEmail?: string | null;
+  /** @nullable */
+  customerAddress?: string | null;
   items: string;
   totalPrice: number;
   status: string;
@@ -91,6 +93,7 @@ export interface OrderInput {
   customerName: string;
   customerPhone: string;
   customerEmail?: string;
+  customerAddress?: string;
   items: string;
   totalPrice: number;
   notes?: string;
