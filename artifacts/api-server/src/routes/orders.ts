@@ -64,7 +64,18 @@ router.post("/", async (req, res) => {
     };
 
     res.status(201).json(response);
-    // No email here — emails are sent only after admin confirms payment received
+
+    // Send emails immediately on order creation
+    sendOrderEmail({
+      orderId: order.id,
+      customerName: order.customerName,
+      customerPhone: order.customerPhone,
+      customerEmail: order.customerEmail,
+      items: order.items,
+      totalPrice: Number(order.totalPrice),
+      notes: order.notes,
+      createdAt: order.createdAt.toISOString(),
+    }).catch(() => {});
 
   } catch (err) {
     req.log.error({ err }, "Failed to create order");
@@ -99,19 +110,6 @@ router.patch("/:id/status", async (req, res) => {
       createdAt: updated.createdAt.toISOString(),
     });
 
-    // Send confirmation emails only when admin marks as confirmed
-    if (status === "confirmed") {
-      sendOrderEmail({
-        orderId: updated.id,
-        customerName: updated.customerName,
-        customerPhone: updated.customerPhone,
-        customerEmail: updated.customerEmail,
-        items: updated.items,
-        totalPrice: Number(updated.totalPrice),
-        notes: updated.notes,
-        createdAt: updated.createdAt.toISOString(),
-      }).catch(() => {});
-    }
   } catch (err) {
     req.log.error({ err }, "Failed to update order status");
     res.status(500).json({ error: "Failed to update order status" });
