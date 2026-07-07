@@ -114,7 +114,7 @@ export default function Home() {
             <div className="p-6 md:p-8 flex flex-col items-center justify-center text-center gap-2">
               <Globe className="w-6 h-6 text-primary mb-2 opacity-50" />
               <span className="font-display text-3xl md:text-4xl font-bold">100%</span>
-              <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">מקורי</span>
+              <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">איכות גבוהה</span>
             </div>
           </div>
         </div>

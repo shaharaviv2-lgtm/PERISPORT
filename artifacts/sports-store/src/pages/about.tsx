@@ -53,7 +53,7 @@ export default function About() {
           </div>
           <div className="md:col-span-8 prose prose-invert prose-p:font-mono prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-display prose-strong:font-bold prose-strong:uppercase">
             <p>
-              לא תמצא פה ריפליקות. לא "כמו מקורי". לא "באיכות גבוהה". פה יש רק <strong>מקורי אמיתי</strong> — אותה חולצה שהשחקן לובש על המגרש, רק שהיא שלך.
+              לא תמצא פה ריפליקות. פה יש רק <strong>מוצרים באיכות גבוהה במיוחד</strong> — אותה חולצה שהשחקן לובש על המגרש, רק שהיא שלך.
             </p>
             <p>
               כי יש הבדל בין לראות את המשחק לבין לחיות אותו.

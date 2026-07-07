@@ -374,7 +374,7 @@ export function AdminProductsTab() {
                   name="originalPrice"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מחיר מקורי (₪)</FormLabel>
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מחיר לפני הנחה (₪)</FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" placeholder="249.90" className="rounded-none bg-background border-border font-mono" {...field} />
                       </FormControl>
