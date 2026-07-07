@@ -20,6 +20,7 @@ export default function Cart() {
   const [, navigate] = useLocation();
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
   const [showModal, setShowModal] = useState(false);
+  const [showPayboxWarning, setShowPayboxWarning] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
@@ -75,6 +76,11 @@ export default function Cart() {
   async function handlePaybox() {
     if (!validateForm()) return;
     await saveOrder();
+    setShowPayboxWarning(true);
+  }
+
+  function confirmPaybox() {
+    setShowPayboxWarning(false);
     window.open(buildPayboxUrl(totalPrice), "_blank");
   }
 
@@ -333,6 +339,37 @@ export default function Cart() {
                   חזרה לסל
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Paybox warning popup */}
+      {showPayboxWarning && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4" dir="rtl">
+          <div className="bg-[#111] border border-[#2a2a2a] w-full max-w-sm p-6 text-center">
+            <div className="text-4xl mb-4">⚠️</div>
+            <h2 className="font-display text-xl font-bold text-white mb-3">שימו לב!</h2>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+              יש להעביר את הסכום המדויק בלבד:
+            </p>
+            <p className="font-display text-3xl font-bold text-primary mb-4">₪{totalPrice.toFixed(2)}</p>
+            <p className="text-sm text-red-400 font-semibold leading-relaxed mb-6">
+              במידה ולא יועבר הסכום המדויק — ההזמנה תבוטל.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={confirmPaybox}
+                className="w-full h-12 bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-colors"
+              >
+                הבנתי — עבור לתשלום
+              </button>
+              <button
+                onClick={() => setShowPayboxWarning(false)}
+                className="w-full font-mono text-xs text-muted-foreground hover:text-foreground uppercase tracking-widest transition-colors"
+              >
+                ביטול
+              </button>
             </div>
           </div>
         </div>
