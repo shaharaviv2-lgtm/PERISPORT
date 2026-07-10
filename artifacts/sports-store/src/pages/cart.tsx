@@ -2,7 +2,7 @@ import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/cart";
 import { Button } from "@/components/ui/button";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, X } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, X, Lock } from "lucide-react";
 
 const ADMIN_PHONE_WA = "972507755525";
 const PAYBOX_LINK = "https://links.payboxapp.com/YtCtferkl4b";
@@ -371,6 +371,13 @@ export default function Cart() {
                 <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-1">סכום לתשלום ב-Paybox</p>
                 <p className="font-display text-4xl font-bold text-primary">₪{totalPrice.toFixed(2)}</p>
                 <p className="font-mono text-xs text-muted-foreground mt-1">הזן סכום זה ידנית ב-Paybox</p>
+              </div>
+
+              {/* Secure payment badge */}
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Lock className="w-3.5 h-3.5 text-primary" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">תשלום מאובטח</span>
+                <Lock className="w-3.5 h-3.5 text-primary" />
               </div>
 
               {/* Payment buttons */}
