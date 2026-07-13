@@ -95,7 +95,6 @@ export default function Cart() {
     setShowPayboxWarning(false);
     window.open(buildPayboxUrl(totalPrice), "_blank");
     setShowSuccess(true);
-    clearCart();
   }
 
   async function handleWhatsApp() {
@@ -104,7 +103,7 @@ export default function Cart() {
     window.open(buildWhatsAppUrl(buildOrderSummaryText()), "_blank");
   }
 
-  if (items.length === 0) {
+  if (items.length === 0 && !showSuccess) {
     return (
       <div className="min-h-screen bg-background pt-8 pb-24 flex items-center justify-center">
         <div className="text-center border border-dashed border-border p-16 bg-card/30">
@@ -434,7 +433,7 @@ export default function Cart() {
               שלח אישור בוואטסאפ
             </a>
             <button
-              onClick={() => { setShowSuccess(false); navigate("/"); }}
+              onClick={() => { clearCart(); setShowSuccess(false); navigate("/"); }}
               className="w-full font-mono text-xs text-muted-foreground hover:text-foreground uppercase tracking-widest transition-colors"
             >
               חזרה לחנות
