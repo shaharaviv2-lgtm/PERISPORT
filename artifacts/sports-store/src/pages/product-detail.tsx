@@ -56,7 +56,9 @@ export default function ProductDetail() {
   });
 
   const { addItem } = useCart();
-  const sizes = product ? getSizes(product.category) : [];
+  const sizes = product
+    ? (product.availableSizes && product.availableSizes.length > 0 ? product.availableSizes : getSizes(product.category))
+    : [];
   const hasSizes = sizes.length > 1;
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [added, setAdded] = useState(false);

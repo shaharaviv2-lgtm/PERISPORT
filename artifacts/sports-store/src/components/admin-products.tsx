@@ -149,6 +149,8 @@ export function AdminProductsTab() {
   const [uploadingAdditional, setUploadingAdditional] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [additionalPreviews, setAdditionalPreviews] = useState<string[]>([]);
+  const [availableSizes, setAvailableSizes] = useState<string[]>([]);
+  const [newSizeInput, setNewSizeInput] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -265,6 +267,7 @@ export function AdminProductsTab() {
       badge: values.badge && values.badge !== "none" ? values.badge : undefined,
       inStock: values.inStock,
       featured: values.featured,
+      availableSizes: availableSizes.length > 0 ? availableSizes : undefined,
     };
     if (editingId != null) {
       updateProduct.mutate({ id: editingId, data });
@@ -290,6 +293,8 @@ export function AdminProductsTab() {
     });
     setPreviewUrl(product.imageUrl);
     setAdditionalPreviews(product.additionalImages ?? []);
+    setAvailableSizes(product.availableSizes ?? []);
+    setNewSizeInput("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -298,6 +303,8 @@ export function AdminProductsTab() {
     form.reset();
     setPreviewUrl(null);
     setAdditionalPreviews([]);
+    setAvailableSizes([]);
+    setNewSizeInput("");
   }
 
   async function handleDelete(id: number) {
@@ -587,6 +594,63 @@ export function AdminProductsTab() {
                   }}
                 />
                 <p className="font-mono text-[10px] text-muted-foreground/60">תמונות אלה יוצגו כגלריה בדף המוצר</p>
+              </div>
+
+              {/* Available Sizes */}
+              <div className="space-y-2">
+                <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מידות זמינות (לחצני בחירה)</label>
+                <div className="flex gap-2">
+                  <Input
+                    value={newSizeInput}
+                    onChange={(e) => setNewSizeInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        const val = newSizeInput.trim();
+                        if (val && !availableSizes.includes(val)) {
+                          setAvailableSizes((prev) => [...prev, val]);
+                        }
+                        setNewSizeInput("");
+                      }
+                    }}
+                    placeholder="לדוגמה: S, M, L, XL, 38..."
+                    className="rounded-none bg-background border-border font-mono text-sm text-right flex-1"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const val = newSizeInput.trim();
+                      if (val && !availableSizes.includes(val)) {
+                        setAvailableSizes((prev) => [...prev, val]);
+                      }
+                      setNewSizeInput("");
+                    }}
+                    className="px-3 h-10 bg-primary text-primary-foreground font-mono text-xs uppercase tracking-wider hover:bg-primary/90 transition-colors flex-shrink-0"
+                  >
+                    הוסף
+                  </button>
+                </div>
+                {availableSizes.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {availableSizes.map((size) => (
+                      <span key={size} className="flex items-center gap-1 bg-secondary border border-border font-mono text-xs px-2.5 py-1">
+                        {size}
+                        <button
+                          type="button"
+                          onClick={() => setAvailableSizes((prev) => prev.filter((s) => s !== size))}
+                          className="text-muted-foreground hover:text-destructive transition-colors ml-1"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <p className="font-mono text-[10px] text-muted-foreground/60">
+                  {availableSizes.length === 0
+                    ? "ריק = ברירת מחדל לפי קטגוריה (XS–XXL)"
+                    : `${availableSizes.length} מידות מוגדרות — יוצגו כלחצנים בדף המוצר`}
+                </p>
               </div>
 
               <FormField

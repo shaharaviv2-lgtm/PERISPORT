@@ -19,4 +19,5 @@ export interface ProductInput {
   badge?: string;
   inStock?: boolean;
   featured?: boolean;
+  availableSizes?: string[];
 }

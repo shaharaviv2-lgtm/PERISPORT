@@ -28,6 +28,7 @@ export interface Product {
   badge?: string | null;
   inStock: boolean;
   featured?: boolean;
+  availableSizes?: string[] | null;
 }
 
 export interface ProductInput {
@@ -43,6 +44,7 @@ export interface ProductInput {
   badge?: string;
   inStock?: boolean;
   featured?: boolean;
+  availableSizes?: string[];
 }
 
 export interface Category {

@@ -25,4 +25,5 @@ export interface Product {
   badge?: string | null;
   inStock: boolean;
   featured?: boolean;
+  availableSizes?: string[] | null;
 }
