@@ -93,6 +93,7 @@ export default function Cart() {
   function confirmPaybox() {
     setShowPayboxWarning(false);
     window.open(buildPayboxUrl(totalPrice), "_blank");
+    clearCart();
   }
 
   async function handleWhatsApp() {
