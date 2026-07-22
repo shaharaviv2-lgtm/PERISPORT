@@ -1,4 +1,5 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +15,14 @@ import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
+
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location]);
+  return null;
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,6 +55,7 @@ function App() {
       <TooltipProvider>
         <CartProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <ScrollToTop />
             <Layout>
               <Router />
             </Layout>
