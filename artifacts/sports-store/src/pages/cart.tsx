@@ -21,14 +21,15 @@ export default function Cart() {
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [showPayboxWarning, setShowPayboxWarning] = useState(false);
-  const [customerName, setCustomerName] = useState("");
+  const [customerFirstName, setCustomerFirstName] = useState("");
+  const [customerLastName, setCustomerLastName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerCity, setCustomerCity] = useState("");
   const [customerStreet, setCustomerStreet] = useState("");
   const [customerHouseNumber, setCustomerHouseNumber] = useState("");
   const [customerZipCode, setCustomerZipCode] = useState("");
-  const [formErrors, setFormErrors] = useState<{ name?: string; phone?: string; email?: string; city?: string; street?: string; houseNumber?: string; zipCode?: string }>({});
+  const [formErrors, setFormErrors] = useState<{ firstName?: string; lastName?: string; phone?: string; email?: string; city?: string; street?: string; houseNumber?: string; zipCode?: string }>({});
 
   useEffect(() => {
     document.title = `סל קניות${totalItems > 0 ? ` (${totalItems})` : ""} | PERI Sport`;
@@ -42,16 +43,16 @@ export default function Cart() {
   }, [showModal, showPayboxWarning]);
 
   function validateForm(): boolean {
-    const errors: { name?: string; phone?: string; email?: string; city?: string; street?: string; houseNumber?: string; zipCode?: string } = {};
-    if (!customerName.trim()) errors.name = "נא להזין שם";
+    const errors: { firstName?: string; lastName?: string; phone?: string; email?: string; city?: string; street?: string; houseNumber?: string; zipCode?: string } = {};
+    if (!customerFirstName.trim()) errors.firstName = "נא להזין שם פרטי";
+    if (!customerLastName.trim()) errors.lastName = "נא להזין שם משפחה";
     if (!customerPhone.trim()) errors.phone = "נא להזין מספר טלפון";
+    if (!customerEmail.trim()) errors.email = "נא להזין אימייל";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim())) errors.email = "כתובת מייל לא תקינה";
     if (!customerCity.trim()) errors.city = "נא להזין עיר";
     if (!customerStreet.trim()) errors.street = "נא להזין רחוב";
     if (!customerHouseNumber.trim()) errors.houseNumber = "נא להזין מספר בית";
     if (!customerZipCode.trim()) errors.zipCode = "נא להזין מיקוד";
-    if (customerEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim())) {
-      errors.email = "כתובת מייל לא תקינה";
-    }
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   }
@@ -74,7 +75,8 @@ export default function Cart() {
         return `• ${item.product.name}${item.size ? ` (מידה ${item.size})` : ""}${buildCustomizationText(item)} × ${item.quantity} — ₪${itemTotal.toFixed(2)}`;
       }
     );
-    const customerInfo = `שם: ${customerName}\nטלפון: ${customerPhone}\nכתובת: ${customerStreet} ${customerHouseNumber}, ${customerCity}${customerZipCode ? ` ${customerZipCode}` : ""}`;
+    const fullName = `${customerFirstName.trim()} ${customerLastName.trim()}`;
+    const customerInfo = `שם: ${fullName}\nטלפון: ${customerPhone}\nכתובת: ${customerStreet} ${customerHouseNumber}, ${customerCity}${customerZipCode ? ` ${customerZipCode}` : ""}`;
     return `הזמנה מ-PERI Sport:\n${customerInfo}\n\n${lines.join("\n")}\n\nסה"כ: ₪${totalPrice.toFixed(2)}\n\nשלמתי דרך Paybox ✅`;
   }
 
@@ -95,7 +97,7 @@ export default function Cart() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerName: customerName.trim(),
+          customerName: `${customerFirstName.trim()} ${customerLastName.trim()}`,
           customerPhone: customerPhone.trim(),
           customerEmail: customerEmail.trim() || undefined,
           customerCity: customerCity.trim(),
@@ -319,21 +321,30 @@ export default function Cart() {
               {/* Contact details form */}
               <div className="border border-border bg-background/50 p-4 mb-6 space-y-3">
                 <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-1">פרטי יצירת קשר</h3>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="שם מלא *"
-                    value={customerName}
-                    onChange={(e) => {
-                      setCustomerName(e.target.value);
-                      if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: undefined }));
-                    }}
-                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
-                    dir="rtl"
-                  />
-                  {formErrors.name && (
-                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.name}</p>
-                  )}
+                {/* Name row */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="שם פרטי *"
+                      value={customerFirstName}
+                      onChange={(e) => { setCustomerFirstName(e.target.value); if (formErrors.firstName) setFormErrors((p) => ({ ...p, firstName: undefined })); }}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                      dir="rtl"
+                    />
+                    {formErrors.firstName && <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.firstName}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="שם משפחה *"
+                      value={customerLastName}
+                      onChange={(e) => { setCustomerLastName(e.target.value); if (formErrors.lastName) setFormErrors((p) => ({ ...p, lastName: undefined })); }}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                      dir="rtl"
+                    />
+                    {formErrors.lastName && <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.lastName}</p>}
+                  </div>
                 </div>
                 <div>
                   <input
@@ -349,6 +360,22 @@ export default function Cart() {
                   />
                   {formErrors.phone && (
                     <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.phone}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    placeholder="אימייל *"
+                    value={customerEmail}
+                    onChange={(e) => {
+                      setCustomerEmail(e.target.value);
+                      if (formErrors.email) setFormErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
+                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
+                    dir="ltr"
+                  />
+                  {formErrors.email && (
+                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.email}</p>
                   )}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -396,22 +423,6 @@ export default function Cart() {
                     />
                     {formErrors.zipCode && <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.zipCode}</p>}
                   </div>
-                </div>
-                <div>
-                  <input
-                    type="email"
-                    placeholder="אימייל (לסיכום הזמנה)"
-                    value={customerEmail}
-                    onChange={(e) => {
-                      setCustomerEmail(e.target.value);
-                      if (formErrors.email) setFormErrors((prev) => ({ ...prev, email: undefined }));
-                    }}
-                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors text-right"
-                    dir="ltr"
-                  />
-                  {formErrors.email && (
-                    <p className="font-mono text-xs text-destructive mt-1 text-right">{formErrors.email}</p>
-                  )}
                 </div>
               </div>
 
