@@ -37,6 +37,15 @@ function itemKey(productId: number, size?: string, customization?: Customization
   return `${productId}__${size ?? ""}__${customizationKey(customization)}`;
 }
 
+export function customizationExtraPrice(c?: Customization): number {
+  if (!c) return 0;
+  let extra = 0;
+  if (c.badge) extra += 5;
+  if (c.playerName) extra += 5;
+  if (c.playerNumber) extra += 5;
+  return extra;
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
@@ -80,7 +89,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = useCallback(() => setItems([]), []);
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
-  const totalPrice = items.reduce((s, i) => s + i.product.price * i.quantity, 0);
+  const totalPrice = items.reduce((s, i) => s + (i.product.price + customizationExtraPrice(i.customization)) * i.quantity, 0);
 
   return (
     <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}>

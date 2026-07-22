@@ -224,7 +224,7 @@ export function AdminProductsTab() {
       badge: "",
       inStock: true,
       featured: false,
-      customizable: false,
+      customizable: true,
       allowCustomName: false,
       allowCustomNumber: false,
     },

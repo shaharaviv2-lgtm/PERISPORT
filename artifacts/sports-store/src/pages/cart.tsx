@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
-import { useCart } from "@/context/cart";
+import { useCart, customizationExtraPrice } from "@/context/cart";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, X, Lock } from "lucide-react";
 
@@ -53,7 +53,8 @@ export default function Cart() {
   function buildCustomizationText(item: typeof items[0]) {
     const parts: string[] = [];
     if (item.customization?.badge) {
-      parts.push(`פאץ': ${item.customization.badge === "local" ? "ליגה מקומית" : item.customization.badge === "champions" ? "ליגת האלופות" : item.customization.badge}`);
+      const label = item.customization.badge === "local" ? "ליגה מקומית" : item.customization.badge === "champions" ? "ליגת האלופות" : "NBA";
+      parts.push(`פאץ': ${label}`);
     }
     if (item.customization?.playerName) parts.push(`שם: ${item.customization.playerName}`);
     if (item.customization?.playerNumber) parts.push(`מספר: ${item.customization.playerNumber}`);
@@ -62,8 +63,10 @@ export default function Cart() {
 
   function buildOrderSummaryText() {
     const lines = items.map(
-      (item) =>
-        `• ${item.product.name}${item.size ? ` (מידה ${item.size})` : ""}${buildCustomizationText(item)} × ${item.quantity} — ₪${(item.product.price * item.quantity).toFixed(2)}`
+      (item) => {
+        const itemTotal = (item.product.price + customizationExtraPrice(item.customization)) * item.quantity;
+        return `• ${item.product.name}${item.size ? ` (מידה ${item.size})` : ""}${buildCustomizationText(item)} × ${item.quantity} — ₪${itemTotal.toFixed(2)}`;
+      }
     );
     const customerInfo = `שם: ${customerName}\nטלפון: ${customerPhone}\nכתובת: ${customerStreet} ${customerHouseNumber}, ${customerCity}`;
     return `הזמנה מ-PERI Sport:\n${customerInfo}\n\n${lines.join("\n")}\n\nסה"כ: ₪${totalPrice.toFixed(2)}\n\nשלמתי דרך Paybox ✅`;
@@ -178,7 +181,7 @@ export default function Cart() {
                           )}
                           {item.customization?.badge && (
                             <span className="font-mono text-xs text-primary/80 uppercase">
-                              {item.customization.badge === "local" ? "🏆 ליגה מקומית" : "⭐ ליגת האלופות"}
+                              {item.customization.badge === "local" ? "🏆 ליגה מקומית" : item.customization.badge === "champions" ? "⭐ ליגת האלופות" : "🏀 NBA"}
                             </span>
                           )}
                           {item.customization?.playerName && (
@@ -214,9 +217,16 @@ export default function Cart() {
                           <Plus className="w-3 h-3" />
                         </button>
                       </div>
-                      <span className="font-mono text-lg font-bold text-primary">
-                        ₪{(item.product.price * item.quantity).toFixed(2)}
-                      </span>
+                      <div className="text-left">
+                        <span className="font-mono text-lg font-bold text-primary">
+                          ₪{((item.product.price + customizationExtraPrice(item.customization)) * item.quantity).toFixed(2)}
+                        </span>
+                        {customizationExtraPrice(item.customization) > 0 && (
+                          <div className="font-mono text-[10px] text-muted-foreground">
+                            כולל +₪{customizationExtraPrice(item.customization)} התאמה
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

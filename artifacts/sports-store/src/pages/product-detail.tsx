@@ -326,69 +326,77 @@ export default function ProductDetail() {
             )}
 
 
-            {/* Customization section */}
-            <div className="mb-8 border border-primary/20 bg-primary/5 p-4 space-y-5">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-primary">// התאמה אישית</span>
-                </div>
+            {/* Customization section — only for customizable non-pants products */}
+            {product.customizable && product.itemType !== "pants" && (() => {
+              const isBasketball = product.sport === "basketball";
+              const badgeOptions = isBasketball
+                ? [{ value: "", label: "ללא פאץ'" }, { value: "nba", label: "🏀 NBA" }]
+                : [{ value: "", label: "ללא פאץ'" }, { value: "local", label: "🏆 ליגה מקומית" }, { value: "champions", label: "⭐ ליגת האלופות" }];
+              const extraPrice = (selectedBadge ? 5 : 0) + (playerName.trim() ? 5 : 0) + (playerNumber.trim() ? 5 : 0);
+              return (
+                <div className="mb-8 border border-primary/20 bg-primary/5 p-4 space-y-5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-primary">// התאמה אישית</span>
+                    {extraPrice > 0 && (
+                      <span className="font-mono text-xs text-primary">+₪{extraPrice} בחירתך</span>
+                    )}
+                  </div>
 
-                {/* Badge picker */}
-                <div className="space-y-2">
-                  <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                    פאץ' ליגה — אופציונלי
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      { value: "", label: "ללא פאץ'" },
-                      { value: "local", label: "🏆 ליגה מקומית" },
-                      { value: "champions", label: "⭐ ליגת האלופות" },
-                    ].map(({ value, label }) => (
-                      <button
-                        key={value || "none"}
-                        onClick={() => setSelectedBadge(value)}
-                        className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all ${
-                          selectedBadge === value
-                            ? "bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(153,255,0,0.3)]"
-                            : "bg-card border-border text-muted-foreground hover:border-primary/60 hover:text-primary"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
+                  {/* Badge picker */}
+                  <div className="space-y-2">
+                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                      פאץ' ליגה — אופציונלי <span className="text-primary/60">(+₪5)</span>
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {badgeOptions.map(({ value, label }) => (
+                        <button
+                          key={value || "none"}
+                          onClick={() => setSelectedBadge(value)}
+                          className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all ${
+                            selectedBadge === value
+                              ? "bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(153,255,0,0.3)]"
+                              : "bg-card border-border text-muted-foreground hover:border-primary/60 hover:text-primary"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Player name */}
+                  <div className="space-y-2">
+                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                      שם על החולצה — אופציונלי <span className="text-primary/60">(+₪5)</span>
+                    </h3>
+                    <input
+                      type="text"
+                      value={playerName}
+                      onChange={(e) => setPlayerName(e.target.value)}
+                      placeholder="לדוגמה: RONALDO"
+                      maxLength={20}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50 placeholder:normal-case"
+                    />
+                  </div>
+
+                  {/* Player number */}
+                  <div className="space-y-2">
+                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                      מספר על החולצה — אופציונלי <span className="text-primary/60">(+₪5)</span>
+                    </h3>
+                    <input
+                      type="number"
+                      value={playerNumber}
+                      onChange={(e) => setPlayerNumber(e.target.value)}
+                      placeholder="7"
+                      min={1}
+                      max={99}
+                      className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
+                    />
                   </div>
                 </div>
-
-                {/* Player name */}
-                <div className="space-y-2">
-                  <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                    שם על החולצה — אופציונלי
-                  </h3>
-                  <input
-                    type="text"
-                    value={playerName}
-                    onChange={(e) => setPlayerName(e.target.value)}
-                    placeholder="לדוגמה: RONALDO"
-                    maxLength={20}
-                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50 placeholder:normal-case"
-                  />
-                </div>
-
-                {/* Player number */}
-                <div className="space-y-2">
-                  <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                    מספר על החולצה — אופציונלי
-                  </h3>
-                  <input
-                    type="number"
-                    value={playerNumber}
-                    onChange={(e) => setPlayerNumber(e.target.value)}
-                    placeholder="7"
-                    min={1}
-                    max={99}
-                    className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
-                  />
-                </div>
-            </div>
+              );
+            })()}
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mt-auto">
