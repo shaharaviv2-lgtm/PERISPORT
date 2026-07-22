@@ -17,6 +17,10 @@ export const productsTable = pgTable("products", {
   inStock: boolean("in_stock").notNull().default(true),
   featured: boolean("featured").notNull().default(false),
   availableSizes: text("available_sizes").array(),
+  customizable: boolean("customizable").notNull().default(false),
+  badgeOptions: text("badge_options").array(),
+  allowCustomName: boolean("allow_custom_name").notNull().default(false),
+  allowCustomNumber: boolean("allow_custom_number").notNull().default(false),
 });
 
 export const insertProductSchema = createInsertSchema(productsTable).omit({ id: true });

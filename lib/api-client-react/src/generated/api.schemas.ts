@@ -29,6 +29,10 @@ export interface Product {
   inStock: boolean;
   featured?: boolean;
   availableSizes?: string[] | null;
+  customizable?: boolean;
+  badgeOptions?: string[] | null;
+  allowCustomName?: boolean;
+  allowCustomNumber?: boolean;
 }
 
 export interface ProductInput {
@@ -45,6 +49,10 @@ export interface ProductInput {
   inStock?: boolean;
   featured?: boolean;
   availableSizes?: string[];
+  customizable?: boolean;
+  badgeOptions?: string[];
+  allowCustomName?: boolean;
+  allowCustomNumber?: boolean;
 }
 
 export interface Category {

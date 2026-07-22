@@ -68,6 +68,9 @@ const productSchema = z.object({
   badge: z.string().optional(),
   inStock: z.boolean(),
   featured: z.boolean(),
+  customizable: z.boolean(),
+  allowCustomName: z.boolean(),
+  allowCustomNumber: z.boolean(),
 });
 
 type ProductForm = z.infer<typeof productSchema>;
@@ -150,6 +153,7 @@ export function AdminProductsTab() {
   const [additionalPreviews, setAdditionalPreviews] = useState<string[]>([]);
   const [availableSizes, setAvailableSizes] = useState<string[]>([]);
   const [newSizeInput, setNewSizeInput] = useState("");
+  const [badgeOptions, setBadgeOptions] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -220,6 +224,9 @@ export function AdminProductsTab() {
       badge: "",
       inStock: true,
       featured: false,
+      customizable: false,
+      allowCustomName: false,
+      allowCustomNumber: false,
     },
   });
 
@@ -258,6 +265,10 @@ export function AdminProductsTab() {
       inStock: values.inStock,
       featured: values.featured,
       availableSizes: availableSizes.length > 0 ? availableSizes : undefined,
+      customizable: values.customizable,
+      badgeOptions: badgeOptions.length > 0 ? badgeOptions : undefined,
+      allowCustomName: values.allowCustomName,
+      allowCustomNumber: values.allowCustomNumber,
     };
     if (editingId != null) {
       updateProduct.mutate({ id: editingId, data });
@@ -280,10 +291,14 @@ export function AdminProductsTab() {
       badge: product.badge ?? "",
       inStock: product.inStock,
       featured: product.featured,
+      customizable: product.customizable ?? false,
+      allowCustomName: product.allowCustomName ?? false,
+      allowCustomNumber: product.allowCustomNumber ?? false,
     });
     setPreviewUrl(product.imageUrl);
     setAdditionalPreviews(product.additionalImages ?? []);
     setAvailableSizes(product.availableSizes ?? []);
+    setBadgeOptions(product.badgeOptions ?? []);
     setNewSizeInput("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -294,6 +309,7 @@ export function AdminProductsTab() {
     setPreviewUrl(null);
     setAdditionalPreviews([]);
     setAvailableSizes([]);
+    setBadgeOptions([]);
     setNewSizeInput("");
   }
 
@@ -641,6 +657,85 @@ export function AdminProductsTab() {
                     ? "ריק = ברירת מחדל לפי קטגוריה (XS–XXL)"
                     : `${availableSizes.length} מידות מוגדרות — יוצגו כלחצנים בדף המוצר`}
                 </p>
+              </div>
+
+              {/* Customization section */}
+              <div className="space-y-3 border border-border p-4 bg-background/50 relative">
+                <div className="absolute -top-2.5 right-3 bg-background px-2">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-primary">// התאמה אישית</span>
+                </div>
+
+                {/* Enable customization toggle */}
+                <FormField
+                  control={form.control}
+                  name="customizable"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">הפעל התאמה אישית</FormLabel>
+                      <div className="flex gap-2 pt-1">
+                        <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>פעיל</button>
+                        <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>כבוי</button>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                {/* Badge options */}
+                <div className="space-y-1.5">
+                  <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">פאץ' ליגה לבחירה</label>
+                  <div className="flex gap-2">
+                    {[
+                      { value: "local", label: "ליגה מקומית" },
+                      { value: "champions", label: "ליגת האלופות" },
+                    ].map(({ value, label }) => (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setBadgeOptions((prev) =>
+                          prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+                        )}
+                        className={`flex-1 h-8 font-mono text-xs tracking-wider border transition-colors ${
+                          badgeOptions.includes(value)
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-background border-border text-muted-foreground hover:border-primary/50"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="font-mono text-[10px] text-muted-foreground/60">לחץ לבחור אילו פאצ'ים יהיו זמינים ללקוח</p>
+                </div>
+
+                {/* Name + Number toggles */}
+                <div className="grid grid-cols-2 gap-3">
+                  <FormField
+                    control={form.control}
+                    name="allowCustomName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">שם על החולצה</FormLabel>
+                        <div className="flex gap-2 pt-1">
+                          <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>כן</button>
+                          <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground"}`}>לא</button>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="allowCustomNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מספר על החולצה</FormLabel>
+                        <div className="flex gap-2 pt-1">
+                          <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>כן</button>
+                          <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground"}`}>לא</button>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               <FormField

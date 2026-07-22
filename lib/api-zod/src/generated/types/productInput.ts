@@ -20,4 +20,8 @@ export interface ProductInput {
   inStock?: boolean;
   featured?: boolean;
   availableSizes?: string[];
+  customizable?: boolean;
+  badgeOptions?: string[];
+  allowCustomName?: boolean;
+  allowCustomNumber?: boolean;
 }

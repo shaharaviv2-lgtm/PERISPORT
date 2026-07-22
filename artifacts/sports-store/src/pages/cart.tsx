@@ -50,10 +50,20 @@ export default function Cart() {
     return Object.keys(errors).length === 0;
   }
 
+  function buildCustomizationText(item: typeof items[0]) {
+    const parts: string[] = [];
+    if (item.customization?.badge) {
+      parts.push(`פאץ': ${item.customization.badge === "local" ? "ליגה מקומית" : item.customization.badge === "champions" ? "ליגת האלופות" : item.customization.badge}`);
+    }
+    if (item.customization?.playerName) parts.push(`שם: ${item.customization.playerName}`);
+    if (item.customization?.playerNumber) parts.push(`מספר: ${item.customization.playerNumber}`);
+    return parts.length > 0 ? ` [${parts.join(", ")}]` : "";
+  }
+
   function buildOrderSummaryText() {
     const lines = items.map(
       (item) =>
-        `• ${item.product.name}${item.size ? ` (מידה ${item.size})` : ""} × ${item.quantity} — ₪${(item.product.price * item.quantity).toFixed(2)}`
+        `• ${item.product.name}${item.size ? ` (מידה ${item.size})` : ""}${buildCustomizationText(item)} × ${item.quantity} — ₪${(item.product.price * item.quantity).toFixed(2)}`
     );
     const customerInfo = `שם: ${customerName}\nטלפון: ${customerPhone}\nכתובת: ${customerStreet} ${customerHouseNumber}, ${customerCity}`;
     return `הזמנה מ-PERI Sport:\n${customerInfo}\n\n${lines.join("\n")}\n\nסה"כ: ₪${totalPrice.toFixed(2)}\n\nשלמתי דרך Paybox ✅`;
@@ -148,7 +158,7 @@ export default function Cart() {
             <div className="lg:col-span-2 space-y-4">
               {items.map((item) => (
                 <div
-                  key={`${item.product.id}_${item.size ?? ""}`}
+                  key={`${item.product.id}_${item.size ?? ""}_${JSON.stringify(item.customization ?? {})}`}
                   className="bg-card border border-border flex gap-4 p-4"
                 >
                   <div className="w-24 h-24 flex-shrink-0 bg-muted overflow-hidden">
@@ -160,14 +170,27 @@ export default function Cart() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="font-display font-bold uppercase text-lg leading-tight">{item.product.name}</h3>
-                        {item.size && (
-                          <span className="font-mono text-xs text-muted-foreground uppercase">מידה: {item.size}</span>
-                        )}
+                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
+                          {item.size && (
+                            <span className="font-mono text-xs text-muted-foreground uppercase">מידה: {item.size}</span>
+                          )}
+                          {item.customization?.badge && (
+                            <span className="font-mono text-xs text-primary/80 uppercase">
+                              {item.customization.badge === "local" ? "🏆 ליגה מקומית" : "⭐ ליגת האלופות"}
+                            </span>
+                          )}
+                          {item.customization?.playerName && (
+                            <span className="font-mono text-xs text-primary/80 uppercase">שם: {item.customization.playerName}</span>
+                          )}
+                          {item.customization?.playerNumber && (
+                            <span className="font-mono text-xs text-primary/80">#{item.customization.playerNumber}</span>
+                          )}
+                        </div>
                       </div>
                       <button
-                        onClick={() => removeItem(item.product.id, item.size)}
+                        onClick={() => removeItem(item.product.id, item.size, item.customization)}
                         className="text-muted-foreground hover:text-destructive transition-colors p-1 flex-shrink-0"
                         aria-label="הסר"
                       >
@@ -177,7 +200,7 @@ export default function Cart() {
                     <div className="flex items-center justify-between mt-3">
                       <div className="flex items-center border border-border">
                         <button
-                          onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.size)}
+                          onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.size, item.customization)}
                           className="p-2 hover:bg-muted transition-colors"
                           disabled={item.quantity <= 1}
                         >
@@ -185,7 +208,7 @@ export default function Cart() {
                         </button>
                         <span className="font-mono text-sm w-8 text-center">{item.quantity}</span>
                         <button
-                          onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.size)}
+                          onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.size, item.customization)}
                           className="p-2 hover:bg-muted transition-colors"
                         >
                           <Plus className="w-3 h-3" />

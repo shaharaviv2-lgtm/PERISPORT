@@ -61,6 +61,9 @@ export default function ProductDetail() {
     : [];
   const hasSizes = sizes.length > 1;
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedBadge, setSelectedBadge] = useState<string>("");
+  const [playerName, setPlayerName] = useState<string>("");
+  const [playerNumber, setPlayerNumber] = useState<string>("");
   const [added, setAdded] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const allImages = [product?.imageUrl, ...(product?.additionalImages ?? [])].filter(Boolean) as string[];
@@ -84,6 +87,15 @@ export default function ProductDetail() {
     }
   }, [product]);
 
+  function buildCustomization() {
+    if (!product?.customizable) return undefined;
+    const c: { badge?: string; playerName?: string; playerNumber?: string } = {};
+    if (selectedBadge) c.badge = selectedBadge;
+    if (playerName.trim()) c.playerName = playerName.trim();
+    if (playerNumber.trim()) c.playerNumber = playerNumber.trim();
+    return Object.keys(c).length > 0 ? c : undefined;
+  }
+
   function handleBuy() {
     if (hasSizes && !selectedSize) {
       toast({
@@ -94,7 +106,7 @@ export default function ProductDetail() {
       return;
     }
     if (product) {
-      addItem(product, selectedSize || undefined);
+      addItem(product, selectedSize || undefined, buildCustomization());
       toast({
         title: "נוסף לסל!",
         description: `${product.name}${selectedSize ? ` — מידה ${selectedSize}` : ""} נוסף לסל הקניות.`,
@@ -119,7 +131,7 @@ export default function ProductDetail() {
       return;
     }
     if (product) {
-      addItem(product, selectedSize || undefined);
+      addItem(product, selectedSize || undefined, buildCustomization());
       navigate("/cart");
     }
   }
@@ -314,6 +326,80 @@ export default function ProductDetail() {
               </div>
             )}
 
+
+            {/* Customization section */}
+            {product.customizable && (
+              <div className="mb-8 border border-primary/20 bg-primary/5 p-4 space-y-5">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-primary">// התאמה אישית</span>
+                </div>
+
+                {/* Badge picker */}
+                {product.badgeOptions && product.badgeOptions.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                      פאץ' ליגה
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => setSelectedBadge("")}
+                        className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all ${
+                          selectedBadge === ""
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-card border-border text-muted-foreground hover:border-primary/60"
+                        }`}
+                      >
+                        ללא פאץ'
+                      </button>
+                      {product.badgeOptions.map((opt) => (
+                        <button
+                          key={opt}
+                          onClick={() => setSelectedBadge(opt)}
+                          className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all ${
+                            selectedBadge === opt
+                              ? "bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(153,255,0,0.3)]"
+                              : "bg-card border-border text-foreground hover:border-primary/60 hover:text-primary"
+                          }`}
+                        >
+                          {opt === "local" ? "🏆 ליגה מקומית" : opt === "champions" ? "⭐ ליגת האלופות" : opt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Player name */}
+                {product.allowCustomName && (
+                  <div className="space-y-2">
+                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">שם על החולצה</h3>
+                    <input
+                      type="text"
+                      value={playerName}
+                      onChange={(e) => setPlayerName(e.target.value)}
+                      placeholder="לדוגמה: RONALDO"
+                      maxLength={20}
+                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50 placeholder:normal-case"
+                    />
+                  </div>
+                )}
+
+                {/* Player number */}
+                {product.allowCustomNumber && (
+                  <div className="space-y-2">
+                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">מספר על החולצה</h3>
+                    <input
+                      type="number"
+                      value={playerNumber}
+                      onChange={(e) => setPlayerNumber(e.target.value)}
+                      placeholder="7"
+                      min={1}
+                      max={99}
+                      className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mt-auto">
