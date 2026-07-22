@@ -94,6 +94,28 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  const id = Number(req.params["id"]);
+  if (isNaN(id)) {
+    res.status(400).json({ error: "Invalid id" });
+    return;
+  }
+  try {
+    const [deleted] = await db
+      .delete(ordersTable)
+      .where(eq(ordersTable.id, id))
+      .returning();
+    if (!deleted) {
+      res.status(404).json({ error: "Order not found" });
+      return;
+    }
+    res.status(204).end();
+  } catch (err) {
+    req.log.error({ err }, "Failed to delete order");
+    res.status(500).json({ error: "Failed to delete order" });
+  }
+});
+
 router.patch("/:id/status", async (req, res) => {
   const id = Number(req.params["id"]);
   if (isNaN(id)) {

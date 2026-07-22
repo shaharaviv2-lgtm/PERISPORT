@@ -7,7 +7,7 @@ import {
 } from "@workspace/api-client-react";
 import type { Order } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ShoppingBag, Phone, User, Clock, CheckCircle2, Mail, MapPin } from "lucide-react";
+import { Loader2, ShoppingBag, Phone, User, Clock, CheckCircle2, Mail, MapPin, Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ADMIN_PHONE_WA = "972507755525";
@@ -89,8 +89,10 @@ function parseItems(itemsJson: string): OrderItem[] {
   }
 }
 
-function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id: number, status: string) => Promise<void> }) {
+function OrderRow({ order, onStatusChange, onDelete }: { order: Order; onStatusChange: (id: number, status: string) => Promise<void>; onDelete: (id: number) => Promise<void> }) {
   const [updating, setUpdating] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const items = parseItems(order.items);
   const statusInfo = STATUS_LABELS[order.status] ?? STATUS_LABELS.pending;
 
@@ -98,6 +100,13 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
     setUpdating(true);
     await onStatusChange(order.id, newStatus);
     setUpdating(false);
+  }
+
+  async function handleDelete() {
+    setDeleting(true);
+    await onDelete(order.id);
+    setDeleting(false);
+    setConfirmDelete(false);
   }
 
   return (
@@ -144,7 +153,7 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
 
         <div className="flex items-center gap-3 flex-wrap justify-end">
           <span className="font-mono font-bold text-lg text-primary">₪{order.totalPrice.toFixed(2)}</span>
-          {updating && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
+          {(updating || deleting) && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
           {order.status === "pending" && (
             <a
               href={buildCustomerWhatsAppUrl(order)}
@@ -171,6 +180,35 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
                 ))}
               </SelectContent>
             </Select>
+          )}
+          {/* Delete button */}
+          {!confirmDelete ? (
+            <button
+              onClick={() => setConfirmDelete(true)}
+              disabled={deleting}
+              className="p-2 text-muted-foreground hover:text-destructive transition-colors"
+              title="מחק הזמנה"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 bg-destructive/10 border border-destructive/30 px-3 py-1.5">
+              <span className="font-mono text-xs text-destructive">למחוק?</span>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="font-mono text-xs font-bold text-destructive hover:text-destructive/80 transition-colors"
+              >
+                כן
+              </button>
+              <span className="text-muted-foreground text-xs">|</span>
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                לא
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -253,6 +291,18 @@ export function AdminOrdersTab() {
     }
   }
 
+  async function handleDelete(id: number) {
+    try {
+      const res = await fetch(`/api/orders/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      queryClient.invalidateQueries({ queryKey: getListOrdersQueryKey() });
+      queryClient.invalidateQueries({ queryKey: getGetStoreStatsQueryKey() });
+      toast({ title: "הזמנה נמחקה" });
+    } catch {
+      toast({ title: "שגיאה במחיקת הזמנה", variant: "destructive" });
+    }
+  }
+
   const filtered = orders?.filter((o) => statusFilter === "all" || o.status === statusFilter) ?? [];
 
   return (
@@ -299,7 +349,7 @@ export function AdminOrdersTab() {
       ) : (
         <div className="space-y-3">
           {filtered.map((order) => (
-            <OrderRow key={order.id} order={order} onStatusChange={handleStatusChange} />
+            <OrderRow key={order.id} order={order} onStatusChange={handleStatusChange} onDelete={handleDelete} />
           ))}
         </div>
       )}
