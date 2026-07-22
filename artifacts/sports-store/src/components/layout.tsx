@@ -174,7 +174,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="mt-4 text-center">
-            <p className="font-mono text-[10px] text-muted-foreground/30">נבנה על ידי נירית אחי</p>
+            <p className="font-mono text-[10px] text-muted-foreground/30">נבנה על ידי שחר אביב</p>
           </div>
         </div>
       </footer>
