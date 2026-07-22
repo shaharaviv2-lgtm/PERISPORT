@@ -678,7 +678,7 @@ export function AdminProductsTab() {
                       <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>
                         פעיל
                       </button>
-                      <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>
+                      <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-foreground text-background border-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>
                         כבוי
                       </button>
                     </div>
@@ -722,7 +722,7 @@ export function AdminProductsTab() {
                       <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מומלץ</FormLabel>
                       <div className="flex gap-2 pt-1">
                         <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>Yes</button>
-                        <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>No</button>
+                        <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-foreground text-background border-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>No</button>
                       </div>
                     </FormItem>
                   )}
