@@ -13,6 +13,7 @@ import {
   getListCategoriesQueryKey,
   getGetStoreStatsQueryKey,
   getListFeaturedQueryKey,
+  getGetProductQueryKey,
 } from "@workspace/api-client-react";
 import type { Product } from "@workspace/api-client-react";
 import {
@@ -197,8 +198,9 @@ export function AdminProductsTab() {
 
   const updateProduct = useUpdateProduct({
     mutation: {
-      onSuccess: () => {
+      onSuccess: (_data, variables) => {
         invalidateProductQueries();
+        queryClient.invalidateQueries({ queryKey: getGetProductQueryKey(variables.id) });
         setEditingId(null);
         form.reset();
         setPreviewUrl(null);
