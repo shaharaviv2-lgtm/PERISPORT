@@ -36,6 +36,11 @@ export default function Cart() {
     if (meta) meta.setAttribute("content", "סל הקניות שלך ב-PERI Sport — בדוק את הפריטים שבחרת וסיים את הרכישה.");
   }, [totalItems]);
 
+  useEffect(() => {
+    document.body.style.overflow = showModal || showPayboxWarning ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [showModal, showPayboxWarning]);
+
   function validateForm(): boolean {
     const errors: { name?: string; phone?: string; email?: string; city?: string; street?: string; houseNumber?: string; zipCode?: string } = {};
     if (!customerName.trim()) errors.name = "נא להזין שם";
@@ -280,8 +285,8 @@ export default function Cart() {
 
       {/* Payment modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-card border border-border w-full max-w-md relative">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-card border border-border w-full max-w-md relative my-auto">
             <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
