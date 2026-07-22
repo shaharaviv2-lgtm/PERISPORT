@@ -6,6 +6,7 @@ import socialLinksRouter from "./socialLinks";
 import storeStatsRouter from "./storeStats";
 import uploadRouter from "./upload";
 import ordersRouter from "./orders";
+import storageRouter from "./storage";
 import { db } from "@workspace/db";
 import { productsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
@@ -19,6 +20,7 @@ router.use("/social-links", socialLinksRouter);
 router.use("/store-stats", storeStatsRouter);
 router.use("/upload", uploadRouter);
 router.use("/orders", ordersRouter);
+router.use("/storage", storageRouter);
 
 router.get("/featured", async (req, res) => {
   try {

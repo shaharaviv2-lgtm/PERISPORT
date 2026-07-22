@@ -7,6 +7,7 @@
  */
 
 export * from './category';
+export * from './errorEnvelope';
 export * from './healthStatus';
 export * from './listProductsParams';
 export * from './order';
@@ -16,3 +17,5 @@ export * from './product';
 export * from './productInput';
 export * from './socialLink';
 export * from './storeStats';
+export * from './uploadUrlRequest';
+export * from './uploadUrlResponse';

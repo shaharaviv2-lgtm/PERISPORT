@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
+import { useUpload } from "@workspace/object-storage-web";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -145,8 +146,6 @@ export function AdminProductsTab() {
   const { toast } = useToast();
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadingAdditional, setUploadingAdditional] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [additionalPreviews, setAdditionalPreviews] = useState<string[]>([]);
   const [availableSizes, setAvailableSizes] = useState<string[]>([]);
@@ -154,41 +153,12 @@ export function AdminProductsTab() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
 
-  async function handleImageUpload(file: File) {
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
-      if (!res.ok) throw new Error("Upload failed");
-      const { url } = await res.json() as { url: string };
-      form.setValue("imageUrl", url, { shouldValidate: true });
-      setPreviewUrl(url);
-      toast({ title: "תמונה הועלתה", description: "התמונה מוכנה לשימוש." });
-    } catch {
-      toast({ title: "שגיאת העלאה", description: "נסה JPG, PNG או WebP עד 10MB.", variant: "destructive" });
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  async function handleAdditionalImageUpload(file: File) {
-    if (additionalPreviews.length >= 5) return;
-    setUploadingAdditional(true);
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
-      if (!res.ok) throw new Error("Upload failed");
-      const { url } = await res.json() as { url: string };
-      setAdditionalPreviews((prev) => [...prev, url]);
-      toast({ title: "תמונה נוספת הועלתה" });
-    } catch {
-      toast({ title: "שגיאת העלאה", variant: "destructive" });
-    } finally {
-      setUploadingAdditional(false);
-    }
-  }
+  const { uploadFile: uploadMain, isUploading: uploading } = useUpload({
+    onError: () => toast({ title: "שגיאת העלאה", description: "נסה JPG, PNG או WebP עד 10MB.", variant: "destructive" }),
+  });
+  const { uploadFile: uploadExtra, isUploading: uploadingAdditional } = useUpload({
+    onError: () => toast({ title: "שגיאת העלאה", variant: "destructive" }),
+  });
 
   const { data: products, isLoading } = useListProducts(
     {},
@@ -252,6 +222,26 @@ export function AdminProductsTab() {
       featured: false,
     },
   });
+
+  const handleImageUpload = useCallback(async (file: File) => {
+    const result = await uploadMain(file);
+    if (result) {
+      const url = `/api/storage${result.objectPath}`;
+      form.setValue("imageUrl", url, { shouldValidate: true });
+      setPreviewUrl(url);
+      toast({ title: "תמונה הועלתה", description: "התמונה מוכנה לשימוש." });
+    }
+  }, [uploadMain, form, toast]);
+
+  const handleAdditionalImageUpload = useCallback(async (file: File) => {
+    if (additionalPreviews.length >= 5) return;
+    const result = await uploadExtra(file);
+    if (result) {
+      const url = `/api/storage${result.objectPath}`;
+      setAdditionalPreviews((prev) => [...prev, url]);
+      toast({ title: "תמונה נוספת הועלתה" });
+    }
+  }, [uploadExtra, additionalPreviews.length, toast]);
 
   function onSubmit(values: ProductForm) {
     const data = {
