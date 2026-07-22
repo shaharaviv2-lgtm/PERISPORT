@@ -66,7 +66,8 @@ export default function ProductDetail() {
   const [playerNumber, setPlayerNumber] = useState<string>("");
   const [added, setAdded] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
-  const [showCustomization, setShowCustomization] = useState(false);
+  const [showBadgeTab, setShowBadgeTab] = useState(false);
+  const [showNameTab, setShowNameTab] = useState(false);
   const allImages = [product?.imageUrl, ...(product?.additionalImages ?? [])].filter(Boolean) as string[];
   const [activeImage, setActiveImage] = useState(0);
 
@@ -327,49 +328,49 @@ export default function ProductDetail() {
             )}
 
 
-            {/* Customization section — collapsible accordion */}
+            {/* Customization — two independent tabs */}
             {product.customizable && product.itemType !== "pants" && (() => {
               const isBasketball = product.sport === "basketball";
               const badgeOptions = isBasketball
-                ? [{ value: "", label: "ללא פאץ'" }, { value: "nba", label: "🏀 NBA" }]
-                : [{ value: "", label: "ללא פאץ'" }, { value: "local", label: "🏆 ליגה מקומית" }, { value: "champions", label: "⭐ ליגת האלופות" }];
-              const hasSelection = !!(selectedBadge || playerName.trim() || playerNumber.trim());
-              const extraPrice = selectedBadge ? 5 : 0;
+                ? [{ value: "nba", label: "🏀 NBA" }]
+                : [{ value: "local", label: "🏆 ליגה מקומית" }, { value: "champions", label: "⭐ ליגת האלופות" }];
+              const badgeLabel = selectedBadge === "local" ? "ליגה מקומית" : selectedBadge === "champions" ? "ליגת האלופות" : selectedBadge === "nba" ? "NBA" : null;
+              const nameLabel = [playerName.trim(), playerNumber.trim() && `#${playerNumber.trim()}`].filter(Boolean).join(" ");
               return (
-                <div className="mb-8 border border-primary/20">
-                  {/* Accordion header */}
-                  <button
-                    type="button"
-                    onClick={() => setShowCustomization((v) => !v)}
-                    className="w-full flex items-center justify-between px-4 py-3 bg-primary/5 hover:bg-primary/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-primary">// התאמה אישית</span>
-                      {hasSelection && (
-                        <span className="font-mono text-[10px] text-primary/70 normal-case">
-                          {[selectedBadge && (selectedBadge === "local" ? "ליגה מקומית" : selectedBadge === "champions" ? "ליגת האלופות" : "NBA"), playerName.trim(), playerNumber.trim() && `#${playerNumber.trim()}`].filter(Boolean).join(" · ")}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {extraPrice > 0 && <span className="font-mono text-[10px] text-primary">+₪{extraPrice}</span>}
-                      <span className={`font-mono text-muted-foreground text-xs transition-transform duration-200 ${showCustomization ? "rotate-180" : ""}`}>▼</span>
-                    </div>
-                  </button>
+                <div className="mb-8 space-y-0">
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+                    התאמה אישית — אופציונלי
+                  </p>
 
-                  {/* Accordion body */}
-                  {showCustomization && (
-                    <div className="p-4 space-y-5 border-t border-primary/20 bg-primary/5">
-                      {/* Badge picker */}
-                      <div className="space-y-2">
-                        <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                          פאץ' ליגה — אופציונלי <span className="text-primary/60">(+₪5)</span>
-                        </h3>
+                  {/* Tab: Badge */}
+                  <div className="border border-border">
+                    <button
+                      type="button"
+                      onClick={() => setShowBadgeTab((v) => !v)}
+                      className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${showBadgeTab ? "bg-primary/10 border-b border-primary/30" : "hover:bg-muted/40"}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-sm font-medium">
+                          {isBasketball ? "🏀 פאץ' NBA" : "🏆 פאץ' ליגה"}
+                        </span>
+                        {badgeLabel && !showBadgeTab && (
+                          <span className="font-mono text-xs text-primary">{badgeLabel} · +₪5</span>
+                        )}
+                        {!badgeLabel && (
+                          <span className="font-mono text-[10px] text-muted-foreground/60">+₪5</span>
+                        )}
+                      </div>
+                      <span className={`text-muted-foreground text-xs transition-transform duration-200 ${showBadgeTab ? "rotate-180" : ""}`}>▼</span>
+                    </button>
+
+                    {showBadgeTab && (
+                      <div className="px-4 py-4 bg-muted/20 space-y-3">
                         <div className="flex flex-wrap gap-2">
                           {badgeOptions.map(({ value, label }) => (
                             <button
-                              key={value || "none"}
-                              onClick={() => setSelectedBadge(value)}
+                              key={value}
+                              type="button"
+                              onClick={() => setSelectedBadge(selectedBadge === value ? "" : value)}
                               className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all ${
                                 selectedBadge === value
                                   ? "bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(153,255,0,0.3)]"
@@ -379,41 +380,67 @@ export default function ProductDetail() {
                               {label}
                             </button>
                           ))}
+                          {selectedBadge && (
+                            <button
+                              type="button"
+                              onClick={() => setSelectedBadge("")}
+                              className="px-4 py-2 font-mono text-xs border border-border text-muted-foreground hover:border-destructive hover:text-destructive transition-all"
+                            >
+                              ✕ הסר
+                            </button>
+                          )}
                         </div>
                       </div>
+                    )}
+                  </div>
 
-                      {/* Player name */}
-                      <div className="space-y-2">
-                        <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                          שם על החולצה — אופציונלי
-                        </h3>
-                        <input
-                          type="text"
-                          value={playerName}
-                          onChange={(e) => setPlayerName(e.target.value)}
-                          placeholder="לדוגמה: RONALDO"
-                          maxLength={20}
-                          className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50 placeholder:normal-case"
-                        />
+                  {/* Tab: Name & Number */}
+                  <div className="border border-t-0 border-border">
+                    <button
+                      type="button"
+                      onClick={() => setShowNameTab((v) => !v)}
+                      className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${showNameTab ? "bg-primary/10 border-b border-primary/30" : "hover:bg-muted/40"}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-sm font-medium">✏️ שם ומספר</span>
+                        {nameLabel && !showNameTab && (
+                          <span className="font-mono text-xs text-primary">{nameLabel}</span>
+                        )}
+                        {!nameLabel && (
+                          <span className="font-mono text-[10px] text-muted-foreground/60">חינם</span>
+                        )}
                       </div>
+                      <span className={`text-muted-foreground text-xs transition-transform duration-200 ${showNameTab ? "rotate-180" : ""}`}>▼</span>
+                    </button>
 
-                      {/* Player number */}
-                      <div className="space-y-2">
-                        <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                          מספר על החולצה — אופציונלי
-                        </h3>
-                        <input
-                          type="number"
-                          value={playerNumber}
-                          onChange={(e) => setPlayerNumber(e.target.value)}
-                          placeholder="7"
-                          min={1}
-                          max={99}
-                          className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
-                        />
+                    {showNameTab && (
+                      <div className="px-4 py-4 bg-muted/20 space-y-4">
+                        <div className="space-y-1.5">
+                          <label className="font-mono text-xs text-muted-foreground uppercase tracking-wider">שם על החולצה</label>
+                          <input
+                            type="text"
+                            value={playerName}
+                            onChange={(e) => setPlayerName(e.target.value)}
+                            placeholder="לדוגמה: RONALDO"
+                            maxLength={20}
+                            className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/40 placeholder:normal-case"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="font-mono text-xs text-muted-foreground uppercase tracking-wider">מספר על החולצה</label>
+                          <input
+                            type="number"
+                            value={playerNumber}
+                            onChange={(e) => setPlayerNumber(e.target.value)}
+                            placeholder="7"
+                            min={1}
+                            max={99}
+                            className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/40"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               );
             })()}
