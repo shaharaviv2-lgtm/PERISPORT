@@ -42,6 +42,7 @@ import {
   X,
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 const BADGE_OPTIONS = ["", "NEW", "SALE", "HOT"] as const;
 const FIXED_CATEGORIES = ["apparel", "accessories", "equipment"];
@@ -668,19 +669,21 @@ export function AdminProductsTab() {
                     <div className="absolute -top-2.5 right-3 bg-background px-2">
                       <span className="font-mono text-[10px] uppercase tracking-wider text-primary">// התאמה אישית</span>
                     </div>
-                    <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                      אפשר ללקוח לבחור פאץ', שם ומספר
-                    </FormLabel>
-                    <p className="font-mono text-[10px] text-muted-foreground/60 mb-2">
-                      כשמופעל — הלקוח יראה אפשרויות לפאץ' ליגה, שם על החולצה ומספר. כל אחת אופציונלית.
-                    </p>
-                    <div className="flex gap-2">
-                      <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>
-                        פעיל
-                      </button>
-                      <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-foreground text-background border-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>
-                        כבוי
-                      </button>
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+                          אפשר ללקוח לבחור פאץ', שם ומספר
+                        </FormLabel>
+                        <p className="font-mono text-[10px] text-muted-foreground/60 mt-1">
+                          כשמופעל — הלקוח יראה אפשרויות לפאץ' ליגה, שם על החולצה ומספר.
+                        </p>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
                     </div>
                   </FormItem>
                 )}
@@ -705,12 +708,11 @@ export function AdminProductsTab() {
                   control={form.control}
                   name="inStock"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">במלאי</FormLabel>
-                      <div className="flex gap-2 pt-1">
-                        <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>Yes</button>
-                        <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-destructive text-destructive-foreground border-destructive" : "bg-background border-border text-muted-foreground hover:border-destructive/50"}`}>No</button>
-                      </div>
+                    <FormItem className="flex items-center justify-between border border-border p-3">
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground cursor-pointer">במלאי</FormLabel>
+                      <FormControl>
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
                     </FormItem>
                   )}
                 />
@@ -718,12 +720,11 @@ export function AdminProductsTab() {
                   control={form.control}
                   name="featured"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מומלץ</FormLabel>
-                      <div className="flex gap-2 pt-1">
-                        <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>Yes</button>
-                        <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-foreground text-background border-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>No</button>
-                      </div>
+                    <FormItem className="flex items-center justify-between border border-border p-3">
+                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground cursor-pointer">מומלץ</FormLabel>
+                      <FormControl>
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
                     </FormItem>
                   )}
                 />
