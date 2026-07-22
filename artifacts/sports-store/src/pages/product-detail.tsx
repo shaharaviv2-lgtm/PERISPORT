@@ -421,7 +421,7 @@ export default function ProductDetail() {
                             type="text"
                             value={playerName}
                             onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder="לדוגמה: RONALDO"
+                            placeholder="RONALDO"
                             maxLength={20}
                             className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/40 placeholder:normal-case"
                           />
