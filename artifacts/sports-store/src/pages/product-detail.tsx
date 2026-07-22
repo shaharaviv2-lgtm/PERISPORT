@@ -335,69 +335,61 @@ export default function ProductDetail() {
                 </div>
 
                 {/* Badge picker */}
-                {product.badgeOptions && product.badgeOptions.length > 0 && (
-                  <div className="space-y-2">
-                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                      פאץ' ליגה
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
+                <div className="space-y-2">
+                  <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                    פאץ' ליגה — אופציונלי
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { value: "", label: "ללא פאץ'" },
+                      { value: "local", label: "🏆 ליגה מקומית" },
+                      { value: "champions", label: "⭐ ליגת האלופות" },
+                    ].map(({ value, label }) => (
                       <button
-                        onClick={() => setSelectedBadge("")}
+                        key={value || "none"}
+                        onClick={() => setSelectedBadge(value)}
                         className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all ${
-                          selectedBadge === ""
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-card border-border text-muted-foreground hover:border-primary/60"
+                          selectedBadge === value
+                            ? "bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(153,255,0,0.3)]"
+                            : "bg-card border-border text-muted-foreground hover:border-primary/60 hover:text-primary"
                         }`}
                       >
-                        ללא פאץ'
+                        {label}
                       </button>
-                      {product.badgeOptions.map((opt) => (
-                        <button
-                          key={opt}
-                          onClick={() => setSelectedBadge(opt)}
-                          className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all ${
-                            selectedBadge === opt
-                              ? "bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(153,255,0,0.3)]"
-                              : "bg-card border-border text-foreground hover:border-primary/60 hover:text-primary"
-                          }`}
-                        >
-                          {opt === "local" ? "🏆 ליגה מקומית" : opt === "champions" ? "⭐ ליגת האלופות" : opt}
-                        </button>
-                      ))}
-                    </div>
+                    ))}
                   </div>
-                )}
+                </div>
 
                 {/* Player name */}
-                {product.allowCustomName && (
-                  <div className="space-y-2">
-                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">שם על החולצה</h3>
-                    <input
-                      type="text"
-                      value={playerName}
-                      onChange={(e) => setPlayerName(e.target.value)}
-                      placeholder="לדוגמה: RONALDO"
-                      maxLength={20}
-                      className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50 placeholder:normal-case"
-                    />
-                  </div>
-                )}
+                <div className="space-y-2">
+                  <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                    שם על החולצה — אופציונלי
+                  </h3>
+                  <input
+                    type="text"
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
+                    placeholder="לדוגמה: RONALDO"
+                    maxLength={20}
+                    className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50 placeholder:normal-case"
+                  />
+                </div>
 
                 {/* Player number */}
-                {product.allowCustomNumber && (
-                  <div className="space-y-2">
-                    <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">מספר על החולצה</h3>
-                    <input
-                      type="number"
-                      value={playerNumber}
-                      onChange={(e) => setPlayerNumber(e.target.value)}
-                      placeholder="7"
-                      min={1}
-                      max={99}
-                      className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
-                    />
-                  </div>
-                )}
+                <div className="space-y-2">
+                  <h3 className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                    מספר על החולצה — אופציונלי
+                  </h3>
+                  <input
+                    type="number"
+                    value={playerNumber}
+                    onChange={(e) => setPlayerNumber(e.target.value)}
+                    placeholder="7"
+                    min={1}
+                    max={99}
+                    className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
+                  />
+                </div>
               </div>
             )}
 

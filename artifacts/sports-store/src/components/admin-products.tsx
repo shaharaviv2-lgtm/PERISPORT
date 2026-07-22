@@ -266,9 +266,9 @@ export function AdminProductsTab() {
       featured: values.featured,
       availableSizes: availableSizes.length > 0 ? availableSizes : undefined,
       customizable: values.customizable,
-      badgeOptions: badgeOptions.length > 0 ? badgeOptions : undefined,
-      allowCustomName: values.allowCustomName,
-      allowCustomNumber: values.allowCustomNumber,
+      badgeOptions: values.customizable ? ["local", "champions"] : undefined,
+      allowCustomName: values.customizable,
+      allowCustomNumber: values.customizable,
     };
     if (editingId != null) {
       updateProduct.mutate({ id: editingId, data });
@@ -660,83 +660,31 @@ export function AdminProductsTab() {
               </div>
 
               {/* Customization section */}
-              <div className="space-y-3 border border-border p-4 bg-background/50 relative">
-                <div className="absolute -top-2.5 right-3 bg-background px-2">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-primary">// התאמה אישית</span>
-                </div>
-
-                {/* Enable customization toggle */}
-                <FormField
-                  control={form.control}
-                  name="customizable"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">הפעל התאמה אישית</FormLabel>
-                      <div className="flex gap-2 pt-1">
-                        <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>פעיל</button>
-                        <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>כבוי</button>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                {/* Badge options */}
-                <div className="space-y-1.5">
-                  <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">פאץ' ליגה לבחירה</label>
-                  <div className="flex gap-2">
-                    {[
-                      { value: "local", label: "ליגה מקומית" },
-                      { value: "champions", label: "ליגת האלופות" },
-                    ].map(({ value, label }) => (
-                      <button
-                        key={value}
-                        type="button"
-                        onClick={() => setBadgeOptions((prev) =>
-                          prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-                        )}
-                        className={`flex-1 h-8 font-mono text-xs tracking-wider border transition-colors ${
-                          badgeOptions.includes(value)
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-background border-border text-muted-foreground hover:border-primary/50"
-                        }`}
-                      >
-                        {label}
+              <FormField
+                control={form.control}
+                name="customizable"
+                render={({ field }) => (
+                  <FormItem className="border border-border p-4 bg-background/50 relative">
+                    <div className="absolute -top-2.5 right-3 bg-background px-2">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-primary">// התאמה אישית</span>
+                    </div>
+                    <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+                      אפשר ללקוח לבחור פאץ', שם ומספר
+                    </FormLabel>
+                    <p className="font-mono text-[10px] text-muted-foreground/60 mb-2">
+                      כשמופעל — הלקוח יראה אפשרויות לפאץ' ליגה, שם על החולצה ומספר. כל אחת אופציונלית.
+                    </p>
+                    <div className="flex gap-2">
+                      <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>
+                        פעיל
                       </button>
-                    ))}
-                  </div>
-                  <p className="font-mono text-[10px] text-muted-foreground/60">לחץ לבחור אילו פאצ'ים יהיו זמינים ללקוח</p>
-                </div>
-
-                {/* Name + Number toggles */}
-                <div className="grid grid-cols-2 gap-3">
-                  <FormField
-                    control={form.control}
-                    name="allowCustomName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">שם על החולצה</FormLabel>
-                        <div className="flex gap-2 pt-1">
-                          <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>כן</button>
-                          <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground"}`}>לא</button>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="allowCustomNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-mono text-xs uppercase tracking-wider text-muted-foreground">מספר על החולצה</FormLabel>
-                        <div className="flex gap-2 pt-1">
-                          <button type="button" onClick={() => field.onChange(true)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${field.value ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/50"}`}>כן</button>
-                          <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-8 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground"}`}>לא</button>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
+                      <button type="button" onClick={() => field.onChange(false)} className={`flex-1 h-9 font-mono text-xs uppercase tracking-wider border transition-colors ${!field.value ? "bg-card border-border text-muted-foreground" : "bg-background border-border text-muted-foreground hover:border-border"}`}>
+                        כבוי
+                      </button>
+                    </div>
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
