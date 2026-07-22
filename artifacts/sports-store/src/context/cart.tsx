@@ -39,11 +39,7 @@ function itemKey(productId: number, size?: string, customization?: Customization
 
 export function customizationExtraPrice(c?: Customization): number {
   if (!c) return 0;
-  let extra = 0;
-  if (c.badge) extra += 5;
-  if (c.playerName) extra += 5;
-  if (c.playerNumber) extra += 5;
-  return extra;
+  return c.badge ? 5 : 0;
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
