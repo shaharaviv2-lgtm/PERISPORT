@@ -88,7 +88,6 @@ export default function ProductDetail() {
   }, [product]);
 
   function buildCustomization() {
-    if (!product?.customizable) return undefined;
     const c: { badge?: string; playerName?: string; playerNumber?: string } = {};
     if (selectedBadge) c.badge = selectedBadge;
     if (playerName.trim()) c.playerName = playerName.trim();
@@ -328,8 +327,7 @@ export default function ProductDetail() {
 
 
             {/* Customization section */}
-            {product.customizable && (
-              <div className="mb-8 border border-primary/20 bg-primary/5 p-4 space-y-5">
+            <div className="mb-8 border border-primary/20 bg-primary/5 p-4 space-y-5">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-[10px] uppercase tracking-widest text-primary">// התאמה אישית</span>
                 </div>
@@ -390,8 +388,7 @@ export default function ProductDetail() {
                     className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
                   />
                 </div>
-              </div>
-            )}
+            </div>
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mt-auto">
