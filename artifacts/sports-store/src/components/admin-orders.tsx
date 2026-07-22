@@ -42,7 +42,7 @@ function buildCustomerWhatsAppUrl(order: Order): string {
     const customStr = custom.length ? ` [${custom.join(", ")}]` : "";
     return `• ${i.name}${i.size ? ` (מידה ${i.size})` : ""}${customStr} × ${i.quantity} — ₪${(i.price * i.quantity).toFixed(2)}`;
   });
-  const address = [order.customerStreet, order.customerHouseNumber, order.customerCity].filter(Boolean).join(" ");
+  const address = [order.customerStreet, order.customerHouseNumber, order.customerCity, order.customerZipCode].filter(Boolean).join(" ");
   const msg =
     `שלום ${order.customerName} 👋\n` +
     `הזמנתך #${String(order.id).padStart(4, "0")} אושרה!\n\n` +
@@ -79,9 +79,13 @@ function parseItems(itemsJson: string): OrderItem[] {
   try {
     const parsed = JSON.parse(itemsJson);
     if (Array.isArray(parsed)) return parsed as OrderItem[];
-    return [];
+    // fallback: old plain-text format — show as single row
+    return [{ name: String(parsed), quantity: 1, price: 0 }];
   } catch {
-    return [];
+    // plain text (not JSON at all)
+    const trimmed = itemsJson.trim();
+    if (!trimmed) return [];
+    return [{ name: trimmed, quantity: 1, price: 0 }];
   }
 }
 
