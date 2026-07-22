@@ -99,11 +99,11 @@ export default function ProductDetail() {
 
   function handleBuy() {
     if (hasSizes && !selectedSize) {
-      toast({
-        title: "בחר מידה",
-        description: "אנא בחר את המידה שלך לפני שתמשיך.",
-        variant: "destructive",
-      });
+      toast({ title: "בחר מידה", description: "אנא בחר את המידה שלך לפני שתמשיך.", variant: "destructive" });
+      return;
+    }
+    if (showNameTab && (!playerName.trim() || !playerNumber.trim())) {
+      toast({ title: "מלא שם ומספר", description: "אנא מלא את שם השחקן ומספר החולצה.", variant: "destructive" });
       return;
     }
     if (product) {
@@ -124,11 +124,11 @@ export default function ProductDetail() {
 
   function handleCheckout() {
     if (hasSizes && !selectedSize) {
-      toast({
-        title: "בחר מידה",
-        description: "אנא בחר את המידה שלך לפני שתמשיך.",
-        variant: "destructive",
-      });
+      toast({ title: "בחר מידה", description: "אנא בחר את המידה שלך לפני שתמשיך.", variant: "destructive" });
+      return;
+    }
+    if (showNameTab && (!playerName.trim() || !playerNumber.trim())) {
+      toast({ title: "מלא שם ומספר", description: "אנא מלא את שם השחקן ומספר החולצה.", variant: "destructive" });
       return;
     }
     if (product) {
@@ -421,7 +421,7 @@ export default function ProductDetail() {
                             type="text"
                             value={playerName}
                             onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder="RONALDO"
+                            placeholder=""
                             maxLength={20}
                             className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/40 placeholder:normal-case"
                           />
@@ -432,7 +432,7 @@ export default function ProductDetail() {
                             type="number"
                             value={playerNumber}
                             onChange={(e) => setPlayerNumber(e.target.value)}
-                            placeholder="7"
+                            placeholder=""
                             min={1}
                             max={99}
                             className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/40"
