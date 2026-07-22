@@ -73,9 +73,17 @@ export default function Cart() {
   }
 
   async function saveOrder() {
-    const itemsSummary = items
-      .map((i) => `${i.product.name}${i.size ? ` (${i.size})` : ""} x${i.quantity}`)
-      .join(", ");
+    const itemsJson = JSON.stringify(
+      items.map((i) => ({
+        name: i.product.name,
+        size: i.size,
+        quantity: i.quantity,
+        price: i.product.price + customizationExtraPrice(i.customization),
+        badge: i.customization?.badge || undefined,
+        playerName: i.customization?.playerName || undefined,
+        playerNumber: i.customization?.playerNumber || undefined,
+      }))
+    );
     try {
       await fetch("/api/orders", {
         method: "POST",
@@ -88,7 +96,7 @@ export default function Cart() {
           customerStreet: customerStreet.trim(),
           customerHouseNumber: customerHouseNumber.trim(),
           customerZipCode: customerZipCode.trim() || undefined,
-          items: itemsSummary,
+          items: itemsJson,
           totalPrice,
         }),
       });

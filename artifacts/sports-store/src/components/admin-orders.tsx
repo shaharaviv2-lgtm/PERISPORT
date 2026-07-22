@@ -12,14 +12,36 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const ADMIN_PHONE_WA = "972507755525";
 
+interface OrderItem {
+  name: string;
+  size?: string;
+  quantity: number;
+  price: number;
+  badge?: string;
+  playerName?: string;
+  playerNumber?: string;
+}
+
+function badgeLabel(badge: string) {
+  if (badge === "local") return "ליגה מקומית";
+  if (badge === "champions") return "ליגת האלופות";
+  if (badge === "nba") return "NBA";
+  return badge;
+}
+
 function buildCustomerWhatsAppUrl(order: Order): string {
   const parsedItems = (() => {
-    try { return JSON.parse(order.items) as Array<{ name: string; size?: string; quantity: number; price: number }>; }
+    try { return JSON.parse(order.items) as OrderItem[]; }
     catch { return []; }
   })();
-  const lines = parsedItems.map(
-    (i) => `• ${i.name}${i.size ? ` (מידה ${i.size})` : ""} × ${i.quantity} — ₪${(i.price * i.quantity).toFixed(2)}`
-  );
+  const lines = parsedItems.map((i) => {
+    const custom: string[] = [];
+    if (i.badge) custom.push(`פאץ': ${badgeLabel(i.badge)}`);
+    if (i.playerName) custom.push(`שם: ${i.playerName}`);
+    if (i.playerNumber) custom.push(`מספר: ${i.playerNumber}`);
+    const customStr = custom.length ? ` [${custom.join(", ")}]` : "";
+    return `• ${i.name}${i.size ? ` (מידה ${i.size})` : ""}${customStr} × ${i.quantity} — ₪${(i.price * i.quantity).toFixed(2)}`;
+  });
   const address = [order.customerStreet, order.customerHouseNumber, order.customerCity].filter(Boolean).join(" ");
   const msg =
     `שלום ${order.customerName} 👋\n` +
@@ -53,9 +75,11 @@ function formatDate(iso: string) {
   return d.toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
-function parseItems(itemsJson: string) {
+function parseItems(itemsJson: string): OrderItem[] {
   try {
-    return JSON.parse(itemsJson) as Array<{ name: string; size?: string; quantity: number; price: number }>;
+    const parsed = JSON.parse(itemsJson);
+    if (Array.isArray(parsed)) return parsed as OrderItem[];
+    return [];
   } catch {
     return [];
   }
@@ -151,17 +175,41 @@ function OrderRow({ order, onStatusChange }: { order: Order; onStatusChange: (id
       {items.length > 0 && (
         <div className="border-t border-border/50 pt-3">
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-2">פריטים</p>
-          <div className="flex flex-wrap gap-3">
-            {items.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2 bg-background border border-border px-3 py-2">
-                <div>
-                  <p className="font-mono text-xs font-bold leading-tight">{item.name}</p>
-                  <p className="font-mono text-[10px] text-muted-foreground">
-                    כמות: {item.quantity}{item.size ? ` · מידה: ${item.size}` : ""} · ₪{(item.price * item.quantity).toFixed(2)}
-                  </p>
+          <div className="flex flex-col gap-2">
+            {items.map((item, idx) => {
+              const hasCustom = item.badge || item.playerName || item.playerNumber;
+              return (
+                <div key={idx} className="bg-background border border-border px-3 py-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-mono text-xs font-bold leading-tight">{item.name}</p>
+                      <p className="font-mono text-[10px] text-muted-foreground mt-0.5">
+                        כמות: {item.quantity}{item.size ? ` · מידה: ${item.size}` : ""} · ₪{(item.price * item.quantity).toFixed(2)}
+                      </p>
+                    </div>
+                    {hasCustom && (
+                      <div className="flex flex-wrap gap-1.5 justify-end">
+                        {item.badge && (
+                          <span className="font-mono text-[10px] bg-primary/10 text-primary border border-primary/20 px-2 py-0.5">
+                            פאץ': {badgeLabel(item.badge)}
+                          </span>
+                        )}
+                        {item.playerName && (
+                          <span className="font-mono text-[10px] bg-primary/10 text-primary border border-primary/20 px-2 py-0.5">
+                            שם: {item.playerName}
+                          </span>
+                        )}
+                        {item.playerNumber && (
+                          <span className="font-mono text-[10px] bg-primary/10 text-primary border border-primary/20 px-2 py-0.5">
+                            #{item.playerNumber}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
