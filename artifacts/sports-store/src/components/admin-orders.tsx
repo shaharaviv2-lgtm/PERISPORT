@@ -54,6 +54,16 @@ function buildCustomerWhatsAppUrl(order: Order): string {
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 }
 
+function buildCancellationWhatsAppUrl(order: Order): string {
+  const msg =
+    `שלום ${order.customerName} 👋\n` +
+    `לצערנו, הזמנתך #${String(order.id).padStart(4, "0")} בוטלה.\n\n` +
+    `סכום ההזמנה: ₪${order.totalPrice.toFixed(2)}\n\n` +
+    `לשאלות ובירורים אנחנו זמינים — PERI Sport 🏆`;
+  const phone = order.customerPhone.replace(/\D/g, "").replace(/^0/, "972");
+  return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+}
+
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   pending:   { label: "ממתין",   color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" },
   confirmed: { label: "אושרה",   color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
@@ -155,19 +165,34 @@ function OrderRow({ order, onStatusChange, onDelete }: { order: Order; onStatusC
           <span className="font-mono font-bold text-lg text-primary">₪{order.totalPrice.toFixed(2)}</span>
           {(updating || deleting) && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
           {order.status === "pending" && (
-            <a
-              href={buildCustomerWhatsAppUrl(order)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => handleStatusChange("confirmed")}
-              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-mono text-xs font-bold uppercase tracking-wider px-4 py-2 transition-colors"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.427A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.963 7.963 0 01-4.105-1.14l-.295-.175-3.059.877.858-3.023-.192-.31A7.96 7.96 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/>
-              </svg>
-              אשר הזמנה + וואטסאפ ללקוח
-            </a>
+            <>
+              <a
+                href={buildCustomerWhatsAppUrl(order)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => handleStatusChange("confirmed")}
+                className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-mono text-xs font-bold uppercase tracking-wider px-4 py-2 transition-colors"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                  <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.427A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.963 7.963 0 01-4.105-1.14l-.295-.175-3.059.877.858-3.023-.192-.31A7.96 7.96 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/>
+                </svg>
+                אשר הזמנה + וואטסאפ ללקוח
+              </a>
+              <a
+                href={buildCancellationWhatsAppUrl(order)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => handleStatusChange("cancelled")}
+                className="flex items-center gap-2 bg-destructive/90 hover:bg-destructive text-white font-mono text-xs font-bold uppercase tracking-wider px-4 py-2 transition-colors"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                  <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.427A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.963 7.963 0 01-4.105-1.14l-.295-.175-3.059.877.858-3.023-.192-.31A7.96 7.96 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/>
+                </svg>
+                בטל הזמנה + וואטסאפ ללקוח
+              </a>
+            </>
           )}
           {order.status !== "pending" && (
             <Select value={order.status} onValueChange={handleStatusChange} disabled={updating}>
