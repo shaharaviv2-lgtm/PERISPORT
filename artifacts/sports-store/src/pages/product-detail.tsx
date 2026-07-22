@@ -394,24 +394,29 @@ export default function ProductDetail() {
                     )}
                   </div>
 
-                  {/* Tab: Name & Number */}
+                  {/* Checkbox: Name & Number */}
                   <div className="border border-t-0 border-border">
-                    <button
-                      type="button"
-                      onClick={() => setShowNameTab((v) => !v)}
-                      className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${showNameTab ? "bg-primary/10 border-b border-primary/30" : "hover:bg-muted/40"}`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-sm font-medium">✏️ שם ומספר</span>
-                        {nameLabel && !showNameTab && (
-                          <span className="font-mono text-xs text-primary">{nameLabel}</span>
-                        )}
-                        {!nameLabel && (
-                          <span className="font-mono text-[10px] text-muted-foreground/60">חינם</span>
-                        )}
-                      </div>
-                      <span className={`text-muted-foreground text-xs transition-transform duration-200 ${showNameTab ? "rotate-180" : ""}`}>▼</span>
-                    </button>
+                    <label className={`w-full flex items-center gap-3 px-4 py-3 cursor-pointer select-none transition-colors ${showNameTab ? "bg-primary/10 border-b border-primary/30" : "hover:bg-muted/40"}`}>
+                      <input
+                        type="checkbox"
+                        checked={showNameTab}
+                        onChange={(e) => {
+                          setShowNameTab(e.target.checked);
+                          if (!e.target.checked) {
+                            setPlayerName("");
+                            setPlayerNumber("");
+                          }
+                        }}
+                        className="w-4 h-4 accent-primary cursor-pointer flex-shrink-0"
+                      />
+                      <span className="font-mono text-sm font-medium">✏️ שם ומספר</span>
+                      {nameLabel && showNameTab && (
+                        <span className="font-mono text-xs text-primary mr-1">{nameLabel}</span>
+                      )}
+                      {!showNameTab && (
+                        <span className="font-mono text-[10px] text-muted-foreground/60">חינם</span>
+                      )}
+                    </label>
 
                     {showNameTab && (
                       <div className="px-4 py-4 bg-muted/20 space-y-4">
@@ -421,9 +426,8 @@ export default function ProductDetail() {
                             type="text"
                             value={playerName}
                             onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder=""
                             maxLength={20}
-                            className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/40 placeholder:normal-case"
+                            className="w-full bg-background border border-border px-3 py-2 font-mono text-sm uppercase tracking-wider text-right focus:outline-none focus:border-primary transition-colors"
                           />
                         </div>
                         <div className="space-y-1.5">
@@ -432,10 +436,9 @@ export default function ProductDetail() {
                             type="number"
                             value={playerNumber}
                             onChange={(e) => setPlayerNumber(e.target.value)}
-                            placeholder=""
                             min={1}
                             max={99}
-                            className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/40"
+                            className="w-28 bg-background border border-border px-3 py-2 font-mono text-sm focus:outline-none focus:border-primary transition-colors"
                           />
                         </div>
                       </div>
