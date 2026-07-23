@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm run typecheck:libs && pnpm --filter @workspace/sports-store run build",
+  "outputDirectory": "artifacts/sports-store/dist/public",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "env": {
+    "BASE_PATH": "/",
+    "NODE_ENV": "production"
+  }
+}
